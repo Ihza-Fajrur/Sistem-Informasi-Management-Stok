@@ -3,7 +3,7 @@
 html,
 body {
   height: 100%;
-  background-color: #07361b;
+  background-color: #9c9c9c;
   font-family: "Poppins", sans-serif !important;
 }
 
@@ -11,7 +11,7 @@ body {
   /* Logo-Sekolah*/
   position: relative;
   width: 115px;
-  height: 115px;
+  height: 29px;
   left: calc(50% - 115px / 2 + 0.5px);
   top: 0px;
 
@@ -27,7 +27,7 @@ body {
 
 .login-form {
   width: 380px;
-  height: 450px;
+  height: 350px;
   padding: 20px;
   background-color: white !important;
   border-radius: 20px !important;
@@ -45,7 +45,7 @@ body {
 
 
 .btn {
-  background-color: #056a31 !important;
+  background-color: #EA1562 !important;
   color: white;
   transform: translateY(10px);
   font-size: 14px;
@@ -72,11 +72,11 @@ body {
 .footer {
   position: absolute;
   bottom: 0px;
-  background-color: #07361b !important;
+  background-color: #9c9c9c !important;
   color: rgba(255, 255, 255, 0.22);
 }
 
 .form-control:focus {
-  border-color: #056a31;
+  border-color: #9c9c9c;
 }
 
