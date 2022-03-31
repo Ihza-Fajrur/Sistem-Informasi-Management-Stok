@@ -1,0 +1,27 @@
+.container{
+  width: 30%;
+  margin-top:10% ;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3) ;
+  padding: 40px;
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 5%;
+}
+.container img{
+  width: 200px;
+  margin-left: 19%;
+}
+button {
+  margin-top: 8%;
+  margin-left: 40%;
+}
+body{
+  background-color: #423F3E;
+}
+.form-group{
+  margin-top: 3%;
+  margin-left: 15%;
+}
+.form-group input{
+  width: 80%;
+}
