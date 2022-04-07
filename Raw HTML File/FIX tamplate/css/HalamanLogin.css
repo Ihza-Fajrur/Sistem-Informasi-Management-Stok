@@ -44,8 +44,6 @@ html,body{
   
 }
 
-
-
 .wrapper form .row-button input {
   background: #EA1562;
   border: 0px;
@@ -54,5 +52,6 @@ html,body{
   height: 30px;
   position: relative;
   left: 120px;
+  border-radius: 5px;
 }
 
