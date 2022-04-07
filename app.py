@@ -30,36 +30,39 @@ mysql = MySQL(app)
 def function():
     if not 'loggedin' in session:
         return redirect('/login')
-    else:
-        return redirect(url_for('home'))
+    return redirect(url_for('home'))
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    # Output message if something goes wrong...
-    msg = ''
-    # Check if "username" and "password" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        # Create variables for easy access
-        username = request.form['username']
-        password = request.form['password']
-        # Check if account exists using MySQL
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
-        # Fetch one record and return result
-        account = cursor.fetchone()
-        # If account exists in accounts table in out database
-        if account:
-            # Create session data, we can access this data in other routes
-            session['loggedin'] = True
-            session['username'] = account['username']
-            
-            # Redirect to home page
-            return redirect(url_for('home'))
-        else:
-            # Account doesnt exist or username/password incorrect
-            msg = 'Incorrect username/password!'
-    # Show the login form with message (if any)
-    return render_template('login.html', msg=msg)
+    # Check if user is loggedin
+    if not 'loggedin' in session:
+        # Output message if something goes wrong...
+        msg = ''
+        # Check if "username" and "password" POST requests exist (user submitted form)
+        if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+            # Create variables for easy access
+            username = request.form['username']
+            password = request.form['password']
+            # Check if account exists using MySQL
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
+            # Fetch one record and return result
+            account = cursor.fetchone()
+            # If account exists in accounts table in out database
+            if account:
+                # Create session data, we can access this data in other routes
+                session['loggedin'] = True
+                session['username'] = account['username']
+                session['acc_type'] = account['acc_type']
+                
+                # Redirect to home page
+                return redirect(url_for('home'))
+            else:
+                # Account doesnt exist or username/password incorrect
+                msg = 'Incorrect username/password!'
+        # Show the login form with message (if any)
+        return render_template('login.html', msg=msg)
+    return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
@@ -67,10 +70,11 @@ def logout():
    session.pop('loggedin', None)
    session.pop('id', None)
    session.pop('username', None)
+   session.pop('acc_type', None)
    # Redirect to login page
    return redirect(url_for('login'))
 
-@app.route('/profile')
+@app.route('/profile', methods=['POST', 'GET'])
 def profile():
     # Check if user is loggedin
     if 'loggedin' in session:
@@ -83,12 +87,27 @@ def profile():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
-@app.route('/home')
+@app.route('/home', methods=['POST', 'GET'])
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('home.html', username=session['username'])
+        if session['acc_type'] == 'Staff':
+            return render_template('Halaman.Staff.html', username=session['username'])
+        elif session['acc_type'] == 'Admin':
+            return render_template('Halaman.Admin.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/bahan_cutting', methods=['POST', 'GET'])
+def bahan_cutting():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        if session['acc_type'] == 'Staff':
+            return render_template('Bahan.Cutting.html', username=session['username'])
+        elif session['acc_type'] == 'Admin':
+            pass
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
