@@ -661,9 +661,9 @@ pre code {
   border: 1px solid #e3e6f0;
 }
 
-.table-bordered thead th,
-.table-bordered thead td {
+.table-bordered thead th{
   border-bottom-width: 2px;
+  text-align: center;
 }
 
 .table .thead-dark th {
