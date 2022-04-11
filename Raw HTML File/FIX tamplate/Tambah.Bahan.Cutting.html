@@ -9,14 +9,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Halaman Edit Manajemen Akun</title>
+    <title>Halaman Tambah Bahan Cutting</title>
 
     <!-- Custom fonts for this template-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-        
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.css" rel="stylesheet">
@@ -60,7 +60,7 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Menu:</h6>
+                        <h6 class="collapse-header">Menu :</h6>
                         <a class="collapse-item" href="Kaos.Polos.Admin.html">Stok Kaos Polos</a>
                         <a class="collapse-item" href="Kaos.Original.Admin.html">Stok Kaos Original</a>
                         <a class="collapse-item" href="Bahan.Cutting.Admin.html">Stok Bahan Cutting</a>
@@ -68,25 +68,25 @@
                 </div>
             </li>
 
-               <!-- Divider -->
-               <hr class="sidebar-divider">
+             <!-- Divider -->
+             <hr class="sidebar-divider">
 
-               <!-- Histori Update -->
-               <li class="nav-item">
-                   <a class="nav-link collapsed text-white" href="Histori.Update.html">
-                       <i class="fa-solid fa-clock-rotate-left text-white"></i>
-                       <span>Histori Update</span></a>
-               </li>
-   
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-   
-               <!--Manajemen Akun-->
-               <li class="nav-item">
-                   <a class="nav-link collapsed text-white" href="Manajemen.Akun.html">
-                       <i class="fa-solid fa-user-plus text-white"></i>
-                       <span>Manajemen Akun</span></a>
-               </li>
+            <!-- Histori Update -->
+            <li class="nav-item">
+                <a class="nav-link collapsed text-white" href="Histori.Update.html">
+                    <i class="fa-solid fa-clock-rotate-left text-white"></i>
+                    <span>Histori Update</span></a>
+            </li>
+
+             <!-- Divider -->
+             <hr class="sidebar-divider">
+
+            <!--Manajemen Akun-->
+            <li class="nav-item">
+                <a class="nav-link collapsed text-white" href="Manajemen.Akun.html">
+                    <i class="fa-solid fa-user-plus text-white"></i>
+                    <span>Manajemen Akun</span></a>
+            </li>
 
 
             <!-- Divider -->
@@ -118,31 +118,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                       <!-- Nav Item - User Information -->
+                        <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="Edit.Profil.Admin.html">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small" >Admin <i class="fa-solid fa-user ml-2"></i></span>
@@ -167,74 +143,64 @@
 
                     <!-- Content Row -->
                     <div class="container-fluid">
-            
 
-                        <div class="container mb-4">
-                        <div class="row gutters">
-                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                        <div class="card h-100">
+
+                        <!-- DataTales Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 font-weight-bold text-primary">TAMBAH STOK BAHAN CUTTING</h5>
+                            </div>
                             <div class="card-body">
-                                <div class="account-settings">
-                                    <div class="user-profile">
-                                        <div class="user-avatar">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin"  width="100%" height="90%">
+                                <div class="table-responsive">
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="fullName">Kode Barang</label>
+                                            <input type="text" class="form-control" id="fullName" placeholder="Enter Kode Barang">
                                         </div>
                                     </div>
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="fullName">Nama Barang</label>
+                                            <input type="text" class="form-control" id="fullName" placeholder="Enter Nama Barang">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="fullName">Jenis Bahan</label>
+                                            <input type="text" class="form-control" id="fullName" placeholder="Size">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="fullName">Ukuran Bahan [Panjang x Lebar]</label>
+                                            <input type="text" class="form-control" id="fullName" placeholder="Jenis Kain">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="fullName">Warna</label>
+                                            <input type="text" class="form-control" id="fullName" placeholder="Bentuk Lengan">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="fullName">Harga [Per CM]</label>
+                                            <input type="text" class="form-control" id="fullName" placeholder="Bentuk Lingkaran">
+                                        </div>
+                                    </div>
+
+                                    <a class="btn btn-primary float-right mr-3" href="#" role="button">Simpan</a>
+                                    <a class="btn btn-primary float-right mr-3" href="Bahan.Cutting.Admin.html" role="button">Cancel</a>
                                 </div>
                             </div>
+
                         </div>
-                        </div>
-                        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-                        <div class="card h-100">
-                        <div class="card-body">
-                            <div class="row gutters">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <h6 class="mb-2 text-primary">Personal Details</h6>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="fullName">Username</label>
-                                        <input type="text" class="form-control" id="fullName" placeholder="Enter Username">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="eMail">Email</label>
-                                        <input type="email" class="form-control" id="eMail" placeholder="Enter Email">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="website">Tipe User</label>
-                                        <input type="url" class="form-control" id="website" placeholder="Tipe User">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="website">Password</label>
-                                        <input type="url" class="form-control" id="website" placeholder="Password">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gutters">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="text-right">
-                                        <a class="btn btn-primary float-right mr-3" href="#" role="button">Simpan</a>
-                                        <a class="btn btn-secondary float-right mr-3" href="Manajemen.Akun.html" role="button">Cancel</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        </div>
-                        </div>
-                        </div>
+    
                     </div>
                     <!-- /.container-fluid -->
-
+    
                 </div>
                 <!-- End of Main Content -->
-
 
         </div>
         <!-- End of Content Wrapper -->
