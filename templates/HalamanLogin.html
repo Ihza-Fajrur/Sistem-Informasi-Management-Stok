@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends 'base.html'%}
+{% block head %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link rel="stylesheet" type="text/css" href="../static/css/HalamanLogin.css"> -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='HalamanLogin.css') }}">
+  <title></title>
+{% endblock %}
+{% block body %}
+  <div class="wrapper">
+    <div class="image"><img src="static/img/logo.png" width="200px"></div>
+    <form action="{{ url_for('login') }}" method="post">
+      <div class="row">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Masukkan Username" id="username" required>
+      </div>
+      <div class="row">
+        <label>Password</label>
+        <input type="text" name="password" placeholder="Masukkan Password" id="password" required>
+      </div>
+      <div class="row-button">
+        <input type="submit" value="Masuk">
+      </div>
+    </form>
+  </div>
+{% endblock %}
