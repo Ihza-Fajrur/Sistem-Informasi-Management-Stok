@@ -67,37 +67,35 @@ def login():
 
 @app.route('/logout')
 def logout():
-    # Remove session data, this will log the user out
-#    session.pop('loggedin', None)
-#    session.pop('id', None)
-#    session.pop('username', None)
-#    session.pop('acc_type', None)
    session.clear()
     
    # Redirect to login page
    return redirect(url_for('login'))
 
-# @app.route('/profile', methods=['POST', 'GET'])
-# def profile():
-#     # Check if user is loggedin
-#     if 'loggedin' in session:
-#         # We need all the account info for the user so we can display it on the profile page
-#         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#         cursor.execute('SELECT * FROM accounts WHERE username = %s', (session['username'],))
-#         account = cursor.fetchone()
-#         # Show the profile page with account info
-#         return render_template('profile.html', account=account)
-#     # User is not loggedin redirect to login page
-#     return redirect(url_for('login'))
-
 @app.route('/profile', methods=['POST', 'GET'])
 def profile():
+    if request.method == 'POST':
+        if 'new_username' in request.form:
+            # Create variables for easy access
+            new_username = request.form['new_username']
+            # new_email = request.form['new_email']
+            print("it goes here")
+        if 'new_email' in request.form:
+            # Create variables for easy access
+            new_email = request.form['new_email']
+            print("it goes here 2")
+        else:
+            print("it doesn't go there")
     # Check if user is loggedin
     if 'loggedin' in session:
+        username =  session['username']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
+        account = cursor.fetchone()
         if session['acc_type'] == 'Staff':
-            return render_template('Profil.Admin.html', username=session['username'])
+            return render_template('Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
         elif session['acc_type'] == 'Admin':
-            return render_template('Edit.Profil.Admin.html', username=session['username'])
+            return render_template('Edit.Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
 
 @app.route('/home', methods=['POST', 'GET'])
 def home():
@@ -158,6 +156,31 @@ def manajemen_akun():
         #user is loggedin show them the home page
         if session['acc_type'] == 'Admin':
             return render_template('Manajemen.Akun.html', username=session['username'])
+        
+@app.route('/edit_bahan_cutting', methods=['POST', 'GET'])
+def edit_bahan_cutting():
+    #check if user is loggedin
+    if 'loggedin' in session:
+        #user is loggedin show them the home page
+        if session['acc_type'] == 'Admin':
+            return render_template('Edit.Bahan.Cutting.html', username=session['username'])
+        
+@app.route('/edit_kaos_polos', methods=['POST', 'GET'])
+def edit_kaos_polos():
+    #check if user is loggedin
+    if 'loggedin' in session:
+        #user is loggedin show them the home page
+        if session['acc_type'] == 'Admin':
+            return render_template('Edit.Kaos.Polos.html', username=session['username'])
+        
+@app.route('/edit_kaos_original', methods=['POST', 'GET'])
+def edit_kaos_original():
+    #check if user is loggedin
+    if 'loggedin' in session:
+        #user is loggedin show them the home page
+        if session['acc_type'] == 'Admin':
+            return render_template('Edit.Kaos.Original.html', username=session['username'])
+
 
 if __name__ == "__main__": 
     app.run(host='0.0.0.0', port=5000, debug=True)
