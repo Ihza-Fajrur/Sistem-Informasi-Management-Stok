@@ -157,107 +157,25 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                                <td>
-                                                    <a href="Edit.Manajemen.Akun.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                </td>
-                                            </tr>
-                                        
+                                            {% for account in accounts %}
+                                                    <tr>
+                                                        <td >{{ account['username'] }}</td>
+                                                        <td>{{ account['email'] }}</td>
+                                                        <td>{{ account['acc_type'] }}</td>
+                                                        <td>{{ account['email'] }}</td>
+                                                        <td>
+                                                            <form action="/manajemen_akun" method="POST" ><button class="btn btn-danger" type="submit" name="username" value="{{  account['username']  }}"><span class="glyphicon glyphicon-trash"></span> Edit</button> </form>
+                                                            <!-- <form action="/edit_detail_akun" method="POST" id="edit_detail_akun">
+                                                                <a href="javascript:{}" onclick="document.getElementById('edit_detail_akun').submit(account['username']);"  name="username" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                            </form> -->
+                                                            <!-- <form action="/edit_detail_akun" method="POST" id="hapus_akun">
+                                                                <a href="javascript:{}" onclick="document.getElementById('edit_detail_akun').submit();" value="{{  account['username']  }}" name="username" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                                                            </form> -->
+                                                            <!-- <a href="#" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a> -->
+                                                        </td>
+                                                    </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                     <a class="btn btn-primary float-right" href="Tambah.Manajemen.Akun.html" role="button">Tambah</a>

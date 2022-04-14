@@ -162,9 +162,27 @@ def history_update():
 def manajemen_akun():
     #check if user is loggedin
     if 'loggedin' in session:
-        #user is loggedin show them the home page
-        if session['acc_type'] == 'Admin':
-            return render_template('Manajemen.Akun.html', username=session['username'])
+        if request.method == 'GET':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM accounts ORDER BY acc_type ASC')
+            accounts = cursor.fetchall()
+            #user is loggedin show them the home page
+            if session['acc_type'] == 'Admin':
+                return render_template('Manajemen.Akun.html', username=session['username'], accounts=accounts)
+        elif request.method == 'POST':
+            username = request.form['username']
+            
+            return redirect (url_for('.edit_detail_akun', username=username))
+            
+        
+@app.route('/edit_detail_akun/<username>', methods=['POST', 'GET'])
+def edit_detail_akun(username):
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
+        account = cursor.fetchone()
+        print(request.method)
+        return render_template('Edit.Manajemen.Akun.html', account=account)
         
 @app.route('/edit_bahan_cutting', methods=['POST', 'GET'])
 def edit_bahan_cutting():
@@ -173,6 +191,7 @@ def edit_bahan_cutting():
         #user is loggedin show them the home page
         if session['acc_type'] == 'Admin':
             return render_template('Edit.Bahan.Cutting.html', username=session['username'])
+        
         
 @app.route('/edit_kaos_polos', methods=['POST', 'GET'])
 def edit_kaos_polos():
