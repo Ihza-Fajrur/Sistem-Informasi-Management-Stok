@@ -156,28 +156,30 @@
                                             <th>Bentuk Lengan</th>
                                             <th>Bentuk Lingkaran Leher</th>
                                             <th>Warna</th>
-                                            <th>Jumlah</th>
+                                            <th>Jumlah Stok</th>
                                             <th>Harga</th>
                                             <th>Total Harga</th>
                                             <th>Pengaturan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for kaos_polos in data_kaos_polos %}
                                         <tr>
-                                            <td>A001</td>
-                                            <td>Baju Polos</td>
-                                            <td>XL</td>
-                                            <td>Kasa</td>
-                                            <td>Panjang</td>
-                                            <td>Bulat</td>
-                                            <td>Hitam</td>
-                                            <td>10</td>
-                                            <td>Rp.65.000</td>
-                                            <td>Rp.65.000</td>
+                                            <td>{{ kaos_polos['kode_barang'] }}</td>
+                                            <td>{{ kaos_polos['nama_barang'] }}</td>
+                                            <td>{{ kaos_polos['size'] }}</td>
+                                            <td>{{ kaos_polos['jenis_kain'] }}</td>
+                                            <td>{{ kaos_polos['bentuk_lengan'] }}</td>
+                                            <td>{{ kaos_polos['bentuk_lingkaran_leher'] }}</td>
+                                            <td>{{ kaos_polos['warna'] }}</td>
+                                            <td>{{ kaos_polos['jumlah_stok'] }}</td>
+                                            <td>{{ kaos_polos['harga_satuan'] }}</td>
+                                            <td>{{ kaos_polos['total_harga'] }}</td>
                                             <td>
                                                 <a href="Edit.Kaos.Polos.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                                                 <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                                             </td>
+                                            {% endfor %}
                                         </tr>
                                     </tbody>
                                 </table>

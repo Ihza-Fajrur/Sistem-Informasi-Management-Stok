@@ -113,11 +113,14 @@ def home():
 def bahan_cutting():
     # Check if user is loggedin
     if 'loggedin' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM bahan_cutting ORDER BY kode_barang DESC')
+        data_bahan_cutting = cursor.fetchall()
         # User is loggedin show them the home page
         if session['acc_type'] == 'Staff':
-            return render_template('Bahan.Cutting.html', username=session['username'])
+            return render_template('Bahan.Cutting.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
         elif session['acc_type'] == 'Admin':
-            return render_template('Bahan.Cutting.Admin.html', username=session['username'])
+            return render_template('Bahan.Cutting.Admin.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -125,21 +128,27 @@ def bahan_cutting():
 def kaos_polos():
     # Check if user is loggedin
     if 'loggedin' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM kaos_polos ORDER BY kode_barang DESC')
+        data_kaos_polos = cursor.fetchall()
         # User is loggedin show them the home page
         if session['acc_type'] == 'Staff':
-            return render_template('Kaos.Polos.html', username=session['username'])
+            return render_template('Kaos.Polos.html', username=session['username'],data_kaos_polos=data_kaos_polos)
         elif session['acc_type'] == 'Admin':
-            return render_template('Kaos.Polos.Admin.html', username=session['username'])
+            return render_template('Kaos.Polos.Admin.html', username=session['username'],data_kaos_polos=data_kaos_polos)
         
 @app.route('/kaos_original', methods=['POST', 'GET'])
 def kaos_original():
     #check if user is loggedin
     if 'loggedin' in session:
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM kaos_original ORDER BY kode_barang DESC')
+        data_kaos_original = cursor.fetchall()
         #user is loggedin show them the home page
         if session['acc_type'] == 'Staff':
-            return render_template('Kaos.Original.html', username=session['username'])
+            return render_template('Kaos.Original.html', username=session['username'], data_kaos_original=data_kaos_original)
         elif session['acc_type'] == 'Admin':
-            return render_template('Kaos.Original.Admin.html', username=session['username'])
+            return render_template('Kaos.Original.Admin.html', username=session['username'], data_kaos_original=data_kaos_original)
         
 @app.route('/history_update', methods=['POST', 'GET'])
 def history_update():

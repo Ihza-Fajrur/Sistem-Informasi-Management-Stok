@@ -162,20 +162,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for kaos_original in data_kaos_original %}
                                         <tr>
-                                            <td>A001</td>
-                                            <td>Baju Polos</td>
-                                            <td>XL</td>
-                                            <td>Panjang</td>
-                                            <td>Bebas</td>
-                                            <td>Hitam</td>
-                                            <td>10</td>
-                                            <td>Rp.65.000</td>
-                                            <td>Rp.65.000</td>
+                                            <td>{{ kaos_original['kode_barang'] }}</td>
+                                            <td>{{ kaos_original['nama_barang'] }}</td>
+                                            <td>{{ kaos_original['size'] }}</td>
+                                            <td>{{ kaos_original['jenis_kain'] }}</td>
+                                            <td>{{ kaos_original['bentuk_lengan'] }}</td>
+                                            <td>{{ kaos_original['bentuk_lingkar_leher'] }}</td>
+                                            <td>{{ kaos_original['warna'] }}</td>
+                                            <td>{{ kaos_original['harga_satuan'] }}</td>
+                                            <td>{{ kaos_original['total_harga'] }}</td>
                                             <td>
                                                 <a href="Edit.Kaos.Original.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                                                 <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                                             </td>
+                                        {% endfor %}
                                         </tr>
                                     </tbody>
                                 </table>

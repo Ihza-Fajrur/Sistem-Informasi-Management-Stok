@@ -152,29 +152,31 @@
                                             <th>Kode Barang</th>
                                             <th>Nama Barang</th>
                                             <th>Jenis Bahan</th>
-                                            <th>Ukuran Bahan</th>
-                                            <th>Warna Bahan</th>
-                                            <th>Harga</th>
-                                            <th>Jumlah</th>
+                                            <th>Warna</th>
+                                            <th>Ukuran Panjang</th>
+                                            <th>Ukuran Lebar</th>
+                                            <th>Harga Satuan</th>
                                             <th>Total Harga</th>
                                             <th>Pengaturan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for bahan_cutting in data_bahan_cutting %}
                                         <tr>
-                                            <td>A001</td>
-                                            <td>Baju Polos</td>
-                                            <td>Licin</td>
-                                            <td>100</td>
-                                            <td>Hitam</td>
-                                            <td>Rp.25.000</td>
-                                            <td>250</td>
-                                            <td>Rp.1.000.000</td>
+                                            <td>{{ bahan_cutting['kode_barang'] }}</td>
+                                            <td>{{ bahan_cutting['nama_barang'] }}</td>
+                                            <td>{{  bahan_cutting['jenis_barang'] }}</td>
+                                            <td>{{ bahan_cutting['warna'] }}</td>
+                                            <td>{{ bahan_cutting['ukuran_panjang'] }}</td>
+                                            <td>{{ bahan_cutting['ukuran_lebar'] }}</td>
+                                            <td>Rp. {{ bahan_cutting['harga_satuan'] }}</td>
+                                            <td>Rp. {{ bahan_cutting['total_harga'] }}</td>
                                             <td>
                                                 <a href="Edit.Bahan.Cutting.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                                                 <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                                             </td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 <input class="btn btn-primary float-right ml-3" type="submit" value="Export">
