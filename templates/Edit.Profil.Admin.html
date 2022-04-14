@@ -153,11 +153,11 @@
                                 <form action="{{ url_for('profile') }}" method="POST">
                                     <div class="row">
                                         <label>Username</label>
-                                        <input type="text"  placeholder="{{ username }}" id="new_username" required>
+                                        <input type="text" name="new_username" placeholder="{{ username }}" id="new_username" required>
                                     </div>
                                     <div class="row">
                                         <label>Email</label>
-                                        <input type="text"  placeholder="{{ email }}" id="new_email" required>
+                                        <input type="text" name="new_email" placeholder="{{ email }}" id="new_email" required>
                                     </div>
                                     <div class="row-button">
                                         <input type="submit" value="Simpan">

@@ -74,28 +74,30 @@ def logout():
 
 @app.route('/profile', methods=['POST', 'GET'])
 def profile():
-    if request.method == 'POST':
-        if 'new_username' in request.form:
-            # Create variables for easy access
-            new_username = request.form['new_username']
-            # new_email = request.form['new_email']
-            print("it goes here")
-        if 'new_email' in request.form:
-            # Create variables for easy access
-            new_email = request.form['new_email']
-            print("it goes here 2")
-        else:
-            print("it doesn't go there")
     # Check if user is loggedin
     if 'loggedin' in session:
-        username =  session['username']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
-        account = cursor.fetchone()
-        if session['acc_type'] == 'Staff':
-            return render_template('Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
-        elif session['acc_type'] == 'Admin':
-            return render_template('Edit.Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
+        if request.method == 'POST':
+            if 'new_username' in request.form:
+                # Create variables for easy access
+                new_username = request.form['new_username']
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('UPDATE accounts SET username = %s WHERE username = %s', (new_username, session['username'],))
+                mysql.connect().commit()
+            if 'new_email' in request.form:
+                # Create variables for easy access
+                new_email = request.form['new_email']
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('UPDATE accounts SET email = %s WHERE username = %s', (new_email, session['username'],))
+                mysql.connect().commit()
+        elif request.method == 'GET':
+            username =  session['username']
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
+            account = cursor.fetchone()
+            if session['acc_type'] == 'Staff':
+                return render_template('Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
+            elif session['acc_type'] == 'Admin':
+                return render_template('Edit.Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
 
 @app.route('/home', methods=['POST', 'GET'])
 def home():
