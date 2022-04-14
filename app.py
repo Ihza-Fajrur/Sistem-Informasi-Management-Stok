@@ -95,7 +95,7 @@ def profile():
             cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
             account = cursor.fetchone()
             if session['acc_type'] == 'Staff':
-                return render_template('Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
+                return render_template('Edit.Profil.html', username=username, email=account['email'], profile_picture=account['user_photo'])
             elif session['acc_type'] == 'Admin':
                 return render_template('Edit.Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
 
