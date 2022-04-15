@@ -183,9 +183,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <form action="/kaos_polos" method="POST" >
-                                    <input name="export" class="btn btn-primary float-right" type="submit" value="Export">
-                                </form>
+                                <a class="btn btn-primary float-right ml-3" href="{{ url_for('kaos_polos_export') }}" role="button">Export</a>
                                 <a class="btn btn-primary float-right" href="Tambah.Kaos.Polos.html" role="button">Tambah</a>
                             </div>
                         </div>

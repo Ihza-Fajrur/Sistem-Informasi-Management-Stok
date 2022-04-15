@@ -5,10 +5,8 @@ import MySQLdb.cursors
 import re
 from werkzeug.utils import append_slash_redirect
 from flask_mail import Mail, Message
-import xlwt
 from pandas import json_normalize 
 import pandas.io.sql as psql
-import os
 
 #inisialisasi
 app = Flask(__name__)
@@ -124,69 +122,83 @@ def home():
 def bahan_cutting():
     # Check if user is loggedin
     if 'loggedin' in session:
-        if request.method == 'GET':
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM bahan_cutting ORDER BY kode_barang ASC')
-            data_bahan_cutting = cursor.fetchall()
-            # User is loggedin show them the home page
-            if session['acc_type'] == 'Staff':
-                return render_template('Bahan.Cutting.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
-            elif session['acc_type'] == 'Admin':
-                return render_template('Bahan.Cutting.Admin.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
-        elif request.method == 'POST':
-             if request.form['export'] == 'Export':
-                df=psql.read_sql('SELECT * FROM bahan_cutting ORDER BY kode_barang ASC', con=mysql.connection)
-                df.to_excel('./data_export/bahan_cutting.xlsx', index=False)
-                return send_file("./data_export/bahan_cutting.xlsx", as_attachment=True)
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM bahan_cutting ORDER BY kode_barang ASC')
+        data_bahan_cutting = cursor.fetchall()
+        # User is loggedin show them the home page
+        if session['acc_type'] == 'Staff':
+            return render_template('Bahan.Cutting.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
+        elif session['acc_type'] == 'Admin':
+            return render_template('Bahan.Cutting.Admin.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
         return redirect(url_for('bahan_cutting'))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/bahan_cutting_export', methods=['POST', 'GET'])
+def bahan_cutting_export():
+    if 'loggedin' in session:
+        df=psql.read_sql('SELECT * FROM bahan_cutting ORDER BY kode_barang ASC', con=mysql.connection)
+        df.to_excel('./data_export/bahan_cutting.xlsx', index=False)
+        return send_file("./data_export/bahan_cutting.xlsx", as_attachment=True)
+    if 'loggedin' in session:
+        return redirect(url_for('bahan_cutting'))
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/kaos_polos', methods=['POST', 'GET'])
 def kaos_polos():
     # Check if user is loggedin
     if 'loggedin' in session:
-        if request.method == 'GET':
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM kaos_polos ORDER BY kode_barang ASC')
-            data_kaos_polos = cursor.fetchall()
-            # User is loggedin show them the home page
-            if session['acc_type'] == 'Staff':
-                return render_template('Kaos.Polos.html', username=session['username'],data_kaos_polos=data_kaos_polos)
-            elif session['acc_type'] == 'Admin':
-                return render_template('Kaos.Polos.Admin.html', username=session['username'],data_kaos_polos=data_kaos_polos)
-        elif request.method == 'POST':
-             if request.form['export'] == 'Export':
-                df=psql.read_sql('SELECT * FROM kaos_polos ORDER BY kode_barang ASC', con=mysql.connection)
-                df.to_excel('./data_export/kaos_polos.xlsx', index=False)
-                return send_file("./data_export/kaos_polos.xlsx", as_attachment=True)
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM kaos_polos ORDER BY kode_barang ASC')
+        data_kaos_polos = cursor.fetchall()
+        # User is loggedin show them the home page
+        if session['acc_type'] == 'Staff':
+            return render_template('Kaos.Polos.html', username=session['username'],data_kaos_polos=data_kaos_polos)
+        elif session['acc_type'] == 'Admin':
+            return render_template('Kaos.Polos.Admin.html', username=session['username'],data_kaos_polos=data_kaos_polos)
         return redirect(url_for('kaos_polos'))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
-        
+
+@app.route('/kaos_polos_export', methods=['POST', 'GET'])
+def kaos_polos_export():
+    if 'loggedin' in session:
+        df=psql.read_sql('SELECT * FROM kaos_polos ORDER BY kode_barang ASC', con=mysql.connection)
+        df.to_excel('./data_export/kaos_polos.xlsx', index=False)
+        return send_file("./data_export/kaos_polos.xlsx", as_attachment=True)
+    if 'loggedin' in session:
+        return redirect(url_for('kaos_polos'))
+    else:
+        return redirect(url_for('login'))
+            
 @app.route('/kaos_original', methods=['POST', 'GET'])
 def kaos_original():
     #check if user is loggedin
     if 'loggedin' in session:
-        if request.method == 'GET':
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM kaos_original ORDER BY kode_barang ASC')
-            data_kaos_original = cursor.fetchall()
-            #user is loggedin show them the home page
-            if session['acc_type'] == 'Staff':
-                return render_template('Kaos.Original.html', username=session['username'], data_kaos_original=data_kaos_original)
-            elif session['acc_type'] == 'Admin':
-                return render_template('Kaos.Original.Admin.html', username=session['username'], data_kaos_original=data_kaos_original)
-        elif request.method == 'POST':
-             if request.form['export'] == 'Export':
-                df=psql.read_sql('SELECT * FROM kaos_original ORDER BY kode_barang ASC', con=mysql.connection)
-                df.to_excel('./data_export/kaos_original.xlsx', index=False)
-                return send_file("./data_export/kaos_original.xlsx", as_attachment=True)
-                # return redirect(url_for('kaos_original'))
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM kaos_original ORDER BY kode_barang ASC')
+        data_kaos_original = cursor.fetchall()
+        #user is loggedin show them the home page
+        if session['acc_type'] == 'Staff':
+            return render_template('Kaos.Original.html', username=session['username'], data_kaos_original=data_kaos_original)
+        elif session['acc_type'] == 'Admin':
+            return render_template('Kaos.Original.Admin.html', username=session['username'], data_kaos_original=data_kaos_original)
         return redirect(url_for('kaos_original'))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
         
+@app.route('/kaos_original_export', methods=['POST', 'GET'])
+def kaos_original_export():
+    if 'loggedin' in session:
+        df=psql.read_sql('SELECT * FROM kaos_original ORDER BY kode_barang ASC', con=mysql.connection)
+        df.to_excel('./data_export/kaos_original.xlsx', index=False)
+        return send_file("./data_export/kaos_original.xlsx", as_attachment=True)
+    if 'loggedin' in session:
+        return redirect(url_for('kaos_original'))
+    else:
+        return redirect(url_for('login'))
+    
 @app.route('/history_update', methods=['POST', 'GET'])
 def history_update():
     #check if user is loggedin
@@ -213,7 +225,6 @@ def manajemen_akun():
             return redirect (url_for('.edit_detail_akun', username=username))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
-            
         
 @app.route('/edit_detail_akun/<username>', methods=['POST', 'GET'])
 def edit_detail_akun(username):
@@ -226,6 +237,22 @@ def edit_detail_akun(username):
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
         
+@app.route('/tambah_akun', methods=['POST', 'GET'])
+def tambah_akun():
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        if request.method == 'GET':
+            return render_template('Tambah.Manajemen.Akun.html', username=session['username'])
+        elif request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            acc_type = request.form['acc_type']
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('INSERT INTO accounts (username, password, acc_type) VALUES ("{0}", "{1}", "{2}")'.format(username, password, acc_type))
+            mysql.connection.commit()
+            return redirect(url_for('.tambah_akun'))
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
 @app.route('/edit_bahan_cutting', methods=['POST', 'GET'])
 def edit_bahan_cutting():
     #check if user is loggedin
