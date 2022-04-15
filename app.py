@@ -82,13 +82,15 @@ def profile():
                 new_username = request.form['new_username']
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
                 cursor.execute('UPDATE accounts SET username = %s WHERE username = %s', (new_username, session['username'],))
-                mysql.connect().commit()
+                mysql.connection.commit()
+                session['username'] = new_username
             if 'new_email' in request.form:
                 # Create variables for easy access
                 new_email = request.form['new_email']
                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
                 cursor.execute('UPDATE accounts SET email = %s WHERE username = %s', (new_email, session['username'],))
-                mysql.connect().commit()
+                mysql.connection.commit()
+            return redirect(url_for('home'))    
         elif request.method == 'GET':
             username =  session['username']
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
