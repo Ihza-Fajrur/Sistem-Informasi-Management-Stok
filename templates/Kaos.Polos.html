@@ -157,7 +157,9 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                                <input class="btn btn-primary float-right" type="submit" value="Export">
+                                <form action="/kaos_polos" method="POST">
+                                    <input name="export" class="btn btn-primary float-right" type="submit" value="Export">
+                                </form>
                             </div>
                         </div>
                     </div>

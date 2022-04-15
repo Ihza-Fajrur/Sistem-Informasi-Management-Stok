@@ -178,7 +178,9 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                                <input class="btn btn-primary float-right ml-3" type="submit" value="Export">
+                                <form action="/bahan_cutting" method="POST">
+                                    <input name="export" class="btn btn-primary float-right" type="submit" value="Export">
+                                </form>
                                 <a class="btn btn-primary float-right" href="Tambah.Bahan.Cutting.html" role="button">Tambah</a>
                             </div>
                         </div>

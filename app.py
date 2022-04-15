@@ -124,14 +124,21 @@ def home():
 def bahan_cutting():
     # Check if user is loggedin
     if 'loggedin' in session:
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM bahan_cutting ORDER BY kode_barang ASC')
-        data_bahan_cutting = cursor.fetchall()
-        # User is loggedin show them the home page
-        if session['acc_type'] == 'Staff':
-            return render_template('Bahan.Cutting.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
-        elif session['acc_type'] == 'Admin':
-            return render_template('Bahan.Cutting.Admin.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
+        if request.method == 'GET':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM bahan_cutting ORDER BY kode_barang ASC')
+            data_bahan_cutting = cursor.fetchall()
+            # User is loggedin show them the home page
+            if session['acc_type'] == 'Staff':
+                return render_template('Bahan.Cutting.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
+            elif session['acc_type'] == 'Admin':
+                return render_template('Bahan.Cutting.Admin.html', username=session['username'],data_bahan_cutting=data_bahan_cutting)
+        elif request.method == 'POST':
+             if request.form['export'] == 'Export':
+                df=psql.read_sql('SELECT * FROM bahan_cutting ORDER BY kode_barang ASC', con=mysql.connection)
+                df.to_excel('./data_export/bahan_cutting.xlsx', index=False)
+                return send_file("./data_export/bahan_cutting.xlsx", as_attachment=True)
+        return redirect(url_for('bahan_cutting'))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
