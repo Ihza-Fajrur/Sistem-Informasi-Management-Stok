@@ -184,8 +184,12 @@
                                             <td>Rp. {{ kaos_polos['harga_satuan'] }}</td>
                                             <td>Rp. {{ kaos_polos['total_harga'] }}</td>
                                             <td>
-                                                <a href="Edit.Kaos.Polos.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                                                <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                                                <a href="Edit.Kaos.Polos.html" class="edit" title="Edit" data-toggle="tooltip">
+                                                    <i class="material-icons">&#xE254;</i>
+                                                </a>
+                                                <a href="{{ url_for('kaos_polos_del', kode_barang = kaos_polos['kode_barang']) }}" class="delete" title="Delete" data-toggle="tooltip">
+                                                    <i class="material-icons">&#xE872;</i>
+                                                </a>
                                             </td>
                                             {% endfor %}
                                         </tr>

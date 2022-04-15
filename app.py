@@ -134,6 +134,17 @@ def bahan_cutting():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+@app.route('/bahan_cutting_del/<kode_barang>', methods=['POST', 'GET'])
+def bahan_cutting_del(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        #Penambahan stok kaos original
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM bahan_cutting WHERE kode_barang = %s', (kode_barang,))
+        mysql.connection.commit()
+        return redirect(url_for('bahan_cutting'))
+    return redirect (url_for('login'))
+
 @app.route('/bahan_cutting_export', methods=['POST', 'GET'])
 def bahan_cutting_export():
     if 'loggedin' in session:
@@ -234,7 +245,18 @@ def kaos_polos_inc(kode_barang):
 
         return redirect(url_for('kaos_polos'))
     return redirect (url_for('login'))
-                    
+
+@app.route('/kaos_polos_del/<kode_barang>', methods=['POST', 'GET'])
+def kaos_polos_del(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        #Penambahan stok kaos polos
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM kaos_polos WHERE kode_barang = %s', (kode_barang,))
+        mysql.connection.commit()
+        return redirect(url_for('kaos_polos'))
+    return redirect (url_for('login'))
+                          
 @app.route('/kaos_polos_export', methods=['POST', 'GET'])
 def kaos_polos_export():
     if 'loggedin' in session:
@@ -301,6 +323,17 @@ def kaos_original_inc(kode_barang):
         cursor.execute('UPDATE kaos_original SET total_harga = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']*kaos_original['harga_satuan'], kode_barang,))
         mysql.connection.commit()
         
+        return redirect(url_for('kaos_original'))
+    return redirect (url_for('login'))
+
+@app.route('/kaos_original_del/<kode_barang>', methods=['POST', 'GET'])
+def kaos_original_del(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        #Penambahan stok kaos original
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM kaos_original WHERE kode_barang = %s', (kode_barang,))
+        mysql.connection.commit()
         return redirect(url_for('kaos_original'))
     return redirect (url_for('login'))
         
@@ -378,7 +411,6 @@ def edit_bahan_cutting():
             return render_template('Edit.Bahan.Cutting.html', username=session['username'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
-        
         
 @app.route('/edit_kaos_polos', methods=['POST', 'GET'])
 def edit_kaos_polos():
