@@ -1,9 +1,14 @@
-from flask import Flask,render_template,url_for, request,jsonify,session,flash,redirect
+import json
+from flask import Flask,render_template,url_for, request,jsonify,session,flash,redirect,send_file
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 from werkzeug.utils import append_slash_redirect
 from flask_mail import Mail, Message
+import xlwt
+from pandas import json_normalize 
+import pandas.io.sql as psql
+import os
 
 #inisialisasi
 app = Flask(__name__)
@@ -54,7 +59,6 @@ def login():
                 session['loggedin'] = True
                 session['username'] = account['username']
                 session['acc_type'] = account['acc_type']
-                
                 # Redirect to home page
                 return redirect(url_for('home'))
             else:
@@ -102,6 +106,7 @@ def profile():
                 return render_template('Edit.Profil.html', username=username, email=account['email'], profile_picture=account['user_photo'])
             elif session['acc_type'] == 'Admin':
                 return render_template('Edit.Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
+    return redirect(url_for('login'))
 
 @app.route('/home', methods=['POST', 'GET'])
 def home():
@@ -134,27 +139,46 @@ def bahan_cutting():
 def kaos_polos():
     # Check if user is loggedin
     if 'loggedin' in session:
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM kaos_polos ORDER BY kode_barang ASC')
-        data_kaos_polos = cursor.fetchall()
-        # User is loggedin show them the home page
-        if session['acc_type'] == 'Staff':
-            return render_template('Kaos.Polos.html', username=session['username'],data_kaos_polos=data_kaos_polos)
-        elif session['acc_type'] == 'Admin':
-            return render_template('Kaos.Polos.Admin.html', username=session['username'],data_kaos_polos=data_kaos_polos)
+        if request.method == 'GET':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM kaos_polos ORDER BY kode_barang ASC')
+            data_kaos_polos = cursor.fetchall()
+            # User is loggedin show them the home page
+            if session['acc_type'] == 'Staff':
+                return render_template('Kaos.Polos.html', username=session['username'],data_kaos_polos=data_kaos_polos)
+            elif session['acc_type'] == 'Admin':
+                return render_template('Kaos.Polos.Admin.html', username=session['username'],data_kaos_polos=data_kaos_polos)
+        elif request.method == 'POST':
+             if request.form['export'] == 'Export':
+                df=psql.read_sql('SELECT * FROM kaos_polos ORDER BY kode_barang ASC', con=mysql.connection)
+                df.to_excel('./data_export/kaos_polos.xlsx', index=False)
+                return send_file("./data_export/kaos_polos.xlsx", as_attachment=True)
+        return redirect(url_for('kaos_polos'))
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
         
 @app.route('/kaos_original', methods=['POST', 'GET'])
 def kaos_original():
     #check if user is loggedin
     if 'loggedin' in session:
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM kaos_original ORDER BY kode_barang ASC')
-        data_kaos_original = cursor.fetchall()
-        #user is loggedin show them the home page
-        if session['acc_type'] == 'Staff':
-            return render_template('Kaos.Original.html', username=session['username'], data_kaos_original=data_kaos_original)
-        elif session['acc_type'] == 'Admin':
-            return render_template('Kaos.Original.Admin.html', username=session['username'], data_kaos_original=data_kaos_original)
+        if request.method == 'GET':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM kaos_original ORDER BY kode_barang ASC')
+            data_kaos_original = cursor.fetchall()
+            #user is loggedin show them the home page
+            if session['acc_type'] == 'Staff':
+                return render_template('Kaos.Original.html', username=session['username'], data_kaos_original=data_kaos_original)
+            elif session['acc_type'] == 'Admin':
+                return render_template('Kaos.Original.Admin.html', username=session['username'], data_kaos_original=data_kaos_original)
+        elif request.method == 'POST':
+             if request.form['export'] == 'Export':
+                df=psql.read_sql('SELECT * FROM kaos_original ORDER BY kode_barang ASC', con=mysql.connection)
+                df.to_excel('./data_export/kaos_original.xlsx', index=False)
+                return send_file("./data_export/kaos_original.xlsx", as_attachment=True)
+                # return redirect(url_for('kaos_original'))
+        return redirect(url_for('kaos_original'))
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
         
 @app.route('/history_update', methods=['POST', 'GET'])
 def history_update():
@@ -163,6 +187,8 @@ def history_update():
         #user is loggedin show them the home page
         if session['acc_type'] == 'Admin':
             return render_template('Histori.Update.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
         
 @app.route('/manajemen_akun', methods=['POST', 'GET'])
 def manajemen_akun():
@@ -177,8 +203,9 @@ def manajemen_akun():
                 return render_template('Manajemen.Akun.html', username=session['username'], accounts=accounts)
         elif request.method == 'POST':
             username = request.form['username']
-            
             return redirect (url_for('.edit_detail_akun', username=username))
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
             
         
 @app.route('/edit_detail_akun/<username>', methods=['POST', 'GET'])
@@ -189,6 +216,8 @@ def edit_detail_akun(username):
         account = cursor.fetchone()
         print(request.method)
         return render_template('Edit.Manajemen.Akun.html', account=account)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
         
 @app.route('/edit_bahan_cutting', methods=['POST', 'GET'])
 def edit_bahan_cutting():
@@ -197,6 +226,8 @@ def edit_bahan_cutting():
         #user is loggedin show them the home page
         if session['acc_type'] == 'Admin':
             return render_template('Edit.Bahan.Cutting.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
         
         
 @app.route('/edit_kaos_polos', methods=['POST', 'GET'])
@@ -206,6 +237,8 @@ def edit_kaos_polos():
         #user is loggedin show them the home page
         if session['acc_type'] == 'Admin':
             return render_template('Edit.Kaos.Polos.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
         
 @app.route('/edit_kaos_original', methods=['POST', 'GET'])
 def edit_kaos_original():
@@ -214,6 +247,8 @@ def edit_kaos_original():
         #user is loggedin show them the home page
         if session['acc_type'] == 'Admin':
             return render_template('Edit.Kaos.Original.html', username=session['username'])
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 if __name__ == "__main__": 

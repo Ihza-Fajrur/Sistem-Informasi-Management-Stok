@@ -19,6 +19,9 @@
         <label>Password</label>
         <input type="text" name="password" placeholder="Masukkan Password" id="password" required>
       </div>
+      {% if msg %}  
+        <p><strong>Error</strong>: {{msg}}</p>  
+      {% endif %}    
       <div class="row-button">
         <input type="submit" value="Masuk">
       </div>
