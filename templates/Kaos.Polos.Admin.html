@@ -165,14 +165,22 @@
                                     <tbody>
                                         {% for kaos_polos in data_kaos_polos %}
                                         <tr>
-                                            <td>{{ kaos_polos['kode_barang'] }}</td>
+                                            <td >{{ kaos_polos['kode_barang'] }}</td>
                                             <td>{{ kaos_polos['nama_barang'] }}</td>
                                             <td>{{ kaos_polos['size'] }}</td>
                                             <td>{{ kaos_polos['jenis_kain'] }}</td>
                                             <td>{{ kaos_polos['bentuk_lengan'] }}</td>
                                             <td>{{ kaos_polos['bentuk_lingkar_leher'] }}</td>
                                             <td>{{ kaos_polos['warna'] }}</td>
-                                            <td>{{ kaos_polos['jumlah_stok'] }}</td>
+                                            <td>
+                                                {{ kaos_polos['jumlah_stok'] }} 
+                                                <a href="{{ url_for('kaos_polos_dec', kode_barang = kaos_polos['kode_barang']) }}" style="float: right; padding:4px">
+                                                    <i class="fa-solid fa-minus"></i>
+                                                </a> 
+                                                <a href="{{ url_for('kaos_polos_inc', kode_barang = kaos_polos['kode_barang']) }}" style="float: right; padding: 4px;">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </a>
+                                            </td>
                                             <td>Rp. {{ kaos_polos['harga_satuan'] }}</td>
                                             <td>Rp. {{ kaos_polos['total_harga'] }}</td>
                                             <td>

@@ -161,6 +161,45 @@ def kaos_polos():
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
+@app.route('/kaos_polos_dec/<kode_barang>', methods=['POST', 'GET'])
+def kaos_polos_dec(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        #Pengurangan stok kaos polos
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT jumlah_stok FROM kaos_polos where kode_barang = %s', (kode_barang,))
+        kaos_polos = cursor.fetchone()
+        cursor.execute('UPDATE kaos_polos SET jumlah_stok = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']-1, kode_barang,))
+        mysql.connection.commit()
+        
+        #Pembaruan total harga kaos polos
+        cursor.execute('SELECT * FROM kaos_polos where kode_barang = %s', (kode_barang,))
+        kaos_polos = cursor.fetchone()
+        cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']*kaos_polos['harga_satuan'], kode_barang,))
+        mysql.connection.commit()
+        return redirect(url_for('kaos_polos'))
+    return redirect (url_for('login'))
+
+@app.route('/kaos_polos_inc/<kode_barang>', methods=['POST', 'GET'])
+def kaos_polos_inc(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        #Penambahan stok kaos polos
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM kaos_polos where kode_barang = %s', (kode_barang,))
+        kaos_polos = cursor.fetchone()
+        cursor.execute('UPDATE kaos_polos SET jumlah_stok = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']+1, kode_barang,))
+        mysql.connection.commit()
+        
+        #Pembaruan total harga kaos polos
+        cursor.execute('SELECT * FROM kaos_polos where kode_barang = %s', (kode_barang,))
+        kaos_polos = cursor.fetchone()
+        cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']*kaos_polos['harga_satuan'], kode_barang,))
+        mysql.connection.commit()
+        
+        return redirect(url_for('kaos_polos'))
+    return redirect (url_for('login'))
+                    
 @app.route('/kaos_polos_export', methods=['POST', 'GET'])
 def kaos_polos_export():
     if 'loggedin' in session:
@@ -187,6 +226,46 @@ def kaos_original():
         return redirect(url_for('kaos_original'))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/kaos_original_dec/<kode_barang>', methods=['POST', 'GET'])
+def kaos_original_dec(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        #Pengurangan stok kaos original
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT jumlah_stok FROM kaos_original where kode_barang = %s', (kode_barang,))
+        kaos_original = cursor.fetchone()
+        cursor.execute('UPDATE kaos_original SET jumlah_stok = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']-1, kode_barang,))
+        mysql.connection.commit()
+        
+        #Pembaruan total harga kaos original
+        cursor.execute('SELECT * FROM kaos_original where kode_barang = %s', (kode_barang,))
+        kaos_original = cursor.fetchone()
+        cursor.execute('UPDATE kaos_original SET total_harga = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']*kaos_original['harga_satuan'], kode_barang,))
+        mysql.connection.commit()
+        
+        return redirect(url_for('kaos_original'))
+    return redirect (url_for('login'))
+
+@app.route('/kaos_original_inc/<kode_barang>', methods=['POST', 'GET'])
+def kaos_original_inc(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        #Penambahan stok kaos original
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT jumlah_stok FROM kaos_original where kode_barang = %s', (kode_barang,))
+        kaos_original = cursor.fetchone()
+        cursor.execute('UPDATE kaos_original SET jumlah_stok = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']+1, kode_barang,))
+        mysql.connection.commit()
+        
+        #Pembaruan total harga kaos original
+        cursor.execute('SELECT * FROM kaos_original where kode_barang = %s', (kode_barang,))
+        kaos_original = cursor.fetchone()
+        cursor.execute('UPDATE kaos_original SET total_harga = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']*kaos_original['harga_satuan'], kode_barang,))
+        mysql.connection.commit()
+        
+        return redirect(url_for('kaos_original'))
+    return redirect (url_for('login'))
         
 @app.route('/kaos_original_export', methods=['POST', 'GET'])
 def kaos_original_export():

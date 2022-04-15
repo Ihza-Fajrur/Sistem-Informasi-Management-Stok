@@ -169,7 +169,16 @@
                                             <td>{{ kaos_original['bentuk_lengan'] }}</td>
                                             <td>{{ kaos_original['desain'] }}</td>
                                             <td>{{ kaos_original['warna'] }}</td>
-                                            <td>{{ kaos_original['jumlah_stok'] }}</td>
+                                            <td>
+                                                {{ kaos_original['jumlah_stok'] }}
+                                                <a href="{{ url_for('kaos_original_dec', kode_barang = kaos_original['kode_barang']) }}" style="float: right; padding:4px">
+                                                    <i class="fa-solid fa-minus"></i>
+                                                </a> 
+                                                <a href="{{ url_for('kaos_original_inc', kode_barang = kaos_original['kode_barang']) }}" style="float: right; padding: 4px;">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </a>
+
+                                            </td>
                                             <td>Rp. {{ kaos_original['harga_satuan'] }}</td>
                                             <td>Rp. {{ kaos_original['total_harga'] }}</td>
                                             <td>
