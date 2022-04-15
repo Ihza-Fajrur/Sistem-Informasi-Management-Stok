@@ -78,18 +78,20 @@ def profile():
     if 'loggedin' in session:
         if request.method == 'POST':
             if 'new_username' in request.form:
-                # Create variables for easy access
-                new_username = request.form['new_username']
-                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-                cursor.execute('UPDATE accounts SET username = %s WHERE username = %s', (new_username, session['username'],))
-                mysql.connection.commit()
-                session['username'] = new_username
+                if request.form['new_username'] != '':
+                    # Create variables for easy access
+                    new_username = request.form['new_username']
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE accounts SET username = %s WHERE username = %s', (new_username, session['username'],))
+                    mysql.connection.commit()
+                    session['username'] = new_username
             if 'new_email' in request.form:
-                # Create variables for easy access
-                new_email = request.form['new_email']
-                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-                cursor.execute('UPDATE accounts SET email = %s WHERE username = %s', (new_email, session['username'],))
-                mysql.connection.commit()
+                if request.form['new_email'] != '':
+                    # Create variables for easy access
+                    new_email = request.form['new_email']
+                    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                    cursor.execute('UPDATE accounts SET email = %s WHERE username = %s', (new_email, session['username'],))
+                    mysql.connection.commit()
             return redirect(url_for('home'))    
         elif request.method == 'GET':
             username =  session['username']
@@ -118,7 +120,7 @@ def bahan_cutting():
     # Check if user is loggedin
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM bahan_cutting ORDER BY kode_barang DESC')
+        cursor.execute('SELECT * FROM bahan_cutting ORDER BY kode_barang ASC')
         data_bahan_cutting = cursor.fetchall()
         # User is loggedin show them the home page
         if session['acc_type'] == 'Staff':
@@ -133,7 +135,7 @@ def kaos_polos():
     # Check if user is loggedin
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM kaos_polos ORDER BY kode_barang DESC')
+        cursor.execute('SELECT * FROM kaos_polos ORDER BY kode_barang ASC')
         data_kaos_polos = cursor.fetchall()
         # User is loggedin show them the home page
         if session['acc_type'] == 'Staff':
@@ -146,7 +148,7 @@ def kaos_original():
     #check if user is loggedin
     if 'loggedin' in session:
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM kaos_original ORDER BY kode_barang DESC')
+        cursor.execute('SELECT * FROM kaos_original ORDER BY kode_barang ASC')
         data_kaos_original = cursor.fetchall()
         #user is loggedin show them the home page
         if session['acc_type'] == 'Staff':
