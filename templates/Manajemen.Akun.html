@@ -152,7 +152,7 @@
                                                 <th>Username</th>
                                                 <th>Email</th>
                                                 <th>Tipe User</th>
-                                                <th>Password</th>
+                                                <th>Email</th>
                                                 <th>Pengaturan</th>
                                             </tr>
                                         </thead>
@@ -178,7 +178,7 @@
                                             {% endfor %}
                                         </tbody>
                                     </table>
-                                    <a class="btn btn-primary float-right" href="Tambah.Manajemen.Akun.html" role="button">Tambah</a>
+                                    <a class="btn btn-primary float-right" href="{{ url_for('tambah_akun') }}" role="button">Tambah</a>
                                 </div>
                             </div>
                         </div>
