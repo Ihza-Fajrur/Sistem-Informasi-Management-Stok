@@ -123,27 +123,27 @@
                                 <h5 class="tengah font-weight-bold text-primary">EDIT PROFIL</h5>
                             </div>
                                 <hr class="sidebar-divider d-none d-md-block">
-                                <div class="image"><img src="/static/img/Admin.jpg" width="100px"></div>
+                                <!-- <img src="/static/img/logo.png" alt="" width="90%" height="80%"> -->
+                                <!-- <div class="image"><img src="{{ profile_picture }}" width="100px"></div> -->
+                                <div class="image"><img src="/profile_picture/Ihza.jpg" width="100px"></div>
                                 <a class="edit" href="#">
                                     <span class="mr-2 d-none d-lg-inline text-primary-600 small">Ubah Foto Profil</span>
                                 </a>
-                                <form action="#">
-                                <div class="row">
-                                    <label>Username</label>
-                                    <input type="text" placeholder="Masukkan Username" id="new_username" required>
-                                </div>
-                                <div class="row">
-                                    <label>Email</label>
-                                    <input type="text" placeholder="Masukkan Email" id="new_email" required>
-                                </div>
-                                <div class="row-button">
-                                    <input type="submit" value="Simpan">
-                                </div>
+                                
+                                <form action="{{ url_for('profile') }}" method="POST">
+                                    <div class="row">
+                                        <label>Username</label>
+                                        <input type="text" name="new_username" placeholder="{{ username }}" id="new_username">
+                                    </div>
+                                    <div class="row">
+                                        <label>Email</label>
+                                        <input type="text" name="new_email" placeholder="{{ email }}" id="new_email">
+                                    </div>
+                                    <div class="row-button">
+                                        <input type="submit" value="Simpan">
+                                    </div>
                                 </form>
                         </div>
-
-
-    
                     </div>
                     <!-- /.container-fluid -->
     
@@ -171,5 +171,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-</div>
-{% endblock %}
+    </div>
+
+{%endblock%}
