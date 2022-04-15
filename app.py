@@ -165,19 +165,39 @@ def kaos_polos():
 def kaos_polos_dec(kode_barang):
     # Check if user is loggedin
     if 'loggedin' in session:
-        #Pengurangan stok kaos polos
+        #Kaos polos data retrieval
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT jumlah_stok FROM kaos_polos where kode_barang = %s', (kode_barang,))
         kaos_polos = cursor.fetchone()
-        cursor.execute('UPDATE kaos_polos SET jumlah_stok = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']-1, kode_barang,))
-        mysql.connection.commit()
         
-        #Pembaruan total harga kaos polos
-        cursor.execute('SELECT * FROM kaos_polos where kode_barang = %s', (kode_barang,))
-        kaos_polos = cursor.fetchone()
-        cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']*kaos_polos['harga_satuan'], kode_barang,))
-        mysql.connection.commit()
+        if not kaos_polos['jumlah_stok']-1 == -1:
+            #Pengurangan stok kaos polos
+            cursor.execute('UPDATE kaos_polos SET jumlah_stok = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']-1, kode_barang,))
+            mysql.connection.commit()
+            
+            #Pembaruan total harga kaos polos
+            cursor.execute('SELECT * FROM kaos_polos where kode_barang = %s', (kode_barang,))
+            kaos_polos = cursor.fetchone()
+            cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']*kaos_polos['harga_satuan'], kode_barang,))
+            mysql.connection.commit()
+            
+            #Pengiriman notifikasi ke email jika stok habis
+            if kaos_polos['jenis_kain'] == 'COTTON COMBED 20S' and kaos_polos['jumlah_stok'] == 0:
+                if kaos_polos['warna'] == 'PUTIH' or kaos_polos['warna'] == 'HITAM':
+                    cursor.execute('SELECT email FROM accounts WHERE username = "{0}" '.format(session['username']))
+                    account = cursor.fetchone()
+                    cursor.execute('SELECT email FROM accounts WHERE acc_type = "{0}" '.format('Admin'))
+                    akun_penerima = cursor.fetchall()
+                    for i in range(len(akun_penerima)):
+                        temp = []
+                        temp.append(akun_penerima[i]['email'])
+                        msg = Message('Notifikasi Stok Barang - Sokou Lampung', sender = account['email'], recipients = temp)
+                        msg.body = 'Hallo Admin Sokou Lampung. Informasi stok produk ' + kaos_polos['nama_barang'] +' dengan kode ' + kaos_polos['kode_barang'] + ' telah habis' + '\n\n' + 'Segera lakukan penambahan stok barang ya. Cukup hati yang kosong tanpa doi, stok produk jangan :)'
+                        mail.send(msg)
+                        temp.pop()
+        
         return redirect(url_for('kaos_polos'))
+    
     return redirect (url_for('login'))
 
 @app.route('/kaos_polos_inc/<kode_barang>', methods=['POST', 'GET'])
@@ -197,6 +217,21 @@ def kaos_polos_inc(kode_barang):
         cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']*kaos_polos['harga_satuan'], kode_barang,))
         mysql.connection.commit()
         
+        #Pengiriman notifikasi ke email jika stok habis
+        if kaos_polos['jenis_kain'] == 'COTTON COMBED 20S' and kaos_polos['jumlah_stok'] == 0:
+            if kaos_polos['warna'] == 'PUTIH' or kaos_polos['warna'] == 'HITAM':
+                cursor.execute('SELECT email FROM accounts WHERE username = "{0}" '.format(session['username']))
+                account = cursor.fetchone()
+                cursor.execute('SELECT email FROM accounts WHERE acc_type = "{0}" '.format('Admin'))
+                akun_penerima = cursor.fetchall()
+                for i in range(len(akun_penerima)):
+                    temp = []
+                    temp.append(akun_penerima[i]['email'])
+                    msg = Message('Notifikasi Stok Barang - Sokou Lampung', sender = account['email'], recipients = temp)
+                    msg.body = 'Hallo Admin Sokou Lampung. Informasi stok produk ' + kaos_polos['nama_barang'] +' dengan kode ' + kaos_polos['kode_barang'] + ' telah habis' + '\n\n' + 'Segera lakukan penambahan stok barang ya. Cukup hati yang kosong tanpa doi, stok produk jangan :)'
+                    mail.send(msg)
+                    temp.pop()
+
         return redirect(url_for('kaos_polos'))
     return redirect (url_for('login'))
                     
@@ -231,18 +266,20 @@ def kaos_original():
 def kaos_original_dec(kode_barang):
     # Check if user is loggedin
     if 'loggedin' in session:
-        #Pengurangan stok kaos original
+        #Kaos polos data retrieval
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT jumlah_stok FROM kaos_original where kode_barang = %s', (kode_barang,))
         kaos_original = cursor.fetchone()
-        cursor.execute('UPDATE kaos_original SET jumlah_stok = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']-1, kode_barang,))
-        mysql.connection.commit()
+        if not kaos_original['jumlah_stok']-1 == -1:
+            #Pengurangan stok kaos original
+            cursor.execute('UPDATE kaos_original SET jumlah_stok = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']-1, kode_barang,))
+            mysql.connection.commit()
         
-        #Pembaruan total harga kaos original
-        cursor.execute('SELECT * FROM kaos_original where kode_barang = %s', (kode_barang,))
-        kaos_original = cursor.fetchone()
-        cursor.execute('UPDATE kaos_original SET total_harga = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']*kaos_original['harga_satuan'], kode_barang,))
-        mysql.connection.commit()
+            #Pembaruan total harga kaos original
+            cursor.execute('SELECT * FROM kaos_original where kode_barang = %s', (kode_barang,))
+            kaos_original = cursor.fetchone()
+            cursor.execute('UPDATE kaos_original SET total_harga = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']*kaos_original['harga_satuan'], kode_barang,))
+            mysql.connection.commit()
         
         return redirect(url_for('kaos_original'))
     return redirect (url_for('login'))
