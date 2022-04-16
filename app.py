@@ -362,30 +362,64 @@ def history_update():
 def manajemen_akun():
     #check if user is loggedin
     if 'loggedin' in session:
-        if request.method == 'GET':
-            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('SELECT * FROM accounts ORDER BY acc_type ASC')
-            accounts = cursor.fetchall()
-            #user is loggedin show them the home page
-            if session['acc_type'] == 'Admin':
-                return render_template('Manajemen.Akun.html', username=session['username'], accounts=accounts)
-        elif request.method == 'POST':
-            username = request.form['username']
-            return redirect (url_for('.edit_detail_akun', username=username))
-    # User is not loggedin redirect to login page
-    return redirect(url_for('login'))
-        
-@app.route('/edit_detail_akun/<username>', methods=['POST', 'GET'])
-def edit_detail_akun(username):
-    if 'loggedin' in session and session['acc_type'] == 'Admin':
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
-        account = cursor.fetchone()
-        print(request.method)
-        return render_template('Edit.Manajemen.Akun.html', account=account)
+        cursor.execute('SELECT * FROM accounts ORDER BY acc_type ASC')
+        accounts = cursor.fetchall()
+        #user is loggedin show them the home page
+        if session['acc_type'] == 'Admin':
+            return render_template('Manajemen.Akun.html', username=session['username'], accounts=accounts)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
+
+@app.route('/manajemen_akun_del/<username>', methods=['POST', 'GET'])
+def manajemen_akun_del(username):
+    # Check if user is loggedin
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        #Penambahan stok kaos original
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('DELETE FROM accounts WHERE username = %s', (username,))
+        mysql.connection.commit()
+        return redirect(url_for('manajemen_akun'))
+    return redirect (url_for('login'))
         
+@app.route('/manajemen_akun_edit/<username>', methods=['POST', 'GET'])
+def manajemen_akun_edit(username):
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        if request.method == 'POST':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            if 'username' in request.form:
+                if not request.form['username'] == '':
+                    # Create variables for easy access
+                    new_username = request.form['username']
+                    cursor.execute('UPDATE accounts SET username = %s WHERE username = %s', (new_username, username,))
+                    mysql.connection.commit()
+            if 'email' in request.form:
+                if not request.form['email'] == '':
+                    # Create variables for easy access
+                    new_email = request.form['email']
+                    cursor.execute('UPDATE accounts SET email = %s WHERE username = %s', (new_email, username,))
+                    mysql.connection.commit()
+            if 'acc_type' in request.form:
+                if not request.form['acc_type'] == '':
+                    # Create variables for easy access
+                    new_acc_type = request.form['acc_type']
+                    cursor.execute('UPDATE accounts SET acc_type = %s WHERE username = %s', (new_acc_type, username,))
+                    mysql.connection.commit()
+                    print(new_acc_type)
+            if 'password' in request.form:
+                if not request.form['password'] == '':
+                    # Create variables for easy access
+                    new_password = request.form['password']
+                    cursor.execute('UPDATE accounts SET password = %s WHERE username = %s', (new_password, username,))
+                    mysql.connection.commit()
+        elif request.method == 'GET':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
+            account = cursor.fetchone()
+            return render_template('Edit.Manajemen.Akun.html', account=account)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('manajemen_akun'))
+
 @app.route('/tambah_akun', methods=['POST', 'GET'])
 def tambah_akun():
     if 'loggedin' in session and session['acc_type'] == 'Admin':

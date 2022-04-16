@@ -158,27 +158,28 @@
                         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
                         <div class="card h-100">
                         <div class="card-body">
+                            <form action="{{ url_for('manajemen_akun_edit', username = account['username']) }}" method="POST">
                             <div class="row gutters">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                     <h6 class="mb-2 text-primary">Personal Details</h6>
                                 </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="fullName">Username</label>
-                                            <input type="text" class="form-control" id="username" value="{{ account['username'] }}" placeholder="Enter username">
+                                            <label for="username">Username</label>
+                                            <input type="text" class="form-control" id="username" name="username" value="{{ account['username'] }}" placeholder="Enter username">
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="eMail">Email</label>
-                                            <input type="email" class="form-control" id="eMail" value="{{ account['email'] }}" placeholder="Enter email ID">
+                                            <input type="email" class="form-control" id="eMail" name="email" value="{{ account['email'] }}" placeholder="Enter email ID">
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="website">Tipe User</label>
                                             <!-- <input type="url" class="form-control" id="tipe_user" value="{{ account['tipe_user'] }}" placeholder="Username"> -->
-                                            <select type="url" class="form-control" id="tipe_user" placeholder="Username">
+                                            <select type="tipe user" class="form-control" name="acc_type" id="acc_type" placeholder="Tipe User">
                                                 {% if account['acc_type'] == "Staff"%}
                                                     <option value="Admin">Admin</option>
                                                     <option selected="selected" value="Staff">Staff</option>
@@ -193,18 +194,19 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="website">Password</label>
-                                            <input type="url" class="form-control" id="password" value="{{ account['password'] }}" placeholder="Password">
+                                            <input type="password" name="password" class="form-control" id="password" value="{{ account['password'] }}" placeholder="Password">
                                         </div>
                                     </div>
                             </div>
                             <div class="row gutters">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                     <div class="text-right">
-                                        <a class="btn btn-primary float-right mr-3" href="#" role="button">Simpan</a>
+                                        <input type="submit" class="btn btn-primary float-right mr-3" href="#" role="button" value="Simpan">
                                         <a class="btn btn-secondary float-right mr-3" href="{{ url_for('manajemen_akun') }}" role="button">Cancel</a>
                                     </div>
                                 </div>
                             </div>
+                            </form>
                         </div>
                         </div>
                         </div>
