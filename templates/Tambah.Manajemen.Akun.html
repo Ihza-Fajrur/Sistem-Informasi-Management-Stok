@@ -116,7 +116,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="{{ url_for('profile') }}">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ username }} <i class="fa-solid fa-user ml-2"></i></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ session['username'] }} <i class="fa-solid fa-user ml-2"></i></span>
                             </a>
                         </li>
 
@@ -158,43 +158,51 @@
                         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
                         <div class="card h-100">
                         <div class="card-body">
-                            <div class="row gutters">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <h6 class="mb-2 text-primary">Personal Details</h6>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="username">Username</label>
-                                        <input type="text" class="form-control" id="username" placeholder="Enter Username">
+                            <form action="{{ url_for('tambah_akun') }}" method="POST">
+                                <div class="row gutters">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <h6 class="mb-2 text-primary">Personal Details</h6>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="username">Username</label>
+                                            <input type="text" class="form-control" name="username" id="username" placeholder="Enter Username">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="eMail">Email</label>
+                                            <input type="email" class="form-control" name="email" id="eMail" placeholder="Enter Email">
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="tipe_user">Tipe User</label>
+                                            <select type="tipe user" class="form-control" name="acc_type" id="acc_type" placeholder="Tipe User">
+                                                <option value="Admin">Admin</option>
+                                                <option selected="selected" value="Staff">Staff</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="password">Password</label>
+                                            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="eMail">Email</label>
-                                        <input type="email" class="form-control" id="eMail" placeholder="Enter Email">
+                                {% if msg %}  
+                                    <p><strong>Error</strong>: {{msg}}</p>  
+                                {% endif %}    
+                                <div class="row gutters">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="text-right">
+                                            <input type="submit" class="btn btn-primary float-right mr-3" href="#" role="button" value="Simpan">
+                                            <a class="btn btn-secondary float-right mr-3" href="{{  url_for('manajemen_akun') }}" role="button">Cancel</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="tipe_user">Tipe User</label>
-                                        <input type="url" class="form-control" id="tipe_user" placeholder="Tipe User">
-                                    </div>
-                                </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="password">Password</label>
-                                        <input type="url" class="form-control" id="password" placeholder="Password">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gutters">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="text-right">
-                                        <a class="btn btn-primary float-right mr-3" href="#" role="button">Simpan</a>
-                                        <a class="btn btn-secondary float-right mr-3" href="{{  url_for('manajemen_akun') }}" role="button">Cancel</a>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                         </div>
                         </div>
@@ -214,7 +222,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2021</span>
+                    <span>Copyright &copy;Sokou Lampung 2022</span>
                 </div>
             </div>
         </footer>
