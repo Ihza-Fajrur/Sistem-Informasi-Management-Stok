@@ -119,7 +119,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('profile') }}">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ username }} <i class="fa-solid fa-user ml-2"></i></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ session['username'] }} <i class="fa-solid fa-user ml-2"></i></span>
                             </a>
                         </li>
 
@@ -150,71 +150,67 @@
                                 <h5 class="m-0 font-weight-bold text-primary">EDIT STOK KAOS POLOS</h5>
                             </div>
                             <div class="card-body">
+                                <form action="{{ url_for('kaos_polos_edit', kode_barang = kaos_polos['kode_barang']) }}" method="POST">
                                 <div class="table-responsive">
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Kode Barang</label>
-                                            <input type="text" class="form-control" id="fullName" placeholder="Enter Kode Barang">
+                                            <input type="text" class="form-control" id="fullName" name="kode_barang" placeholder="Enter Kode Barang" value="{{ kaos_polos['kode_barang'] }}">
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Nama Barang</label>
-                                            <input type="text" class="form-control" id="nama_barang" placeholder="Enter Nama Barang">
+                                            <input type="text" class="form-control" id="nama_barang" name="nama_barang" placeholder="Enter Nama Barang" value="{{ kaos_polos['nama_barang'] }}">
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Size</label>
-                                            <input type="text" class="form-control" id="size" placeholder="Size">
+                                            <input type="text" class="form-control" id="size" name="size" placeholder="Size" value="{{ kaos_polos['size'] }}">
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Jenis Kain</label>
-                                            <input type="text" class="form-control" id="jenis_kain" placeholder="Jenis Kain">
+                                            <input type="text" class="form-control" id="jenis_kain" name="jenis_kain" placeholder="Jenis Kain" value="{{ kaos_polos['jenis_kain'] }}">
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Bentuk Lengan</label>
-                                            <input type="text" class="form-control" id="bentuk_lengan" placeholder="Bentuk Lengan">
+                                            <input type="text" class="form-control" id="bentuk_lengan" name="bentuk_lengan" placeholder="Bentuk Lengan" value="{{ kaos_polos['bentuk_lengan'] }}">
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Bentuk Lingkaran</label>
-                                            <input type="text" class="form-control" id="bentuk_lingkaran" placeholder="Bentuk Lingkaran">
+                                            <input type="text" class="form-control" id="bentuk_lingkaran" name="bentuk_lingkar_leher" placeholder="Bentuk Lingkaran" value="{{ kaos_polos['bentuk_lingkar_leher'] }}">
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Warna</label>
-                                            <input type="text" class="form-control" id="warna" placeholder="Warna">
+                                            <input type="text" class="form-control" id="warna" name="warna" placeholder="Warna" value="{{ kaos_polos['warna'] }}">
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Jumlah</label>
-                                            <input type="text" class="form-control" id="jumlah" placeholder="Jumlah">
+                                            <input type="number" class="form-control" id="jumlah" name="jumlah_stok" placeholder="Jumlah" value="{{ kaos_polos['jumlah_stok'] }}">
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="fullName">Harga</label>
-                                            <input type="text" class="form-control" id="harga" placeholder="Harga">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <label for="fullName">Total Harga</label>
-                                            <input type="text" class="form-control" id="total_harga" placeholder="Total Harga">
+                                            <input type="number" class="form-control" id="harga" name="harga_satuan" placeholder="Harga" value="{{ kaos_polos['harga_satuan'] }}">
                                         </div>
                                     </div>
 
-                                    <a class="btn btn-primary float-right mr-3" href="Kaos.Polos.Admin.html" role="button">Simpan</a>
-                                    <a class="btn btn-primary float-right mr-3" href="Edit.Kaos.Polos.html" role="button">Cancel</a>
+                                    <input type="submit" class="btn btn-primary float-right mr-3" role="button" value="Simpan">
+                                    <a class="btn btn-primary float-right mr-3" href="{{ url_for('kaos_polos') }}" role="button">Cancel</a>
                                 </div>
+                                </form>
                             </div>
 
                         </div>

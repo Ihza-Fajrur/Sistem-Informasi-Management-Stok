@@ -1,4 +1,7 @@
+import email
+from hashlib import new
 import json
+from select import select
 from flask import Flask,render_template,url_for, request,jsonify,session,flash,redirect,send_file
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -256,6 +259,122 @@ def kaos_polos_del(kode_barang):
         mysql.connection.commit()
         return redirect(url_for('kaos_polos'))
     return redirect (url_for('login'))
+
+@app.route('/kaos_polos_edit/<kode_barang>', methods=['POST', 'GET'])
+def kaos_polos_edit(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        if request.method == 'POST':
+            kode_barang_changed = False
+            if 'kode_barang' in request.form:
+                if request.form['kode_barang'] != '':
+                    # Create variables for easy access
+                    new_kode_barang = request.form['kode_barang']
+                    try:
+                        cursor.execute('UPDATE kaos_polos SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
+                        mysql.connection.commit()
+                        kode_barang_changed = True
+                    except:
+                        cursor.execute('UPDATE IGNORE kaos_polos SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
+                        mysql.connection.commit()
+                        
+            if kode_barang_changed:
+                kode_barang = new_kode_barang
+                
+            if 'nama_barang' in request.form:
+                if request.form['nama_barang'] != '':
+                    # Create variables for easy access
+                    new_nama_barang = request.form['nama_barang']
+                    cursor.execute('UPDATE kaos_polos SET nama_barang = %s WHERE kode_barang = %s', (new_nama_barang, kode_barang,))
+                    mysql.connection.commit()
+            
+            if 'size' in request.form:
+                if request.form['size'] != '':
+                    # Create variables for easy access
+                    new_size = request.form['size']
+                    cursor.execute('UPDATE kaos_polos SET size = %s WHERE kode_barang = %s', (new_size, kode_barang,))
+                    mysql.connection.commit()
+            
+            if 'jenis_kain' in request.form:
+                if request.form['jenis_kain'] != '':
+                    # Create variables for easy access
+                    new_jenis_kain = request.form['jenis_kain']
+                    cursor.execute('UPDATE kaos_polos SET jenis_kain = %s WHERE kode_barang = %s', (new_jenis_kain, kode_barang,))
+                    mysql.connection.commit()
+                    
+            if 'bentuk_lengan' in request.form:
+                if request.form['bentuk_lengan'] != '':
+                    # Create variables for easy access
+                    new_bentuk_lengan = request.form['bentuk_lengan']
+                    cursor.execute('UPDATE kaos_polos SET bentuk_lengan = %s WHERE kode_barang = %s', (new_bentuk_lengan, kode_barang,))
+                    mysql.connection.commit()
+            
+            if 'bentuk_lingkar_leher' in request.form:
+                if request.form['bentuk_lingkar_leher'] != '':
+                    # Create variables for easy access
+                    new_bentuk_lingkar_leher = request.form['bentuk_lingkar_leher']
+                    cursor.execute('UPDATE kaos_polos SET bentuk_lingkar_leher = %s WHERE kode_barang = %s', (new_bentuk_lingkar_leher, kode_barang,))
+                    mysql.connection.commit()
+            
+            if 'warna' in request.form:
+                if request.form['warna'] != '':
+                    # Create variables for easy access
+                    new_warna = request.form['warna']
+                    cursor.execute('UPDATE kaos_polos SET warna = %s WHERE kode_barang = %s', (new_warna, kode_barang,))
+                    mysql.connection.commit()
+            
+            if 'jumlah_stok' in request.form:
+                if request.form['jumlah_stok'] != '':
+                    # Create variables for easy access
+                    new_jumlah_stok = request.form['jumlah_stok']
+                    cursor.execute('UPDATE kaos_polos SET jumlah_stok = %s WHERE kode_barang = %s', (new_jumlah_stok, kode_barang,))
+                    mysql.connection.commit()
+            
+            if 'harga_satuan' in request.form:
+                if request.form['harga_satuan'] != '':
+                    # Create variables for easy access
+                    new_harga_satuan = request.form['harga_satuan']
+                    cursor.execute('UPDATE kaos_polos SET harga_satuan = %s WHERE kode_barang = %s', (new_harga_satuan, kode_barang,))
+                    mysql.connection.commit()
+                    cursor.execute('SELECT jumlah_stok FROM kaos_polos WHERE kode_barang = "{0}" '.format(kode_barang))
+                    jumlah_stok = cursor.fetchone()
+                    new_harga_total = int(new_harga_satuan) * int(jumlah_stok['jumlah_stok'])
+                    cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (new_harga_total, kode_barang,))
+                    mysql.connection.commit()
+                    
+            return redirect(url_for('kaos_polos'))
+        
+        elif request.method == 'GET':
+            cursor.execute('SELECT * FROM kaos_polos WHERE kode_barang = "{0}" '.format(kode_barang))
+            kaosPolos = cursor.fetchone()
+            return render_template('Edit.Kaos.Polos.html', kaos_polos = kaosPolos)
+    # User is not loggedin redirect to login page
+    return redirect (url_for('login'))
+
+# @app.route('/kaos_polos_add/<kode_barang>', methods=['POST', 'GET'])
+# def kaos_polos_add(kode_barang):
+#     if 'loggedin' in session and session['acc_type'] == 'Admin':
+#         if request.method == 'GET':
+#             return render_template('Tambah.Kaos.Polos.html', username=session['username'], msg=msg)
+#         elif request.method == 'POST':
+#             # Create variables for easy access
+#             username = request.form['username']
+#             password = request.form['password']
+#             acc_type = request.form['acc_type']
+#             email = request.form['email']
+#             # Check if account exists using MySQL
+#             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#             cursor.execute('SELECT username FROM accounts WHERE username = "{0}" '.format(username))
+#             # Fetch one record and return result
+#             account = cursor.fetchone()
+#             if not account:
+#                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#                 cursor.execute('INSERT INTO accounts (username, password, acc_type, email) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(username, password, acc_type, email))
+#                 mysql.connection.commit()
+#                 return redirect(url_for('manajemen_akun'))
+#     # User is not loggedin redirect to login page
+#     return redirect(url_for('login'))
                           
 @app.route('/kaos_polos_export', methods=['POST', 'GET'])
 def kaos_polos_export():
@@ -385,13 +504,14 @@ def manajemen_akun_del(username):
 @app.route('/manajemen_akun_edit/<username>', methods=['POST', 'GET'])
 def manajemen_akun_edit(username):
     if 'loggedin' in session and session['acc_type'] == 'Admin':
+        msg =''
         if request.method == 'POST':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             if 'username' in request.form:
                 if not request.form['username'] == '':
                     # Create variables for easy access
                     new_username = request.form['username']
-                    cursor.execute('UPDATE accounts SET username = %s WHERE username = %s', (new_username, username,))
+                    cursor.execute('UPDATE IGNORE accounts SET username = %s WHERE username = %s', (new_username, username,))
                     mysql.connection.commit()
             if 'email' in request.form:
                 if not request.form['email'] == '':
@@ -405,34 +525,48 @@ def manajemen_akun_edit(username):
                     new_acc_type = request.form['acc_type']
                     cursor.execute('UPDATE accounts SET acc_type = %s WHERE username = %s', (new_acc_type, username,))
                     mysql.connection.commit()
-                    print(new_acc_type)
             if 'password' in request.form:
                 if not request.form['password'] == '':
                     # Create variables for easy access
                     new_password = request.form['password']
                     cursor.execute('UPDATE accounts SET password = %s WHERE username = %s', (new_password, username,))
                     mysql.connection.commit()
+                
         elif request.method == 'GET':
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
             account = cursor.fetchone()
-            return render_template('Edit.Manajemen.Akun.html', account=account)
+            return render_template('Edit.Manajemen.Akun.html', account=account, msg=msg)
     # User is not loggedin redirect to login page
     return redirect(url_for('manajemen_akun'))
 
 @app.route('/tambah_akun', methods=['POST', 'GET'])
 def tambah_akun():
     if 'loggedin' in session and session['acc_type'] == 'Admin':
+        msg =''
         if request.method == 'GET':
-            return render_template('Tambah.Manajemen.Akun.html', username=session['username'])
+            return render_template('Tambah.Manajemen.Akun.html', username=session['username'], msg=msg)
         elif request.method == 'POST':
+            # Create variables for easy access
             username = request.form['username']
             password = request.form['password']
             acc_type = request.form['acc_type']
+            email = request.form['email']
+            # Check if account exists using MySQL
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-            cursor.execute('INSERT INTO accounts (username, password, acc_type) VALUES ("{0}", "{1}", "{2}")'.format(username, password, acc_type))
-            mysql.connection.commit()
-            return redirect(url_for('.tambah_akun'))
+            cursor.execute('SELECT username FROM accounts WHERE username = "{0}" '.format(username))
+            # Fetch one record and return result
+            account = cursor.fetchone()
+            if not account:
+                cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+                cursor.execute('INSERT INTO accounts (username, password, acc_type, email) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(username, password, acc_type, email))
+                mysql.connection.commit()
+                return redirect(url_for('manajemen_akun'))
+            else:
+                # Account doesnt exist or username/password incorrect
+                msg = 'Username sudah digunakan'
+                # Show the login form with message (if any)
+                return render_template('Tambah.Manajemen.Akun.html', msg=msg)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
