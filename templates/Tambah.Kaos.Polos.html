@@ -1,141 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
+{% extends 'base.html'%}
+{% block head %}
+<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Halaman Tambah Kaos Polos</title>
+    <title>Halaman Kaos Polos Admin</title>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.css" rel="stylesheet">
+    <link href="/static/css/sb-admin-2.css" rel="stylesheet">
+{% endblock %}
+{% block body %}
+<!-- Page Wrapper -->
+<div id="wrapper">
 
-</head>
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('home') }}">
+            <div class="container">
+                <img src="/static/img/logo.png" alt="" width="90%" height="80%">
+              </div>
+        </a>
 
-<body id="page-top">
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('home') }}">
+                <i class="fa-solid fa-house-chimney"></i>
+                <span>Home</span></a>
+        </li>
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="Halaman.Admin.html">
-                <div class="container">
-                    <img src="img/logo.png" alt="" width="90%" height="80%">
-                  </div>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed text-white" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fa-solid fa-address-book text-white"></i>
+                <span>Stok Barang</span>
             </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="Halaman.Admin.html">
-                    <i class="fa-solid fa-house-chimney"></i>
-                    <span>Home</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed text-white" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa-solid fa-address-book text-white"></i>
-                    <span>Stok Barang</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Menu :</h6>
-                        <a class="collapse-item" href="Kaos.Polos.Admin.html">Stok Kaos Polos</a>
-                        <a class="collapse-item" href="Kaos.Original.Admin.html">Stok Kaos Original</a>
-                        <a class="collapse-item" href="Bahan.Cutting.Admin.html">Stok Bahan Cutting</a>
-                    </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menu :</h6>
+                    <a class="collapse-item" href="{{ url_for('kaos_polos') }}">Stok Kaos Polos</a>
+                    <a class="collapse-item" href="{{ url_for('kaos_original') }}">Stok Kaos Original</a>
+                    <a class="collapse-item" href="{{ url_for('bahan_cutting') }}">Stok Bahan Cutting</a>
                 </div>
-            </li>
-
-             <!-- Divider -->
-             <hr class="sidebar-divider">
-
-            <!-- Histori Update -->
-            <li class="nav-item">
-                <a class="nav-link collapsed text-white" href="Histori.Update.html">
-                    <i class="fa-solid fa-clock-rotate-left text-white"></i>
-                    <span>Histori Update</span></a>
-            </li>
-
-             <!-- Divider -->
-             <hr class="sidebar-divider">
-
-            <!--Manajemen Akun-->
-            <li class="nav-item">
-                <a class="nav-link collapsed text-white" href="Manajemen.Akun.html">
-                    <i class="fa-solid fa-user-plus text-white"></i>
-                    <span>Manajemen Akun</span></a>
-            </li>
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
+        </li>
 
-        </ul>
-        <!-- End of Sidebar -->
+         <!-- Divider -->
+         <hr class="sidebar-divider">
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Histori Update -->
+        <li class="nav-item">
+            <a class="nav-link collapsed text-white" href="{{ url_for('history_update') }}">
+                <i class="fa-solid fa-clock-rotate-left text-white"></i>
+                <span>Histori Update</span></a>
+        </li>
 
-            <!-- Main Content -->
-            <div id="content">
+         <!-- Divider -->
+         <hr class="sidebar-divider">
 
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+        <!--Manajemen Akun-->
+        <li class="nav-item">
+            <a class="nav-link collapsed text-white" href="{{ url_for('manajemen_akun') }}">
+                <i class="fa-solid fa-user-plus text-white"></i>
+                <span>Manajemen Akun</span></a>
+        </li>
 
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
 
 
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="Edit.Profil.Admin.html">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" >Admin <i class="fa-solid fa-user ml-2"></i></span>
-                            </a>
-                        </li>
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle" href="{{ url_for('profile') }}">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ username }} <i class="fa-solid fa-user ml-2"></i></span>
+                        </a>
+                    </li>
 
-                        <!-- Pemisah -->
-                        <div class="topbar-divider d-none d-sm-block"></div>
+                    <!-- Pemisah -->
+                    <div class="topbar-divider d-none d-sm-block"></div>
 
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="HalamanLogin.html">
-                                <i class="fa-solid fa-right-from-bracket text-secondary"></i>
-                            </a>
-                        </li>
-                    </ul>
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a class="nav-link dropdown-toggle" href="{{ url_for('logout') }}">
+                            <i class="fa-solid fa-right-from-bracket text-secondary"></i>
+                        </a>
+                    </li>
+                </ul>
 
-                </nav>
+            </nav>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -151,71 +146,67 @@
                                 <h5 class="m-0 font-weight-bold text-primary">TAMBAH STOK KAOS POLOS</h5>
                             </div>
                             <div class="card-body">
+                                <form action="{{ url_for('kaos_polos_add') }}" method="POST">
                                 <div class="table-responsive">
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="kode_barang">Kode Barang</label>
-                                            <input type="text" class="form-control" id="kode_barang" placeholder="Enter Kode Barang">
+                                            <label for="fullName">Kode Barang</label>
+                                            <input type="text" class="form-control" id="fullName" name="kode_barang" placeholder="Enter Kode Barang" required>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="nama_barang">Nama Barang</label>
-                                            <input type="text" class="form-control" id="nama_barang" placeholder="Enter Nama Barang">
+                                            <label for="fullName">Nama Barang</label>
+                                            <input type="text" class="form-control" id="nama_barang" name="nama_barang" placeholder="Enter Nama Barang" required>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="size">Size</label>
-                                            <input type="text" class="form-control" id="size" placeholder="Size">
+                                            <label for="fullName">Size</label>
+                                            <input type="text" class="form-control" id="size" name="size" placeholder="Size" required>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="jenis_kain">Jenis Kain</label>
-                                            <input type="text" class="form-control" id="jenis_kain" placeholder="Jenis Kain">
+                                            <label for="fullName">Jenis Kain</label>
+                                            <input type="text" class="form-control" id="jenis_kain" name="jenis_kain" placeholder="Jenis Kain" required>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="bentuk_lengan">Bentuk Lengan</label>
-                                            <input type="text" class="form-control" id="bentuk_lengan" placeholder="Bentuk Lengan">
+                                            <label for="fullName">Bentuk Lengan</label>
+                                            <input type="text" class="form-control" id="bentuk_lengan" name="bentuk_lengan" placeholder="Bentuk Lengan" required>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="bentuk_lingkaran">Bentuk Lingkaran</label>
-                                            <input type="text" class="form-control" id="bentuk_lingkaran" placeholder="Bentuk Lingkaran">
+                                            <label for="fullName">Bentuk Lingkaran</label>
+                                            <input type="text" class="form-control" id="bentuk_lingkaran" name="bentuk_lingkar_leher" placeholder="Bentuk Lingkaran" required>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="warna">Warna</label>
-                                            <input type="text" class="form-control" id="warna" placeholder="Warna">
+                                            <label for="fullName">Warna</label>
+                                            <input type="text" class="form-control" id="warna" name="warna" placeholder="Warna" required>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="jumlah">Jumlah</label>
-                                            <input type="text" class="form-control" id="jumlah" placeholder="Jumlah">
+                                            <label for="fullName">Jumlah</label>
+                                            <input type="number" class="form-control" id="jumlah" name="jumlah_stok" placeholder="Jumlah" required>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
-                                            <label for="harga">Harga</label>
-                                            <input type="text" class="form-control" id="harga" placeholder="Harga">
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <label for="total_harga">Total Harga</label>
-                                            <input type="text" class="form-control" id="total_harga" placeholder="Total Harga">
+                                            <label for="fullName">Harga</label>
+                                            <input type="number" class="form-control" id="harga" name="harga_satuan" placeholder="Harga" required>
                                         </div>
                                     </div>
 
-                                    <a class="btn btn-primary float-right mr-3" href="#" role="button">Simpan</a>
-                                    <a class="btn btn-primary float-right mr-3" href="Kaos.Polos.Admin.html" role="button">Cancel</a>
+                                    <input type="submit" class="btn btn-primary float-right mr-3" role="button" value="Simpan">
+                                    <a class="btn btn-primary float-right mr-3" href="{{ url_for('kaos_polos') }}" role="button">Cancel</a>
                                 </div>
+                            </form>
                             </div>
 
                         </div>
@@ -233,7 +224,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2021</span>
+                    <span>Copyright &copy;Sokou Lampung 2022</span>
                 </div>
             </div>
         </footer>
@@ -247,6 +238,4 @@
         <i class="fas fa-angle-up"></i>
     </a>
     </div>  
-</body>
-
-</html>
+{%endblock%}

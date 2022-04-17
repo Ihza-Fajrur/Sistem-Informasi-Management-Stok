@@ -1,3 +1,4 @@
+from ctypes import sizeof
 import email
 from hashlib import new
 import json
@@ -352,29 +353,34 @@ def kaos_polos_edit(kode_barang):
     # User is not loggedin redirect to login page
     return redirect (url_for('login'))
 
-# @app.route('/kaos_polos_add/<kode_barang>', methods=['POST', 'GET'])
-# def kaos_polos_add(kode_barang):
-#     if 'loggedin' in session and session['acc_type'] == 'Admin':
-#         if request.method == 'GET':
-#             return render_template('Tambah.Kaos.Polos.html', username=session['username'], msg=msg)
-#         elif request.method == 'POST':
-#             # Create variables for easy access
-#             username = request.form['username']
-#             password = request.form['password']
-#             acc_type = request.form['acc_type']
-#             email = request.form['email']
-#             # Check if account exists using MySQL
-#             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#             cursor.execute('SELECT username FROM accounts WHERE username = "{0}" '.format(username))
-#             # Fetch one record and return result
-#             account = cursor.fetchone()
-#             if not account:
-#                 cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#                 cursor.execute('INSERT INTO accounts (username, password, acc_type, email) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(username, password, acc_type, email))
-#                 mysql.connection.commit()
-#                 return redirect(url_for('manajemen_akun'))
-#     # User is not loggedin redirect to login page
-#     return redirect(url_for('login'))
+@app.route('/kaos_polos_add', methods=['POST', 'GET'])
+def kaos_polos_add():
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        if request.method == 'GET':
+            return render_template('Tambah.Kaos.Polos.html', username=session['username'],)
+        elif request.method == 'POST':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Create variables for easy access
+            kode_barang = request.form['kode_barang']
+            nama_barang = request.form['nama_barang']
+            size = request.form['size']
+            jenis_kain = request.form['jenis_kain']
+            bentuk_lengan = request.form['bentuk_lengan']
+            bentuk_lingkar_leher = request.form['bentuk_lingkar_leher']
+            warna = request.form['warna']
+            jumlah_stok = request.form['jumlah_stok']
+            harga_satuan = request.form['harga_satuan']
+            total_harga = int(harga_satuan) * int(jumlah_stok)
+            # Check if account exists using MySQL
+            cursor.execute('SELECT kode_barang FROM kaos_polos WHERE kode_barang = "{0}" '.format(kode_barang))
+            # Fetch one record and return result
+            old_kaos_polos = cursor.fetchone()
+            if not old_kaos_polos:
+                cursor.execute('INSERT INTO kaos_polos (kode_barang, nama_barang, size, jenis_kain, bentuk_lengan, bentuk_lingkar_leher, warna, jumlah_stok, harga_satuan, total_harga) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}")'.format(kode_barang, nama_barang, size, jenis_kain, bentuk_lengan, bentuk_lingkar_leher, warna, jumlah_stok, harga_satuan, total_harga))
+                mysql.connection.commit()
+                return redirect(url_for('kaos_polos'))
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
                           
 @app.route('/kaos_polos_export', methods=['POST', 'GET'])
 def kaos_polos_export():
