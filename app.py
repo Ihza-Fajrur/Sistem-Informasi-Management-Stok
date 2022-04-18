@@ -461,6 +461,34 @@ def kaos_original_del(kode_barang):
         mysql.connection.commit()
         return redirect(url_for('kaos_original'))
     return redirect (url_for('login'))
+
+@app.route('/kaos_original_add', methods=['POST', 'GET'])
+def kaos_original_add():
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        if request.method == 'GET':
+            return render_template('Tambah.Kaos.Original.html', username=session['username'],)
+        elif request.method == 'POST':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Create variables for easy access
+            kode_barang = request.form['kode_barang']
+            nama_barang = request.form['nama_barang']
+            size = request.form['size']
+            bentuk_lengan = request.form['bentuk_lengan']
+            desain = request.form['desain']
+            warna = request.form['warna']
+            jumlah_stok = request.form['jumlah_stok']
+            harga_satuan = request.form['harga_satuan']
+            total_harga = int(harga_satuan) * int(jumlah_stok)
+            # Check if account exists using MySQL
+            cursor.execute('SELECT kode_barang FROM kaos_original WHERE kode_barang = "{0}" '.format(kode_barang))
+            # Fetch one record and return result
+            old_kaos_original = cursor.fetchone()
+            if not old_kaos_original:
+                cursor.execute('INSERT INTO kaos_original (kode_barang, nama_barang, size, bentuk_lengan, desain, warna, jumlah_stok, harga_satuan, total_harga) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}")'.format(kode_barang, nama_barang, size, bentuk_lengan, desain, warna, jumlah_stok, harga_satuan, total_harga))
+                mysql.connection.commit()
+                return redirect(url_for('kaos_original'))
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
         
 @app.route('/kaos_original_export', methods=['POST', 'GET'])
 def kaos_original_export():
