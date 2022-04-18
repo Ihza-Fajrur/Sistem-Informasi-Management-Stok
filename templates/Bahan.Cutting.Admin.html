@@ -171,7 +171,7 @@
                                                 <td>Rp. {{ bahan_cutting['harga_satuan'] }}</td>
                                                 <td>Rp. {{ bahan_cutting['total_harga'] }}</td>
                                                 <td>
-                                                    <a href="Edit.Bahan.Cutting.html" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                    <a href="{{ url_for('bahan_cutting_edit', kode_barang = bahan_cutting['kode_barang']) }}" class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
                                                     <a href="{{ url_for('bahan_cutting_del', kode_barang = bahan_cutting['kode_barang']) }}" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                                                 </td>
                                             </tr>

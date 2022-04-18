@@ -143,6 +143,84 @@ def bahan_cutting_del(kode_barang):
         return redirect(url_for('bahan_cutting'))
     return redirect (url_for('login'))
 
+@app.route('/bahan_cutting_edit/<kode_barang>', methods=['POST', 'GET'])
+def bahan_cutting_edit(kode_barang):
+    # Check if user is loggedin
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        if request.method == 'POST':
+            kode_barang_changed = False
+            if 'kode_barang' in request.form:
+                if request.form['kode_barang'] != '':
+                    # Create variables for easy access
+                    new_kode_barang = request.form['kode_barang']
+                    try:
+                        cursor.execute('UPDATE bahan_cutting SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
+                        mysql.connection.commit()
+                        kode_barang_changed = True
+                    except:
+                        cursor.execute('UPDATE IGNORE bahan_cutting SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
+                        mysql.connection.commit()
+                        
+            if kode_barang_changed:
+                kode_barang = new_kode_barang
+                
+            if 'nama_barang' in request.form:
+                if request.form['nama_barang'] != '':
+                    # Create variables for easy access
+                    new_nama_barang = request.form['nama_barang']
+                    cursor.execute('UPDATE bahan_cutting SET nama_barang = %s WHERE kode_barang = %s', (new_nama_barang, kode_barang,))
+                    mysql.connection.commit()
+                    
+            if 'jenis_barang' in request.form:
+                if request.form['jenis_barang'] != '':
+                    # Create variables for easy access
+                    new_jenis_barang = request.form['jenis_barang']
+                    cursor.execute('UPDATE bahan_cutting SET jenis_barang = %s WHERE kode_barang = %s', (new_jenis_barang, kode_barang,))
+                    mysql.connection.commit()
+                    
+            if 'warna' in request.form:
+                if request.form['warna'] != '':
+                    # Create variables for easy access
+                    new_warna = request.form['warna']
+                    cursor.execute('UPDATE bahan_cutting SET warna = %s WHERE kode_barang = %s', (new_warna, kode_barang,))
+                    mysql.connection.commit()
+            
+            if 'ukuran_panjang' in request.form:
+                if request.form['ukuran_panjang'] != '':
+                    # Create variables for easy access
+                    new_ukuran_panjang = request.form['ukuran_panjang']
+                    cursor.execute('UPDATE bahan_cutting SET ukuran_panjang = %s WHERE kode_barang = %s', (new_ukuran_panjang, kode_barang,))
+                    mysql.connection.commit()
+                    
+            if 'ukuran_lebar' in request.form:
+                if request.form['ukuran_lebar'] != '':
+                    # Create variables for easy access
+                    new_ukuran_lebar = request.form['ukuran_lebar']
+                    cursor.execute('UPDATE bahan_cutting SET ukuran_lebar = %s WHERE kode_barang = %s', (new_ukuran_lebar, kode_barang,))
+                    mysql.connection.commit()
+            
+            if 'harga_satuan' in request.form:
+                if request.form['harga_satuan'] != '':
+                    # Create variables for easy access
+                    new_harga_satuan = request.form['harga_satuan']
+                    cursor.execute('UPDATE bahan_cutting SET harga_satuan = %s WHERE kode_barang = %s', (new_harga_satuan, kode_barang,))
+                    mysql.connection.commit()
+                    cursor.execute('SELECT ukuran_panjang, ukuran_lebar FROM bahan_cutting WHERE kode_barang = "{0}" '.format(kode_barang))
+                    ukuran = cursor.fetchone()
+                    new_harga_total = int(new_harga_satuan) * int(ukuran['ukuran_panjang']) * int(ukuran['ukuran_lebar'])
+                    cursor.execute('UPDATE bahan_cutting SET total_harga = %s WHERE kode_barang = %s', (new_harga_total, kode_barang,))
+                    mysql.connection.commit()
+                    
+            return redirect(url_for('bahan_cutting'))
+        
+        elif request.method == 'GET':
+            cursor.execute('SELECT * FROM bahan_cutting WHERE kode_barang = "{0}" '.format(kode_barang))
+            bahanCutting = cursor.fetchone()
+            return render_template('Edit.Bahan.Cutting.html', bahan_cutting = bahanCutting)
+    # User is not loggedin redirect to login page
+    return redirect (url_for('login'))
+
 @app.route('/bahan_cutting_add', methods=['POST', 'GET'])
 def bahan_cutting_add():
     if 'loggedin' in session and session['acc_type'] == 'Admin':

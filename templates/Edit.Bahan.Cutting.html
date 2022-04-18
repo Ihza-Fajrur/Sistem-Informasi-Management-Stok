@@ -117,7 +117,7 @@
                     <!-- Nav Item - User Information -->
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="{{ url_for('profile') }}">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" >{{ username }} <i class="fa-solid fa-user ml-2"></i></span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" >{{ session['username'] }} <i class="fa-solid fa-user ml-2"></i></span>
                         </a>
                     </li>
 
@@ -147,47 +147,54 @@
                             <h5 class="m-0 font-weight-bold text-primary">EDIT STOK BAHAN CUTTING</h5>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="fullName">Kode Barang</label>
-                                        <input type="text" class="form-control" id="kode_barang" placeholder="Enter Kode Barang">
+                            <form action="{{ url_for('bahan_cutting_edit', kode_barang = bahan_cutting['kode_barang']) }}" method="POST">
+                                <div class="table-responsive">
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="kode_barang">Kode Barang</label>
+                                            <input type="text" class="form-control" id="kode_barang" name="kode_barang" placeholder="Masukkan Kode Barang" value="{{ bahan_cutting['kode_barang'] }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="fullName">Nama Barang</label>
-                                        <input type="text" class="form-control" id="nama_barang" placeholder="Enter Nama Barang">
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="nama_barang">Nama Barang</label>
+                                            <input type="text" class="form-control" id="nama_barang" name="nama_barang" placeholder="Masukkan Nama Barang" value="{{ bahan_cutting['nama_barang'] }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="fullName">Jenis Bahan</label>
-                                        <input type="text" class="form-control" id="jenis_bahan" placeholder="Size">
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="jenis_bahan">Jenis Bahan</label>
+                                            <input type="text" class="form-control" id="jenis_bahan" name="jenis_barang" placeholder="Masukkan Size" value="{{ bahan_cutting['jenis_barang'] }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="fullName">Ukuran Bahan [Panjang x Lebar]</label>
-                                        <input type="text" class="form-control" id="ukuran_bahan" placeholder="Jenis Kain">
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="warna">Warna</label>
+                                            <input type="text" class="form-control" id="warna" name="warna" placeholder="Masukkan Warna" value="{{ bahan_cutting['warna'] }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="fullName">Warna</label>
-                                        <input type="text" class="form-control" id="warna" placeholder="Bentuk Lengan">
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="ukuran_panjang">Ukuran Bahan [Panjang]</label>
+                                            <input type="number" class="form-control" id="ukuran_panjang" name="ukuran_panjang" placeholder="Masukkan Ukuran Panjang" value="{{ bahan_cutting['ukuran_panjang'] }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div class="form-group">
-                                        <label for="fullName">Harga [Per CM]</label>
-                                        <input type="text" class="form-control" id="harga/cm" placeholder="Bentuk Lingkaran">
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="ukuran_lebar">Ukuran Bahan [Lebar]</label>
+                                            <input type="number" class="form-control" id="ukuran_lebar" name="ukuran_lebar" placeholder="Masukkan Ukuran Lebar" value="{{ bahan_cutting['ukuran_lebar'] }}">
+                                        </div>
                                     </div>
+                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <label for="harga">Harga [Per CM]</label>
+                                            <input type="number" class="form-control" id="harga/cm" name="harga_satuan" placeholder="Masukkan Harga per CM" value="{{ bahan_cutting['harga_satuan'] }}">
+                                        </div>
+                                    </div>
+                                    <input type="submit" class="btn btn-primary float-right mr-3" role="button" value="Simpan">
+                                    <a class="btn btn-secondary float-right mr-3" href="{{ url_for('bahan_cutting') }}" role="button">Cancel</a>
                                 </div>
-
-                                <a class="btn btn-primary float-right mr-3" href="Kaos.Polos.Admin.html" role="button">Simpan</a>
-                                <a class="btn btn-primary float-right mr-3" href="Edit.Kaos.Polos.html" role="button">Cancel</a>
-                            </div>
+                            </form>
                         </div>
 
                     </div>
