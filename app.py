@@ -143,6 +143,33 @@ def bahan_cutting_del(kode_barang):
         return redirect(url_for('bahan_cutting'))
     return redirect (url_for('login'))
 
+@app.route('/bahan_cutting_add', methods=['POST', 'GET'])
+def bahan_cutting_add():
+    if 'loggedin' in session and session['acc_type'] == 'Admin':
+        if request.method == 'GET':
+            return render_template('Tambah.Bahan.Cutting.html', username=session['username'],)
+        elif request.method == 'POST':
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            # Create variables for easy access
+            kode_barang = request.form['kode_barang']
+            nama_barang = request.form['nama_barang']
+            jenis_barang = request.form['jenis_barang']
+            warna = request.form['warna']
+            ukuran_panjang = request.form['ukuran_panjang']
+            ukuran_lebar = request.form['ukuran_lebar']
+            harga_satuan = request.form['harga_satuan']
+            total_harga = int(harga_satuan) * int(ukuran_lebar) * int(ukuran_panjang)
+            # Check if account exists using MySQL
+            cursor.execute('SELECT kode_barang FROM bahan_cutting WHERE kode_barang = "{0}" '.format(kode_barang))
+            # Fetch one record and return result
+            old_bahan_cutting = cursor.fetchone()
+            if not old_bahan_cutting:
+                cursor.execute('INSERT INTO bahan_cutting (kode_barang, nama_barang, jenis_barang, warna, ukuran_panjang, ukuran_lebar, harga_satuan, total_harga) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}")'.format(kode_barang, nama_barang, jenis_barang, warna, ukuran_panjang,ukuran_lebar, harga_satuan, total_harga))
+                mysql.connection.commit()
+                return redirect(url_for('bahan_cutting'))
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+   
 @app.route('/bahan_cutting_export', methods=['POST', 'GET'])
 def bahan_cutting_export():
     if 'loggedin' in session:
