@@ -1,13 +1,9 @@
-
-from hashlib import new
-from select import select
 from flask import Flask,render_template,url_for, request,jsonify,session,flash,redirect,send_file
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 from werkzeug.utils import append_slash_redirect
 from flask_mail import Mail, Message
-from pandas import json_normalize 
 import pandas.io.sql as psql
 
 #inisialisasi
