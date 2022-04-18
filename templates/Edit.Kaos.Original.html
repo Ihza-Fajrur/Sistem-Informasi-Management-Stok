@@ -119,7 +119,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('profile') }}">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ username }} <i class="fa-solid fa-user ml-2"></i></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ session['username'] }} <i class="fa-solid fa-user ml-2"></i></span>
                             </a>
                         </li>
 
@@ -150,49 +150,61 @@
                                 <h5 class="m-0 font-weight-bold text-primary">EDIT STOK KAOS ORIGINAL</h5>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <label for="fullName">Kode Barang</label>
-                                            <input type="text" class="form-control" id="kode_barang" placeholder="Enter Kode Barang">
+                                <form action="{{ url_for('kaos_original_edit', kode_barang = kaos_original['kode_barang']) }}" method="POST">
+                                    <div class="table-responsive">
+                                        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="kode_barang">Kode Barang</label>
+                                                <input type="text" class="form-control" id="kode_barang" name="kode_barang" placeholder="Masukkan Kode Barang" value="{{ kaos_original['kode_barang'] }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <label for="fullName">Nama Barang</label>
-                                            <input type="text" class="form-control" id="nama_barang" placeholder="Enter Nama Barang">
+                                        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="nama_barang">Nama Barang</label>
+                                                <input type="text" class="form-control" id="nama_barang" name="nama_barang" placeholder="Masukkan Nama Barang" value="{{ kaos_original['nama_barang'] }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <label for="fullName">Size</label>
-                                            <input type="text" class="form-control" id="size" placeholder="Size">
+                                        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="size">Size</label>
+                                                <input type="text" class="form-control" id="size" name="size" placeholder="Masukkan Size" value="{{ kaos_original['size'] }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <label for="fullName">Bentuk Lengan</label>
-                                            <input type="text" class="form-control" id="bentuk_lengan" placeholder="Jenis Kain">
+                                        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="bentuk_lengan">Bentuk Lengan</label>
+                                                <input type="text" class="form-control" id="bentuk_lengan" name="bentuk_lengan" placeholder="Masukkan Bentuk Lengan" value="{{ kaos_original['bentuk_lengan'] }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <label for="fullName">Warna</label>
-                                            <input type="text" class="form-control" id="warna" placeholder="Bentuk Lengan">
+                                        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="desain">Desain</label>
+                                                <input type="text" class="form-control" id="desain" name="desain" placeholder="Masukkan Desain" value="{{ kaos_original['desain'] }}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <label for="fullName">Desain</label>
-                                            <input type="text" class="form-control" id="desain" placeholder="Bentuk Lingkaran">
+                                        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="warna">Warna</label>
+                                                <input type="text" class="form-control" id="warna" name="warna" placeholder="Masukkan Warna" value="{{ kaos_original['warna'] }}">
+                                            </div>
                                         </div>
+                                        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="jumlah_stok">Jumlah Stok</label>
+                                                <input type="number" class="form-control" id="jumlah_stok" name="jumlah_stok" placeholder="Masukkan Bentuk Lingkaran" value="{{ kaos_original['jumlah_stok'] }}">
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-12 col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group">
+                                                <label for="harga_satuan">Harga Satuan</label>
+                                                <input type="number" class="form-control" id="harga_satuan" name="harga_satuan" placeholder="Masukkan Bentuk Lingkaran" value="{{ kaos_original['harga_satuan'] }}">
+                                            </div>
+                                        </div>
+                                        <input type="submit" class="btn btn-primary float-right mr-3" role="button" value="Simpan">
+                                        <a class="btn btn-secondary float-right mr-3" href="{{ url_for('kaos_original') }}" role="button">Cancel</a>
                                     </div>
-
-                                    <a class="btn btn-primary float-right mr-3" href="Kaos.Polos.Admin.html" role="button">Simpan</a>
-                                    <a class="btn btn-primary float-right mr-3" href="Edit.Kaos.Polos.html" role="button">Cancel</a>
-                                </div>
+                                </form>
                             </div>
-
                         </div>
     
                     </div>
