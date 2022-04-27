@@ -1,3 +1,4 @@
+from os import abort
 from flask import Flask,render_template,url_for, request,jsonify,session,flash,redirect,send_file
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -5,6 +6,7 @@ import re
 from werkzeug.utils import append_slash_redirect
 from flask_mail import Mail, Message
 import pandas.io.sql as psql
+from datetime import datetime 
 
 #inisialisasi
 app = Flask(__name__)
@@ -140,6 +142,12 @@ def bahan_cutting_del(kode_barang):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('DELETE FROM bahan_cutting WHERE kode_barang = %s', (kode_barang,))
         mysql.connection.commit()
+        
+        #Dokumentasi perubahan ke database
+        activity = (f"(DEL) Penghapusan stok kaos polos dengan kode barang {kode_barang}")
+        cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+        mysql.connection.commit()
+        
         return redirect(url_for('bahan_cutting'))
     return redirect (url_for('login'))
 
@@ -150,14 +158,21 @@ def bahan_cutting_edit(kode_barang):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         if request.method == 'POST':
             kode_barang_changed = False
-            if 'kode_barang' in request.form:
-                if request.form['kode_barang'] != '':
+            
+            if 'kode_barang' in request.form and not request.form['kode_barang'] == '':
+                if request.form['kode_barang'] != kode_barang:
                     # Create variables for easy access
                     new_kode_barang = request.form['kode_barang']
                     try:
                         cursor.execute('UPDATE bahan_cutting SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
                         mysql.connection.commit()
                         kode_barang_changed = True
+                        
+                        #Dokumentasi perubahan ke database
+                        activity = (f"(EDIT) Pengeditan kode barang {kode_barang} menjadi {new_kode_barang} pada bahan cutting")
+                        cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                        mysql.connection.commit()
+                        
                     except:
                         cursor.execute('UPDATE IGNORE bahan_cutting SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
                         mysql.connection.commit()
@@ -165,43 +180,71 @@ def bahan_cutting_edit(kode_barang):
             if kode_barang_changed:
                 kode_barang = new_kode_barang
                 
-            if 'nama_barang' in request.form:
-                if request.form['nama_barang'] != '':
+            cursor.execute('SELECT * FROM bahan_cutting WHERE kode_barang = %s', (kode_barang,))
+            bahan_cutting = cursor.fetchone()
+            
+            if 'nama_barang' in request.form and not request.form['nama_barang'] == '':
+                if request.form['nama_barang'] != bahan_cutting['nama_barang']:
                     # Create variables for easy access
                     new_nama_barang = request.form['nama_barang']
                     cursor.execute('UPDATE bahan_cutting SET nama_barang = %s WHERE kode_barang = %s', (new_nama_barang, kode_barang,))
                     mysql.connection.commit()
                     
-            if 'jenis_barang' in request.form:
-                if request.form['jenis_barang'] != '':
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan nama barang dengan kode barang {kode_barang} dari {bahan_cutting['nama_barang']} menjadi {new_nama_barang} pada bahan cutting")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
+                    
+            if 'jenis_barang' in request.form and not request.form['jenis_barang'] == '':
+                if request.form['jenis_barang'] != bahan_cutting['jenis_barang']:
                     # Create variables for easy access
                     new_jenis_barang = request.form['jenis_barang']
                     cursor.execute('UPDATE bahan_cutting SET jenis_barang = %s WHERE kode_barang = %s', (new_jenis_barang, kode_barang,))
                     mysql.connection.commit()
                     
-            if 'warna' in request.form:
-                if request.form['warna'] != '':
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan jenis barang dengan kode barang {kode_barang} dari {bahan_cutting['jenis_barang']} menjadi {new_nama_barang} pada bahan cutting")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
+                    
+            if 'warna' in request.form and not request.form['warna'] == '':
+                if request.form['warna'] != bahan_cutting['warna']:
                     # Create variables for easy access
                     new_warna = request.form['warna']
                     cursor.execute('UPDATE bahan_cutting SET warna = %s WHERE kode_barang = %s', (new_warna, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan warna dengan kode barang {kode_barang} dari {bahan_cutting['warna']} menjadi {new_warna} pada bahan cutting")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'ukuran_panjang' in request.form:
-                if request.form['ukuran_panjang'] != '':
+            if 'ukuran_panjang' in request.form and not request.form['ukuran_panjang'] == '':
+                if request.form['ukuran_panjang'] != bahan_cutting['ukuran_panjang']:
                     # Create variables for easy access
                     new_ukuran_panjang = request.form['ukuran_panjang']
                     cursor.execute('UPDATE bahan_cutting SET ukuran_panjang = %s WHERE kode_barang = %s', (new_ukuran_panjang, kode_barang,))
                     mysql.connection.commit()
                     
-            if 'ukuran_lebar' in request.form:
-                if request.form['ukuran_lebar'] != '':
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan ukuran panjang dengan kode barang {kode_barang} dari {bahan_cutting['ukuran_panjang']} menjadi {new_ukuran_panjang} pada bahan cutting")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
+                    
+            if 'ukuran_lebar' in request.form and not request.form['ukuran_lebar'] == '':
+                if request.form['ukuran_lebar'] != bahan_cutting['ukuran_lebar']:
                     # Create variables for easy access
                     new_ukuran_lebar = request.form['ukuran_lebar']
                     cursor.execute('UPDATE bahan_cutting SET ukuran_lebar = %s WHERE kode_barang = %s', (new_ukuran_lebar, kode_barang,))
                     mysql.connection.commit()
-            
-            if 'harga_satuan' in request.form:
-                if request.form['harga_satuan'] != '':
+
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan ukuran lebar dengan kode barang {kode_barang} dari {bahan_cutting['ukuran_lebar']} menjadi {new_ukuran_lebar} pada bahan cutting")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
+                    
+            if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
+                if request.form['harga_satuan'] != bahan_cutting['harga_satuan']:
                     # Create variables for easy access
                     new_harga_satuan = request.form['harga_satuan']
                     cursor.execute('UPDATE bahan_cutting SET harga_satuan = %s WHERE kode_barang = %s', (new_harga_satuan, kode_barang,))
@@ -210,6 +253,11 @@ def bahan_cutting_edit(kode_barang):
                     ukuran = cursor.fetchone()
                     new_harga_total = int(new_harga_satuan) * int(ukuran['ukuran_panjang']) * int(ukuran['ukuran_lebar'])
                     cursor.execute('UPDATE bahan_cutting SET total_harga = %s WHERE kode_barang = %s', (new_harga_total, kode_barang,))
+                    mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan harga satuan dengan kode barang {kode_barang} dari Rp.{bahan_cutting['harga_satuan']} menjadi Rp.{new_harga_satuan} pada bahan cutting")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
                     
             return redirect(url_for('bahan_cutting'))
@@ -244,6 +292,12 @@ def bahan_cutting_add():
             if not old_bahan_cutting:
                 cursor.execute('INSERT INTO bahan_cutting (kode_barang, nama_barang, jenis_barang, warna, ukuran_panjang, ukuran_lebar, harga_satuan, total_harga) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}")'.format(kode_barang, nama_barang, jenis_barang, warna, ukuran_panjang,ukuran_lebar, harga_satuan, total_harga))
                 mysql.connection.commit()
+                
+                #Dokumentasi perubahan ke database
+                activity = (f"(ADD) Penambahan stok bahan cutting {nama_barang} dengan kode barang {kode_barang}")
+                cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                mysql.connection.commit()
+                
                 return redirect(url_for('bahan_cutting'))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
@@ -295,6 +349,11 @@ def kaos_polos_dec(kode_barang):
             cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']*kaos_polos['harga_satuan'], kode_barang,))
             mysql.connection.commit()
             
+            #Dokumentasi perubahan ke database
+            activity = (f"(-) Pengurangan stok kaos polos dengan kode barang {kode_barang} yang berjumlah {kaos_polos['jumlah_stok']+1} ke {kaos_polos['jumlah_stok']}")
+            cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+            mysql.connection.commit()
+            
             #Pengiriman notifikasi ke email jika stok habis
             if kaos_polos['jenis_kain'] == 'COTTON COMBED 20S' and kaos_polos['jumlah_stok'] == 0:
                 if kaos_polos['warna'] == 'PUTIH' or kaos_polos['warna'] == 'HITAM':
@@ -331,6 +390,11 @@ def kaos_polos_inc(kode_barang):
         cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (kaos_polos['jumlah_stok']*kaos_polos['harga_satuan'], kode_barang,))
         mysql.connection.commit()
         
+        #Dokumentasi perubahan ke database
+        activity = (f"(+) Penambahan stok kaos polos dengan kode barang {kode_barang} yang berjumlah {kaos_polos['jumlah_stok']-1} ke {kaos_polos['jumlah_stok']}")
+        cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+        mysql.connection.commit()
+        
         #Pengiriman notifikasi ke email jika stok habis
         if kaos_polos['jenis_kain'] == 'COTTON COMBED 20S' and kaos_polos['jumlah_stok'] == 0:
             if kaos_polos['warna'] == 'PUTIH' or kaos_polos['warna'] == 'HITAM':
@@ -353,10 +417,16 @@ def kaos_polos_inc(kode_barang):
 def kaos_polos_del(kode_barang):
     # Check if user is loggedin
     if 'loggedin' in session:
-        #Penambahan stok kaos polos
+        #Penghapusan stok kaos polos
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('DELETE FROM kaos_polos WHERE kode_barang = %s', (kode_barang,))
         mysql.connection.commit()
+        
+        #Dokumentasi perubahan ke database
+        activity = (f"(DEL) Penghapusan stok kaos polos dengan kode barang {kode_barang}")
+        cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+        mysql.connection.commit()
+        
         return redirect(url_for('kaos_polos'))
     return redirect (url_for('login'))
 
@@ -367,14 +437,21 @@ def kaos_polos_edit(kode_barang):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         if request.method == 'POST':
             kode_barang_changed = False
-            if 'kode_barang' in request.form:
-                if request.form['kode_barang'] != '':
-                    # Create variables for easy access
+            
+            if 'kode_barang' in request.form and not request.form['kode_barang'] == '':
+                if request.form['kode_barang'] != kode_barang:
+                # Create variables for easy access
                     new_kode_barang = request.form['kode_barang']
                     try:
                         cursor.execute('UPDATE kaos_polos SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
                         mysql.connection.commit()
                         kode_barang_changed = True
+                        
+                        #Dokumentasi perubahan ke database
+                        activity = (f"(EDIT) Pengeditan kode barang {kode_barang} menjadi {new_kode_barang} pada stok kaos polos")
+                        cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                        mysql.connection.commit()
+                        
                     except:
                         cursor.execute('UPDATE IGNORE kaos_polos SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
                         mysql.connection.commit()
@@ -382,57 +459,101 @@ def kaos_polos_edit(kode_barang):
             if kode_barang_changed:
                 kode_barang = new_kode_barang
                 
-            if 'nama_barang' in request.form:
-                if request.form['nama_barang'] != '':
+            cursor.execute('SELECT * FROM kaos_polos WHERE kode_barang = %s', (kode_barang,))
+            kaos_polos = cursor.fetchone()
+                
+            if 'nama_barang' in request.form and not request.form['nama_barang'] == '':
+                if request.form['nama_barang'] != kaos_polos['nama_barang']:
                     # Create variables for easy access
                     new_nama_barang = request.form['nama_barang']
                     cursor.execute('UPDATE kaos_polos SET nama_barang = %s WHERE kode_barang = %s', (new_nama_barang, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan nama barang dengan kode barang {kode_barang} dari {kaos_polos['nama_barang']} menjadi {new_nama_barang} pada stok kaos polos")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'size' in request.form:
-                if request.form['size'] != '':
+            if 'size' in request.form and not request.form['size'] == '':
+                if request.form['size'] != kaos_polos['size']:
                     # Create variables for easy access
                     new_size = request.form['size']
                     cursor.execute('UPDATE kaos_polos SET size = %s WHERE kode_barang = %s', (new_size, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan size dengan kode barang {kode_barang} dari {kaos_polos['size']} menjadi {new_size} pada stok kaos polos")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'jenis_kain' in request.form:
-                if request.form['jenis_kain'] != '':
+            
+            if 'jenis_kain' in request.form and not request.form['jenis_kain'] == '':
+                if request.form['jenis_kain'] != kaos_polos['jenis_kain']:
                     # Create variables for easy access
                     new_jenis_kain = request.form['jenis_kain']
                     cursor.execute('UPDATE kaos_polos SET jenis_kain = %s WHERE kode_barang = %s', (new_jenis_kain, kode_barang,))
                     mysql.connection.commit()
                     
-            if 'bentuk_lengan' in request.form:
-                if request.form['bentuk_lengan'] != '':
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan jenis kain dengan kode barang {kode_barang} dari {kaos_polos['jenis_kain']} menjadi {new_jenis_kain} pada stok kaos polos")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
+            
+                    
+            if 'bentuk_lengan' in request.form and not request.form['bentuk_lengan'] == '':
+                if request.form['bentuk_lengan'] != kaos_polos['bentuk_lengan']:
                     # Create variables for easy access
                     new_bentuk_lengan = request.form['bentuk_lengan']
                     cursor.execute('UPDATE kaos_polos SET bentuk_lengan = %s WHERE kode_barang = %s', (new_bentuk_lengan, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan bentuk lengan dengan kode barang {kode_barang} dari {kaos_polos['bentuk_lengan']} menjadi {new_bentuk_lengan} pada stok kaos polos")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'bentuk_lingkar_leher' in request.form:
-                if request.form['bentuk_lingkar_leher'] != '':
+            
+            if 'bentuk_lingkar_leher' in request.form and not request.form['bentuk_lingkar_leher'] == '':
+                if request.form['bentuk_lingkar_leher'] != kaos_polos['bentuk_lingkar_leher']:
                     # Create variables for easy access
                     new_bentuk_lingkar_leher = request.form['bentuk_lingkar_leher']
                     cursor.execute('UPDATE kaos_polos SET bentuk_lingkar_leher = %s WHERE kode_barang = %s', (new_bentuk_lingkar_leher, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan bentuk lingkar leher dengan kode barang {kode_barang} dari {kaos_polos['bentuk_lingkar_leher']} menjadi {new_bentuk_lingkar_leher} pada stok kaos polos")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'warna' in request.form:
-                if request.form['warna'] != '':
+            
+            if 'warna' in request.form and not request.form['warna'] == '':
+                if request.form['warna'] != kaos_polos['warna']:
                     # Create variables for easy access
                     new_warna = request.form['warna']
                     cursor.execute('UPDATE kaos_polos SET warna = %s WHERE kode_barang = %s', (new_warna, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan warna dengan kode barang {kode_barang} dari {kaos_polos['warna']} menjadi {new_warna} pada stok kaos polos")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'jumlah_stok' in request.form:
-                if request.form['jumlah_stok'] != '':
+            
+            if 'jumlah_stok' in request.form and not request.form['jumlah_stok'] == '':
+                if request.form['jumlah_stok'] != kaos_polos['jumlah_stok']:
                     # Create variables for easy access
                     new_jumlah_stok = request.form['jumlah_stok']
                     cursor.execute('UPDATE kaos_polos SET jumlah_stok = %s WHERE kode_barang = %s', (new_jumlah_stok, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan jumlah stok dengan kode barang {kode_barang} dari {kaos_polos['jumlah_stok']} menjadi {new_jumlah_stok} pada stok kaos polos")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'harga_satuan' in request.form:
-                if request.form['harga_satuan'] != '':
+            
+            if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
+                if request.form['harga_satuan'] != kaos_polos['harga_satuan']:
                     # Create variables for easy access
                     new_harga_satuan = request.form['harga_satuan']
                     cursor.execute('UPDATE kaos_polos SET harga_satuan = %s WHERE kode_barang = %s', (new_harga_satuan, kode_barang,))
@@ -442,6 +563,12 @@ def kaos_polos_edit(kode_barang):
                     new_harga_total = int(new_harga_satuan) * int(jumlah_stok['jumlah_stok'])
                     cursor.execute('UPDATE kaos_polos SET total_harga = %s WHERE kode_barang = %s', (new_harga_total, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan harga satuan dengan kode barang {kode_barang} dari Rp.{kaos_polos['harga_satuan']} menjadi Rp.{new_harga_satuan} pada stok kaos polos")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
+            
                     
             return redirect(url_for('kaos_polos'))
         
@@ -477,7 +604,14 @@ def kaos_polos_add():
             if not old_kaos_polos:
                 cursor.execute('INSERT INTO kaos_polos (kode_barang, nama_barang, size, jenis_kain, bentuk_lengan, bentuk_lingkar_leher, warna, jumlah_stok, harga_satuan, total_harga) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}", "{9}")'.format(kode_barang, nama_barang, size, jenis_kain, bentuk_lengan, bentuk_lingkar_leher, warna, jumlah_stok, harga_satuan, total_harga))
                 mysql.connection.commit()
+                
+                #Dokumentasi perubahan ke database
+                activity = (f"(ADD) Penambahan stok kaos polos {nama_barang} dengan kode barang {kode_barang}")
+                cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                mysql.connection.commit()
+                
                 return redirect(url_for('kaos_polos'))
+                
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
                           
@@ -526,6 +660,11 @@ def kaos_original_dec(kode_barang):
             kaos_original = cursor.fetchone()
             cursor.execute('UPDATE kaos_original SET total_harga = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']*kaos_original['harga_satuan'], kode_barang,))
             mysql.connection.commit()
+            
+            #Dokumentasi perubahan ke database
+            activity = (f"(-) Pengurangan stok kaos original dengan kode barang {kode_barang} yang berjumlah {kaos_original['jumlah_stok']+1} ke {kaos_original['jumlah_stok']}")
+            cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+            mysql.connection.commit()
         
         return redirect(url_for('kaos_original'))
     return redirect (url_for('login'))
@@ -547,6 +686,11 @@ def kaos_original_inc(kode_barang):
         cursor.execute('UPDATE kaos_original SET total_harga = %s WHERE kode_barang = %s', (kaos_original['jumlah_stok']*kaos_original['harga_satuan'], kode_barang,))
         mysql.connection.commit()
         
+        #Dokumentasi perubahan ke database
+        activity = (f"(+) Penambahan stok kaos original dengan kode barang {kode_barang} yang berjumlah {kaos_original['jumlah_stok']-1} ke {kaos_original['jumlah_stok']}")
+        cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+        mysql.connection.commit()
+        
         return redirect(url_for('kaos_original'))
     return redirect (url_for('login'))
 
@@ -558,6 +702,12 @@ def kaos_original_del(kode_barang):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('DELETE FROM kaos_original WHERE kode_barang = %s', (kode_barang,))
         mysql.connection.commit()
+        
+        #Dokumentasi perubahan ke database
+        activity = (f"(DEL) Penghapusan stok kaos polos dengan kode barang {kode_barang}")
+        cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+        mysql.connection.commit()
+        
         return redirect(url_for('kaos_original'))
     return redirect (url_for('login'))
 
@@ -568,14 +718,21 @@ def kaos_original_edit(kode_barang):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         if request.method == 'POST':
             kode_barang_changed = False
-            if 'kode_barang' in request.form:
-                if request.form['kode_barang'] != '':
+            
+            if 'kode_barang' in request.form and not request.form['kode_barang'] == '':
+                if request.form['kode_barang'] != kode_barang:
                     # Create variables for easy access
                     new_kode_barang = request.form['kode_barang']
                     try:
                         cursor.execute('UPDATE kaos_original SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
                         mysql.connection.commit()
                         kode_barang_changed = True
+                        
+                        #Dokumentasi perubahan ke database
+                        activity = (f"(EDIT) Pengeditan kode barang {kode_barang} menjadi {new_kode_barang} pada stok kaos original")
+                        cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                        mysql.connection.commit()
+                        
                     except:
                         cursor.execute('UPDATE IGNORE kaos_original SET kode_barang = %s WHERE kode_barang = %s', (new_kode_barang, kode_barang,))
                         mysql.connection.commit()
@@ -583,50 +740,84 @@ def kaos_original_edit(kode_barang):
             if kode_barang_changed:
                 kode_barang = new_kode_barang
                 
-            if 'nama_barang' in request.form:
-                if request.form['nama_barang'] != '':
+            cursor.execute('SELECT * FROM kaos_original WHERE kode_barang = %s', (kode_barang,))
+            kaos_original = cursor.fetchone()
+                
+            if 'nama_barang' in request.form and not request.form['nama_barang'] == '':
+                if request.form['nama_barang'] != kaos_original['nama_barang']:
                     # Create variables for easy access
                     new_nama_barang = request.form['nama_barang']
                     cursor.execute('UPDATE kaos_original SET nama_barang = %s WHERE kode_barang = %s', (new_nama_barang, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan nama barang dengan kode barang {kode_barang} dari {kaos_original['nama_barang']} menjadi {new_nama_barang} pada stok kaos original")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'size' in request.form:
-                if request.form['size'] != '':
+            if 'size' in request.form and not request.form['size'] == '':
+                if request.form['size'] != kaos_original['size']:
                     # Create variables for easy access
                     new_size = request.form['size']
                     cursor.execute('UPDATE kaos_original SET size = %s WHERE kode_barang = %s', (new_size, kode_barang,))
                     mysql.connection.commit()
                     
-            if 'bentuk_lengan' in request.form:
-                if request.form['bentuk_lengan'] != '':
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan size dengan kode barang {kode_barang} dari {kaos_original['size']} menjadi {new_size} pada stok kaos original")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
+                    
+            if 'bentuk_lengan' in request.form and not request.form['bentuk_lengan'] == '':
+                if request.form['bentuk_lengan'] != kaos_original['bentuk_lengan']:
                     # Create variables for easy access
                     new_bentuk_lengan = request.form['bentuk_lengan']
                     cursor.execute('UPDATE kaos_original SET bentuk_lengan = %s WHERE kode_barang = %s', (new_bentuk_lengan, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan bentuk lengan dengan kode barang {kode_barang} dari {kaos_original['bentuk_lengan']} menjadi {new_bentuk_lengan} pada stok kaos original")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'desain' in request.form:
-                if request.form['desain'] != '':
+            if 'desain' in request.form and not request.form['desain'] == '':
+                if request.form['desain'] != kaos_original['desain']:
                     # Create variables for easy access
                     new_desain = request.form['desain']
                     cursor.execute('UPDATE kaos_original SET desain = %s WHERE kode_barang = %s', (new_desain, kode_barang,))
                     mysql.connection.commit()
+
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan desain dengan kode barang {kode_barang} dari {kaos_original['desain']} menjadi {new_desain} pada stok kaos original")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'warna' in request.form:
-                if request.form['warna'] != '':
+                    
+            if 'warna' in request.form and not request.form['warna'] == '':
+                if request.form['warna'] != kaos_original['warna']:
                     # Create variables for easy access
                     new_warna = request.form['warna']
                     cursor.execute('UPDATE kaos_original SET warna = %s WHERE kode_barang = %s', (new_warna, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan warna dengan kode barang {kode_barang} dari {kaos_original['warna']} menjadi {new_warna} pada stok kaos original")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'jumlah_stok' in request.form:
-                if request.form['jumlah_stok'] != '':
+            if 'jumlah_stok' in request.form and not request.form['jumlah_stok'] == '':
+                if request.form['jumlah_stok'] != kaos_original['jumlah_stok']:
                     # Create variables for easy access
                     new_jumlah_stok = request.form['jumlah_stok']
                     cursor.execute('UPDATE kaos_original SET jumlah_stok = %s WHERE kode_barang = %s', (new_jumlah_stok, kode_barang,))
                     mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan jumlah stok dengan kode barang {kode_barang} dari {kaos_original['jumlah_stok']} menjadi {new_jumlah_stok} pada stok kaos original")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                    mysql.connection.commit()
             
-            if 'harga_satuan' in request.form:
-                if request.form['harga_satuan'] != '':
+            if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
+                if request.form['harga_satuan'] != kaos_original['harga_satuan']:
                     # Create variables for easy access
                     new_harga_satuan = request.form['harga_satuan']
                     cursor.execute('UPDATE kaos_original SET harga_satuan = %s WHERE kode_barang = %s', (new_harga_satuan, kode_barang,))
@@ -635,6 +826,11 @@ def kaos_original_edit(kode_barang):
                     jumlah_stok = cursor.fetchone()
                     new_harga_total = int(new_harga_satuan) * int(jumlah_stok['jumlah_stok'])
                     cursor.execute('UPDATE kaos_original SET total_harga = %s WHERE kode_barang = %s', (new_harga_total, kode_barang,))
+                    mysql.connection.commit()
+                    
+                    #Dokumentasi perubahan ke database
+                    activity = (f"(EDIT) Pengeditan harga satuan dengan kode barang {kode_barang} dari Rp.{kaos_original['harga_satuan']} menjadi Rp.{new_harga_satuan} pada stok kaos original")
+                    cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
                     
             return redirect(url_for('kaos_original'))
@@ -670,6 +866,12 @@ def kaos_original_add():
             if not old_kaos_original:
                 cursor.execute('INSERT INTO kaos_original (kode_barang, nama_barang, size, bentuk_lengan, desain, warna, jumlah_stok, harga_satuan, total_harga) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}", "{5}", "{6}", "{7}", "{8}")'.format(kode_barang, nama_barang, size, bentuk_lengan, desain, warna, jumlah_stok, harga_satuan, total_harga))
                 mysql.connection.commit()
+                
+                #Dokumentasi perubahan ke database
+                activity = (f"(ADD) Penambahan stok kaos original {nama_barang} dengan kode barang {kode_barang}")
+                cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+                mysql.connection.commit()
+                
                 return redirect(url_for('kaos_original'))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
@@ -691,7 +893,11 @@ def history_update():
     if 'loggedin' in session:
         #user is loggedin show them the home page
         if session['acc_type'] == 'Admin':
-            return render_template('Histori.Update.html', username=session['username'])
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+            cursor.execute('SELECT * FROM update_history ORDER BY id DESC')
+            update_history = cursor.fetchall()
+            return render_template('Histori.Update.html',update_history=update_history )
+        return redirect(url_for('home'))
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
         

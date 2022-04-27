@@ -116,7 +116,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="{{ url_for('profile') }}">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ username }} <i class="fa-solid fa-user ml-2"></i></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ session['username'] }} <i class="fa-solid fa-user ml-2"></i></span>
                             </a>
                         </li>
 
@@ -151,50 +151,17 @@
                                             <tr>
                                                 <th>Aktivitas</th>
                                                 <th>Waktu</th>
+                                                <th>User</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Cell</td>
-                                                <td>Cell</td>
-                                            </tr>
-                                            
+                                            {% for update_history in update_history %}
+                                                <tr>
+                                                    <td >{{ update_history['activity'] }}</td>
+                                                    <td>{{ update_history['time'] }}</td>
+                                                    <td>{{ update_history['user'] }}</td>
+                                                </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
