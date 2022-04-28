@@ -2,8 +2,8 @@
 -- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 14, 2022 at 03:38 AM
+-- Host: localhost
+-- Generation Time: Apr 28, 2022 at 02:56 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -32,7 +32,7 @@ CREATE TABLE `accounts` (
   `password` varchar(50) NOT NULL,
   `acc_type` varchar(10) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `user_photo` text NOT NULL
+  `user_photo` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -40,8 +40,9 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`username`, `password`, `acc_type`, `email`, `user_photo`) VALUES
-('HRFI', '1', 'Staff', 'ihza.119140130@student.itera.ac.id', '/profile_picture/Ihza Fajrur Rachman Hasani_119140130.jpg'),
-('IFRH', '1', 'Admin', 'ihza.119140130@student.itera.ac.id', '/profile_picture/Ihza Fajrur Rachman Hasani_119140130.jpg');
+('HRFI', '1', 'Admin', 'ihza.119140130@student.itera.ac.id', '/profile_picture/Ihza Fajrur Rachman Hasani_119140130.jpg'),
+('IFRH', '1', 'Admin', 'ihza.119140130@student.itera.ac.id', '/profile_picture/Ihza Fajrur Rachman Hasani_119140130.jpg'),
+('user', 'user', 'Staff', 'user@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -144,7 +145,7 @@ CREATE TABLE `kaos_polos` (
 --
 
 INSERT INTO `kaos_polos` (`kode_barang`, `nama_barang`, `size`, `jenis_kain`, `bentuk_lengan`, `bentuk_lingkar_leher`, `warna`, `jumlah_stok`, `harga_satuan`, `total_harga`) VALUES
-('AE2DHI', 'KAOS ALS', 'M', 'COTTON CARDED 20S', 'PENDEK', 'O NECK', 'HITAM', 5, 75000, 375000),
+('AE2DHI', 'KAOS ALS', 'M', 'COTTON CARDED 20S', 'PENDEK', 'O NECK', 'HITAM', 5, 80000, 400000),
 ('AE2GHI', 'KAOS ALS', 'XL', 'COTTON CARDED 20S', 'PENDEK', 'O NECK', 'HITAM', 5, 75000, 375000),
 ('AF2FHI', 'KAOS ALS', 'L', 'CATTON TC30S', 'PENDEK', 'O NECK', 'HITAM', 5, 70000, 350000),
 ('AK2CHL', 'KAOS RMS', 'S', 'COTTON KOZE', 'PENDEK', 'O NECK', 'HIJAU LUMUT', 5, 75000, 375000),
@@ -156,7 +157,7 @@ INSERT INTO `kaos_polos` (`kode_barang`, `nama_barang`, `size`, `jenis_kain`, `b
 ('AP2DKK', 'POLO ALS', 'M', 'COTTON VISCOSE PIQUE', 'PENDEK', 'BERKERAH', 'KUNING KENARI', 10, 85000, 850000),
 ('AP2FBD', 'POLO ALS', 'L', 'COTTON VISCOSE PIQUE', 'PENDEK', 'BERKERAH', 'BIRU DONGKER', 10, 85000, 850000),
 ('AP2HBB', 'POLO ALS', 'XXL', 'COTTON VISCOSE PIQUE', 'PENDEK', 'BERKERAH', 'BIRU BENHUR', 10, 85000, 850000),
-('AR3FHI', 'REGLAN ALS', 'L', 'COTTON COMBED 20S', '3/4', 'O NECK', 'HITAM', 10, 90000, 900000),
+('AR3FHI', 'REGLAN ALS', 'L', 'COTTON COMBED 20S', '3/4', 'O NECK', 'HITAM', 0, 90000, 0),
 ('AT1DHI', 'TUNIK ALS', 'M', 'COTTON SPANDEX', 'PANJANG', 'O NECK', 'HITAM', 10, 90000, 900000),
 ('AT1FHI', 'TUNIK ALS', 'L', 'COTTON SPANDEX', 'PANJANG', 'O NECK', 'HITAM', 10, 90000, 900000),
 ('AT1GHI', 'TUNIK ALS', 'XL', 'COTTON SPANDEX', 'PANJANG', 'O NECK', 'HITAM', 10, 90000, 900000),
@@ -250,6 +251,116 @@ INSERT INTO `kaos_polos` (`kode_barang`, `nama_barang`, `size`, `jenis_kain`, `b
 ('GS2GHI', 'KAOS GM', 'XL', 'COTTON COMBED 24S', 'PENDEK', 'O NECK', 'HITAM', 5, 75000, 375000),
 ('GS2NBD', 'KAOS GM', '6', 'COTTON COMBED 24S', 'PENDEK', 'O NECK', 'BIRU DONGKER', 5, 75000, 375000);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `update_history`
+--
+
+CREATE TABLE `update_history` (
+  `id` int(10) NOT NULL,
+  `activity` text NOT NULL,
+  `time` datetime NOT NULL,
+  `user` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `update_history`
+--
+
+INSERT INTO `update_history` (`id`, `activity`, `time`, `user`) VALUES
+(1, '1', '2022-04-25 17:07:37', 'HRFI'),
+(2, 'Pengurangan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:11:42', 'HRFI'),
+(3, 'Pengurangan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:23:37', 'HRFI'),
+(4, 'Pengurangan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:29:41', 'HRFI'),
+(5, 'Penambahan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:29:43', 'HRFI'),
+(6, 'Penghapusan stok kaos polos dengan kode barang Test', '2022-04-25 17:31:45', 'HRFI'),
+(7, 'Penambahan stok kaos polos Test dengan kode barang Test', '2022-04-25 17:35:13', 'HRFI'),
+(8, 'Penghapusan stok kaos polos dengan kode barang Test', '2022-04-25 17:35:29', 'HRFI'),
+(9, 'Penambahan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:41:12', 'HRFI'),
+(10, 'Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-25 17:41:15', 'HRFI'),
+(11, 'Penambahan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:41:23', 'HRFI'),
+(12, 'Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-25 17:41:24', 'HRFI'),
+(13, 'Penambahan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:41:49', 'HRFI'),
+(14, 'Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-04-25 17:41:50', 'HRFI'),
+(15, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:43:28', 'HRFI'),
+(16, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI', '2022-04-25 17:43:29', 'HRFI'),
+(17, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 7 ke 6', '2022-04-25 17:43:30', 'HRFI'),
+(18, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-04-25 17:43:31', 'HRFI'),
+(19, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-04-25 17:45:51', 'HRFI'),
+(20, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-04-25 17:45:52', 'HRFI'),
+(21, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 5', '2022-04-27 23:07:28', 'IFRH'),
+(22, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 5 ke 6', '2022-04-27 23:07:31', 'IFRH'),
+(23, '(DEL) Penghapusan stok kaos polos dengan kode barang Test', '2022-04-27 23:09:49', 'IFRH'),
+(24, '(ADD) Penambahan stok kaos original Test dengan kode barang Test', '2022-04-27 23:10:21', 'IFRH'),
+(25, '(DEL) Penghapusan stok kaos polos dengan kode barang Test', '2022-04-27 23:10:24', 'IFRH'),
+(26, '(ADD) Penambahan stok bahan cutting Test dengan kode barang Test', '2022-04-27 23:12:46', 'IFRH'),
+(27, '(DEL) Penghapusan stok kaos polos dengan kode barang Test', '2022-04-27 23:12:49', 'IFRH'),
+(28, '(EDIT) Pengeditan kode barang AE2DHIa menjadi AE2DHI pada stok kaos polos', '2022-04-27 23:47:39', 'IFRH'),
+(29, '(EDIT) Pengeditan nama barang dengan kode barang AE2DHI dari KAOS ALS menjadi KAOS ALSa pada stok kaos polos', '2022-04-27 23:50:02', 'IFRH'),
+(30, '(EDIT) Pengeditan nama barang dengan kode barang AE2DHI dari KAOS ALSa menjadi KAOS ALS pada stok kaos polos', '2022-04-27 23:50:23', 'IFRH'),
+(31, '(EDIT) Pengeditan kode barang AE2DHI menjadi AE2DHIa pada stok kaos polos', '2022-04-27 23:55:17', 'IFRH'),
+(32, '(EDIT) Pengeditan nama barang dengan kode barang AE2DHIa dari KAOS ALS menjadi KAOS ALSa pada stok kaos polos', '2022-04-27 23:55:17', 'IFRH'),
+(33, '(EDIT) Pengeditan size dengan kode barang AE2DHIa dari M menjadi Ma pada stok kaos polos', '2022-04-27 23:55:17', 'IFRH'),
+(34, '(EDIT) Pengeditan jenis kain dengan kode barang AE2DHIa dari COTTON CARDED 20S menjadi COTTON CARDED 20Sa pada stok kaos polos', '2022-04-27 23:55:17', 'IFRH'),
+(35, '(EDIT) Pengeditan bentuk lengan dengan kode barang AE2DHIa dari PENDEK menjadi PENDEKa pada stok kaos polos', '2022-04-27 23:55:18', 'IFRH'),
+(36, '(EDIT) Pengeditan bentuk lingkar leher dengan kode barang AE2DHIa dari O NECK menjadi O NECKa pada stok kaos polos', '2022-04-27 23:55:18', 'IFRH'),
+(37, '(EDIT) Pengeditan warna dengan kode barang AE2DHIa dari HITAM menjadi HITAMa pada stok kaos polos', '2022-04-27 23:55:18', 'IFRH'),
+(38, '(EDIT) Pengeditan jumlah stok dengan kode barang AE2DHIa dari 5 menjadi 51 pada stok kaos polos', '2022-04-27 23:55:18', 'IFRH'),
+(39, '(EDIT) Pengeditan harga satuan dengan kode barang AE2DHIa dari 80000 menjadi 800001 pada stok kaos polos', '2022-04-27 23:55:18', 'IFRH'),
+(40, '(EDIT) Pengeditan kode barang AE2DHIa menjadi AE2DHI pada stok kaos polos', '2022-04-27 23:56:33', 'IFRH'),
+(41, '(EDIT) Pengeditan nama barang dengan kode barang AE2DHI dari KAOS ALSa menjadi KAOS ALS pada stok kaos polos', '2022-04-27 23:56:34', 'IFRH'),
+(42, '(EDIT) Pengeditan size dengan kode barang AE2DHI dari Ma menjadi M pada stok kaos polos', '2022-04-27 23:56:34', 'IFRH'),
+(43, '(EDIT) Pengeditan jenis kain dengan kode barang AE2DHI dari COTTON CARDED 20Sa menjadi COTTON CARDED 20S pada stok kaos polos', '2022-04-27 23:56:34', 'IFRH'),
+(44, '(EDIT) Pengeditan bentuk lengan dengan kode barang AE2DHI dari PENDEKa menjadi PENDEK pada stok kaos polos', '2022-04-27 23:56:34', 'IFRH'),
+(45, '(EDIT) Pengeditan bentuk lingkar leher dengan kode barang AE2DHI dari O NECKa menjadi O NECK pada stok kaos polos', '2022-04-27 23:56:35', 'IFRH'),
+(46, '(EDIT) Pengeditan warna dengan kode barang AE2DHI dari HITAMa menjadi HITAM pada stok kaos polos', '2022-04-27 23:56:35', 'IFRH'),
+(47, '(EDIT) Pengeditan jumlah stok dengan kode barang AE2DHI dari 51 menjadi 5 pada stok kaos polos', '2022-04-27 23:56:35', 'IFRH'),
+(48, '(EDIT) Pengeditan harga satuan dengan kode barang AE2DHI dari Rp.800001 menjadi Rp.80000 pada stok kaos polos', '2022-04-27 23:56:35', 'IFRH'),
+(49, '(EDIT) Pengeditan kode barang BB1F2H menjadi BB1F2Ha pada stok kaos original', '2022-04-28 00:14:15', 'IFRH'),
+(50, '(EDIT) Pengeditan nama barang dengan kode barang BB1F2Ha dari KAOS ORI menjadi KAOS ORIa pada stok kaos original', '2022-04-28 00:14:16', 'IFRH'),
+(51, '(EDIT) Pengeditan size dengan kode barang BB1F2Ha dari L menjadi La pada stok kaos original', '2022-04-28 00:14:16', 'IFRH'),
+(52, '(EDIT) Pengeditan bentuk lengan dengan kode barang BB1F2Ha dari PENDEK menjadi PENDEKa pada stok kaos original', '2022-04-28 00:14:16', 'IFRH'),
+(53, '(EDIT) Pengeditan desain dengan kode barang BB1F2Ha dari BBI menjadi BBIa pada stok kaos original', '2022-04-28 00:14:16', 'IFRH'),
+(54, '(EDIT) Pengeditan warna dengan kode barang BB1F2Ha dari HITAM menjadi HITAMa pada stok kaos original', '2022-04-28 00:14:16', 'IFRH'),
+(55, '(EDIT) Pengeditan jumlah stok dengan kode barang BB1F2Ha dari 6 menjadi 61 pada stok kaos original', '2022-04-28 00:14:17', 'IFRH'),
+(56, '(EDIT) Pengeditan harga satuan dengan kode barang BB1F2Ha dari Rp.250000 menjadi Rp.2500001 pada stok kaos original', '2022-04-28 00:14:17', 'IFRH'),
+(57, '(EDIT) Pengeditan kode barang BB1F2Ha menjadi BB1F2H pada stok kaos original', '2022-04-28 00:15:37', 'IFRH'),
+(58, '(EDIT) Pengeditan nama barang dengan kode barang BB1F2H dari KAOS ORIa menjadi KAOS ORI pada stok kaos original', '2022-04-28 00:15:38', 'IFRH'),
+(59, '(EDIT) Pengeditan size dengan kode barang BB1F2H dari La menjadi L pada stok kaos original', '2022-04-28 00:15:38', 'IFRH'),
+(60, '(EDIT) Pengeditan bentuk lengan dengan kode barang BB1F2H dari PENDEKa menjadi PENDEK pada stok kaos original', '2022-04-28 00:15:38', 'IFRH'),
+(61, '(EDIT) Pengeditan desain dengan kode barang BB1F2H dari BBIa menjadi BBI pada stok kaos original', '2022-04-28 00:15:38', 'IFRH'),
+(62, '(EDIT) Pengeditan warna dengan kode barang BB1F2H dari HITAMa menjadi HITAM pada stok kaos original', '2022-04-28 00:15:38', 'IFRH'),
+(63, '(EDIT) Pengeditan jumlah stok dengan kode barang BB1F2H dari 61 menjadi 6 pada stok kaos original', '2022-04-28 00:15:39', 'IFRH'),
+(64, '(EDIT) Pengeditan harga satuan dengan kode barang BB1F2H dari Rp.2500001 menjadi Rp.250000 pada stok kaos original', '2022-04-28 00:15:39', 'IFRH'),
+(65, '(EDIT) Pengeditan kode barang DTAL menjadi DTALa pada bahan cutting', '2022-04-28 00:25:36', 'IFRH'),
+(66, '(EDIT) Pengeditan nama barang dengan kode barang DTALa dari DTF menjadi DTFa pada bahan cutting', '2022-04-28 00:25:36', 'IFRH'),
+(67, '(EDIT) Pengeditan jenis barang dengan kode barang DTALa dari DTF menjadi DTFa pada bahan cutting', '2022-04-28 00:25:36', 'IFRH'),
+(68, '(EDIT) Pengeditan warna dengan kode barang DTALa dari ALL menjadi ALLa pada bahan_cutting', '2022-04-28 00:25:37', 'IFRH'),
+(69, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTALa dari 50 menjadi 501 pada bahan_cutting', '2022-04-28 00:25:37', 'IFRH'),
+(70, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTALa dari 50 menjadi 501 pada bahan_cutting', '2022-04-28 00:25:37', 'IFRH'),
+(71, '(EDIT) Pengeditan harga satuan dengan kode barang DTALa dari Rp.500 menjadi Rp.5001 pada bahan cutting', '2022-04-28 00:25:37', 'IFRH'),
+(72, '(EDIT) Pengeditan kode barang DTALa menjadi DTAL pada bahan cutting', '2022-04-28 00:27:40', 'IFRH'),
+(73, '(EDIT) Pengeditan nama barang dengan kode barang DTAL dari DTFa menjadi DTF pada bahan cutting', '2022-04-28 00:27:41', 'IFRH'),
+(74, '(EDIT) Pengeditan jenis barang dengan kode barang DTAL dari DTFa menjadi DTF pada bahan cutting', '2022-04-28 00:27:41', 'IFRH'),
+(75, '(EDIT) Pengeditan warna dengan kode barang DTAL dari ALLa menjadi ALL pada bahan_cutting', '2022-04-28 00:27:41', 'IFRH'),
+(76, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 501 menjadi 50 pada bahan_cutting', '2022-04-28 00:27:41', 'IFRH'),
+(77, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 501 menjadi 50 pada bahan_cutting', '2022-04-28 00:27:42', 'IFRH'),
+(78, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.5001 menjadi Rp.500 pada bahan cutting', '2022-04-28 00:27:42', 'IFRH');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `update_jumlah_kp`
+--
+
+CREATE TABLE `update_jumlah_kp` (
+  `id` int(10) NOT NULL,
+  `kode_barang` varchar(10) NOT NULL,
+  `old_val` int(11) NOT NULL,
+  `new_val` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -277,6 +388,47 @@ ALTER TABLE `kaos_original`
 --
 ALTER TABLE `kaos_polos`
   ADD PRIMARY KEY (`kode_barang`);
+
+--
+-- Indexes for table `update_history`
+--
+ALTER TABLE `update_history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `account-username` (`user`);
+
+--
+-- Indexes for table `update_jumlah_kp`
+--
+ALTER TABLE `update_jumlah_kp`
+  ADD KEY `update-id` (`id`),
+  ADD KEY `updated-item` (`kode_barang`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `update_history`
+--
+ALTER TABLE `update_history`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `update_history`
+--
+ALTER TABLE `update_history`
+  ADD CONSTRAINT `account-username` FOREIGN KEY (`user`) REFERENCES `accounts` (`username`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `update_jumlah_kp`
+--
+ALTER TABLE `update_jumlah_kp`
+  ADD CONSTRAINT `update-id` FOREIGN KEY (`id`) REFERENCES `update_history` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `updated-item` FOREIGN KEY (`kode_barang`) REFERENCES `kaos_polos` (`kode_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
