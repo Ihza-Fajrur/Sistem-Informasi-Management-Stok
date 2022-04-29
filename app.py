@@ -7,6 +7,8 @@ from werkzeug.utils import append_slash_redirect
 from flask_mail import Mail, Message
 import pandas.io.sql as psql
 from datetime import datetime 
+from threading import Thread
+import time
 
 #inisialisasi
 app = Flask(__name__)
@@ -28,6 +30,121 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'sokou_lampung'
 mysql = MySQL(app)
+
+try:
+    secondary_db = MySQLdb.connect('192.168.1.29','root','','sokou_lampung')
+except(MySQLdb.Error, MySQLdb.Warning) as e:
+    print(e)
+
+def sales_record_kp():
+    time.sleep(10)
+    while True:
+        try:
+            year = time.strftime("%Y")
+            month = time.strftime("%m")
+            cursor = secondary_db.cursor()
+            cursor.execute("SELECT kode_barang FROM kaos_polos")
+            data_kode_barang = cursor.fetchall()
+            for data in data_kode_barang:
+                cursor.execute(f'SELECT id FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                result = cursor.fetchone()
+                if result == None:
+                    cursor.execute('INSERT INTO sales_tracking_kp (kode_barang, jumlah_pembelian, bulan, tahun) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(data[0], 0, month, year))
+                    secondary_db.commit()
+        except:
+            time.sleep(3)
+        time.sleep(10)
+        print("synching sales record kaos polos complete")
+        
+def sales_record_ko():
+    time.sleep(15)
+    while True:
+        try:
+            year = time.strftime("%Y")
+            month = time.strftime("%m")
+            cursor = secondary_db.cursor()
+            cursor.execute("SELECT kode_barang FROM kaos_original")
+            data_kode_barang = cursor.fetchall()
+            for data in data_kode_barang:
+                cursor.execute(f'SELECT id FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                result = cursor.fetchone()
+                if result == None:
+                    cursor.execute('INSERT INTO sales_tracking_ko (kode_barang, jumlah_pembelian, bulan, tahun) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(data[0], 0, month, year))
+                    secondary_db.commit()
+        except:
+            time.sleep(3)
+        time.sleep(10)
+        print("synching sales record kaos original complete")
+        
+def sales_record_bc():
+    time.sleep(7)
+    while True:
+        try:
+            year = time.strftime("%Y")
+            month = time.strftime("%m")
+            cursor = secondary_db.cursor()
+            cursor.execute("SELECT kode_barang FROM bahan_cutting")
+            data_kode_barang = cursor.fetchall()
+            for data in data_kode_barang:
+                cursor.execute(f'SELECT id FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                result = cursor.fetchone()
+                if result == None:
+                    cursor.execute('INSERT INTO sales_tracking_bc (kode_barang, jumlah_pembelian, bulan, tahun) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(data[0], 0, month, year))
+                    secondary_db.commit()
+        except:
+            time.sleep(3)
+        time.sleep(13)
+        print("synching sales record bahan cutting complete")
+        
+def total_penjualan():
+    try:
+        year = time.strftime("%Y")
+        month = time.strftime("%m")
+        
+        #Kaos Polos
+        kp_total_sales = 0
+        cursor = secondary_db.cursor()
+        cursor.execute(f'SELECT kode_barang FROM sales_tracking_kp')
+        data_kaos_polos = cursor.fetchall()  
+        for data in data_kaos_polos:
+            cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+            data_kaos_polos = cursor.fetchone()
+            kp_total_sales += data_kaos_polos[0]
+            
+        #Kaos Original
+        ko_total_sales = 0
+        cursor = secondary_db.cursor()
+        cursor.execute(f'SELECT kode_barang FROM sales_tracking_ko')
+        data_kaos_polos = cursor.fetchall()  
+        for data in data_kaos_polos:
+            cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+            data_kaos_polos = cursor.fetchone()
+            ko_total_sales += data_kaos_polos[0]
+        total_sales = kp_total_sales + ko_total_sales
+        cursor.execute('UPDATE total_penjualan SET penjualan_kp = %s WHERE id = %s', (kp_total_sales, 1))
+        secondary_db.commit()
+        cursor.execute('UPDATE total_penjualan SET penjualan_ko = %s WHERE id = %s', (ko_total_sales, 1))
+        secondary_db.commit()
+        cursor.execute('UPDATE total_penjualan SET penjualan_total = %s WHERE id = %s', (total_sales, 1))
+        secondary_db.commit()
+        print("synching total penjualan complete")
+    except:
+        pass
+        
+def sales_record():
+    thread = Thread(target=sales_record_kp, args=())
+    thread.daemon = True
+    thread.start()
+
+    thread = Thread(target=sales_record_ko, args=())
+    thread.daemon = True
+    thread.start()
+
+    thread = Thread(target=sales_record_bc, args=())
+    thread.daemon = True
+    thread.start()
+    
+sales_record()
 
 @app.route('/', methods=['POST', 'GET'])
 def function():
@@ -112,8 +229,10 @@ def home():
     if 'loggedin' in session:
         # User is loggedin show them the home page
         if session['acc_type'] == 'Staff':
+            total_penjualan()
             return render_template('Halaman.Staff.html', username=session['username'])
         elif session['acc_type'] == 'Admin':
+            total_penjualan()
             return render_template('Halaman.Admin.html', username=session['username'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
@@ -354,6 +473,15 @@ def kaos_polos_dec(kode_barang):
             cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
             mysql.connection.commit()
             
+            #Dokumentasi Sales Record
+            year = time.strftime("%Y")
+            month = time.strftime("%m")
+            cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+            temp = cursor.fetchone()
+            current_sales = temp['jumlah_pembelian']
+            cursor.execute(f'UPDATE sales_tracking_kp SET jumlah_pembelian = {current_sales+1} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+            mysql.connection.commit()
+            
             #Pengiriman notifikasi ke email jika stok habis
             if kaos_polos['jenis_kain'] == 'COTTON COMBED 20S' and kaos_polos['jumlah_stok'] == 0:
                 if kaos_polos['warna'] == 'PUTIH' or kaos_polos['warna'] == 'HITAM':
@@ -550,7 +678,17 @@ def kaos_polos_edit(kode_barang):
                     activity = (f"(EDIT) Pengeditan jumlah stok dengan kode barang {kode_barang} dari {kaos_polos['jumlah_stok']} menjadi {new_jumlah_stok} pada stok kaos polos")
                     cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
-            
+                    
+                    if kaos_polos['jumlah_stok'] > int(new_jumlah_stok):
+                        #Dokumentasi Sales Record
+                        year = time.strftime("%Y")
+                        month = time.strftime("%m")
+                        cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                        temp = cursor.fetchone()
+                        current_sales = temp['jumlah_pembelian']
+                        jumlah_pembelian = current_sales + (kaos_polos['jumlah_stok'] - int(new_jumlah_stok))
+                        cursor.execute(f'UPDATE sales_tracking_kp SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                        mysql.connection.commit()
             
             if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
                 if request.form['harga_satuan'] != kaos_polos['harga_satuan']:
@@ -664,6 +802,15 @@ def kaos_original_dec(kode_barang):
             #Dokumentasi perubahan ke database
             activity = (f"(-) Pengurangan stok kaos original dengan kode barang {kode_barang} yang berjumlah {kaos_original['jumlah_stok']+1} ke {kaos_original['jumlah_stok']}")
             cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
+            mysql.connection.commit()
+            
+            #Dokumentasi Sales Record
+            year = time.strftime("%Y")
+            month = time.strftime("%m")
+            cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+            temp = cursor.fetchone()
+            current_sales = temp['jumlah_pembelian']
+            cursor.execute(f'UPDATE sales_tracking_ko SET jumlah_pembelian = {current_sales+1} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
             mysql.connection.commit()
         
         return redirect(url_for('kaos_original'))
@@ -815,6 +962,17 @@ def kaos_original_edit(kode_barang):
                     activity = (f"(EDIT) Pengeditan jumlah stok dengan kode barang {kode_barang} dari {kaos_original['jumlah_stok']} menjadi {new_jumlah_stok} pada stok kaos original")
                     cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
+                    
+                    if kaos_original['jumlah_stok'] > int(new_jumlah_stok):
+                        #Dokumentasi Sales Record
+                        year = time.strftime("%Y")
+                        month = time.strftime("%m")
+                        cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                        temp = cursor.fetchone()
+                        current_sales = temp['jumlah_pembelian']
+                        jumlah_pembelian = current_sales + (kaos_original['jumlah_stok'] - int(new_jumlah_stok))
+                        cursor.execute(f'UPDATE sales_tracking_ko SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                        mysql.connection.commit()
             
             if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
                 if request.form['harga_satuan'] != kaos_original['harga_satuan']:
@@ -1023,7 +1181,6 @@ def edit_kaos_original():
             return render_template('Edit.Kaos.Original.html', username=session['username'])
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
-
-
+          
 if __name__ == "__main__": 
     app.run(host='0.0.0.0', port=5000, debug=True)
