@@ -124,16 +124,29 @@ def total_penjualan():
             cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
             data_kaos_polos = cursor.fetchone()
             ko_total_sales += data_kaos_polos[0]
+            
+        #Bahan Cutting
+        bc_total_sales = 0
+        cursor = secondary_db.cursor()
+        cursor.execute(f'SELECT kode_barang FROM sales_tracking_bc')
+        data_bahan_cutting = cursor.fetchall()  
+        for data in data_bahan_cutting:
+            cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+            data_bahan_cutting = cursor.fetchone()
+            bc_total_sales += data_bahan_cutting[0]
+        
         total_sales = kp_total_sales + ko_total_sales
         cursor.execute('UPDATE total_penjualan SET penjualan_kp = %s WHERE id = %s', (kp_total_sales, 1))
         secondary_db.commit()
         cursor.execute('UPDATE total_penjualan SET penjualan_ko = %s WHERE id = %s', (ko_total_sales, 1))
         secondary_db.commit()
+        cursor.execute('UPDATE total_penjualan SET penjualan_bc = %s WHERE id = %s', (bc_total_sales, 1))
+        secondary_db.commit()
         cursor.execute('UPDATE total_penjualan SET penjualan_total = %s WHERE id = %s', (total_sales, 1))
         secondary_db.commit()
         print("synching total penjualan complete")
     except:
-        pass
+        print("total penjualan update failed")
         
 def sales_record():
     thread = Thread(target=sales_record_kp, args=())
@@ -145,6 +158,10 @@ def sales_record():
     thread.start()
 
     thread = Thread(target=sales_record_bc, args=())
+    thread.daemon = True
+    thread.start()
+    
+    thread = Thread(target=total_penjualan, args=())
     thread.daemon = True
     thread.start()
     
@@ -255,12 +272,24 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT penjualan_total FROM total_penjualan')
+        penjualan_total = cursor.fetchone()
+        cursor.execute('SELECT penjualan_kp FROM total_penjualan')
+        penjualan_kp = cursor.fetchone()
+        cursor.execute('SELECT penjualan_ko FROM total_penjualan')
+        penjualan_ko = cursor.fetchone()
+        cursor.execute('SELECT penjualan_bc FROM total_penjualan')
+        penjualan_bc = cursor.fetchone()
+        presentase_kp = penjualan_kp['penjualan_kp']/penjualan_total['penjualan_total']*100
+        presentase_ko = penjualan_ko['penjualan_ko']/penjualan_total['penjualan_total']*100
+        penjualan_bc = penjualan_bc['penjualan_bc']
         if session['acc_type'] == 'Staff':
-            total_penjualan()
-            return render_template('Halaman.Staff.html', username=session['username'])
+            # total_penjualan()
+            return render_template('Halaman.Staff.html',presentase_kp=round(presentase_kp,2), presentase_ko=round(presentase_ko,2), penjualan_bc=penjualan_bc)
         elif session['acc_type'] == 'Admin':
-            total_penjualan()
-            return render_template('Halaman.Admin.html')
+            # total_penjualan()
+            return render_template('Halaman.Admin.html',presentase_kp=round(presentase_kp,2), presentase_ko=round(presentase_ko,2), penjualan_bc=penjualan_bc)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -372,6 +401,9 @@ def bahan_cutting_edit(kode_barang):
                     cursor.execute('UPDATE bahan_cutting SET ukuran_panjang = %s WHERE kode_barang = %s', (new_ukuran_panjang, kode_barang,))
                     mysql.connection.commit()
                     
+                    bc_panjang_old = bahan_cutting['ukuran_panjang']
+                    bc_panjang_new = new_ukuran_panjang
+                    
                     #Dokumentasi perubahan ke database
                     activity = (f"(EDIT) Pengeditan ukuran panjang dengan kode barang {kode_barang} dari {bahan_cutting['ukuran_panjang']} menjadi {new_ukuran_panjang} pada bahan cutting")
                     cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
@@ -384,10 +416,26 @@ def bahan_cutting_edit(kode_barang):
                     cursor.execute('UPDATE bahan_cutting SET ukuran_lebar = %s WHERE kode_barang = %s', (new_ukuran_lebar, kode_barang,))
                     mysql.connection.commit()
 
+                    bc_lebar_old = bahan_cutting['ukuran_lebar']
+                    bc_lebar_new = new_ukuran_lebar
+                    
                     #Dokumentasi perubahan ke database
                     activity = (f"(EDIT) Pengeditan ukuran lebar dengan kode barang {kode_barang} dari {bahan_cutting['ukuran_lebar']} menjadi {new_ukuran_lebar} pada bahan cutting")
                     cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
+            
+            ukuran_lama = int(bc_panjang_old)  * int(bc_lebar_old)
+            ukuran_baru = int(bc_panjang_new)  * int(bc_lebar_new)
+            if ukuran_lama > ukuran_baru:
+                #Dokumentasi Sales Record
+                year = time.strftime("%Y")
+                month = time.strftime("%m")
+                cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                temp = cursor.fetchone()
+                current_sales = temp['jumlah_pembelian']
+                jumlah_pembelian = current_sales + (ukuran_lama - ukuran_baru)
+                cursor.execute(f'UPDATE sales_tracking_bc SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                mysql.connection.commit()
                     
             if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
                 if request.form['harga_satuan'] != bahan_cutting['harga_satuan']:
