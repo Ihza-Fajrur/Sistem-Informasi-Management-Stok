@@ -96,7 +96,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="{{ url_for('profile') }}">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ username }} <i class="fa-solid fa-user ml-2"></i></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" > {{ session['username'] }} <i class="fa-solid fa-user ml-2"></i></span>
                             </a>
                         </li>
 
@@ -125,7 +125,7 @@
                                 <hr class="sidebar-divider d-none d-md-block">
                                 <!-- <img src="/static/img/logo.png" alt="" width="90%" height="80%"> -->
                                 <!-- <div class="image"><img src="{{ profile_picture }}" width="100px"></div> -->
-                                <div class="image"><img src="/profile_picture/Ihza.jpg" width="100px"></div>
+                                <div class="image"><img src="{{ user_photo }}" width="100px"></div>
                                 <a class="edit" href="#">
                                     <span class="mr-2 d-none d-lg-inline text-primary-600 small">Ubah Foto Profil</span>
                                 </a>
