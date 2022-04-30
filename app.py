@@ -1,4 +1,5 @@
 from os import abort
+from MySQLdb import OperationalError
 from flask import Flask,render_template,url_for, request,jsonify,session,flash,redirect,send_file
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
@@ -54,8 +55,9 @@ def sales_record_kp():
                     cursor.execute('INSERT IGNORE INTO sales_tracking_kp (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
                     secondary_db.commit()
             print("synching sales record kaos polos complete")
+            cursor.close() 
         except:
-            time.sleep(3)
+            time.sleep(3) 
         time.sleep(10)
         
 def sales_record_ko():
@@ -75,10 +77,10 @@ def sales_record_ko():
                     cursor.execute('INSERT IGNORE INTO sales_tracking_ko (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
                     secondary_db.commit()
             print("synching sales record kaos original complete")
+            cursor.close() 
         except:
             time.sleep(3)
         time.sleep(10)
-        
         
 def sales_record_bc():
     time.sleep(7)
@@ -89,14 +91,18 @@ def sales_record_bc():
             cursor = secondary_db.cursor()
             cursor.execute("SELECT kode_barang FROM bahan_cutting")
             data_kode_barang = cursor.fetchall()
-            for data in data_kode_barang:
-                cursor.execute(f'SELECT id FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
-                result = cursor.fetchone()
+            try:
+                for data in data_kode_barang:
+                    cursor.execute(f'SELECT id FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                    result = cursor.fetchone()
                 if result == None:
                     id = f'{data[0]}-{month}-{year}'
                     cursor.execute('INSERT IGNORE INTO sales_tracking_bc (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
                     secondary_db.commit()
-            print("synching sales record bahan cutting complete")
+                print("synching sales record bahan cutting complete")
+                cursor.close() 
+            except OperationalError:
+                continue
         except:
             time.sleep(3)
         time.sleep(13)
@@ -116,8 +122,8 @@ def total_penjualan():
                 for data in data_kaos_polos:
                     cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
                     data_kaos_polos = cursor.fetchone()
-                    kp_total_sales += data_kaos_polos[0]
-                  
+                    if type(data_kaos_polos[0]) == int:
+                        kp_total_sales += data_kaos_polos[0]
             #Kaos Original
             ko_total_sales = 0
             cursor = secondary_db.cursor()
@@ -127,7 +133,8 @@ def total_penjualan():
                 for data in data_kaos_original:
                     cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
                     data_kaos_original = cursor.fetchone()
-                    ko_total_sales += data_kaos_original[0]
+                    if type(data_kaos_original[0]) == int:
+                        ko_total_sales += data_kaos_original[0]
                 
             #Bahan Cutting
             bc_total_sales = 0
@@ -138,7 +145,8 @@ def total_penjualan():
                 for data in data_bahan_cutting:
                     cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
                     data_bahan_cutting = cursor.fetchone()
-                    bc_total_sales += data_bahan_cutting[0]
+                    if type(data_bahan_cutting[0]) == int:
+                        bc_total_sales += data_bahan_cutting[0]
             cursor.execute(f'SELECT id FROM total_penjualan')
             verify = cursor.fetchone()
             if verify:
@@ -155,11 +163,10 @@ def total_penjualan():
                 cursor.execute('INSERT INTO total_penjualan (id, penjualan_total, penjualan_kp, penjualan_ko, penjualan_bc) VALUES (%s, %s, %s, %s, %s)', (1, 0, 0, 0, 0))
                 secondary_db.commit()
             print("synching total penjualan complete")
+            cursor.close()
         except Exception as e:
             print("total penjualan update failed")
             print(e)
-            continue
-            
         time.sleep(10)
         
 def sales_record():
@@ -197,6 +204,7 @@ def graph_data_retreval():
     if not var[0] == temp[0]:
         cursor.execute('UPDATE record_penjualan_tahunan SET value = %s WHERE bulan = %s', (temp[0], month))
         secondary_db.commit()
+        print("executed")
     cursor.execute(f'SELECT value FROM record_penjualan_tahunan')
     data = cursor.fetchall()
     response = []
@@ -282,9 +290,9 @@ def profile():
             cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
             account = cursor.fetchone()
             if session['acc_type'] == 'Staff':
-                return render_template('Edit.Profil.html', username=username, email=account['email'], profile_picture=account['user_photo'])
+                return render_template('Edit.Profil.html', username=username, user_photo=account['user_photo'], email=account['email'], profile_picture=account['user_photo'])
             elif session['acc_type'] == 'Admin':
-                return render_template('Edit.Profil.Admin.html', username=username, email=account['email'], profile_picture=account['user_photo'])
+                return render_template('Edit.Profil.Admin.html', username=username, user_photo=account['user_photo'], email=account['email'], profile_picture=account['user_photo'])
     return redirect(url_for('login'))
 
 @app.route('/home', methods=['POST', 'GET'])
@@ -1222,7 +1230,8 @@ def manajemen_akun_edit(username):
             cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute('SELECT * FROM accounts WHERE username = "{0}" '.format(username))
             account = cursor.fetchone()
-            return render_template('Edit.Manajemen.Akun.html', account=account, msg=msg)
+            user_photo=account['user_photo']
+            return render_template('Edit.Manajemen.Akun.html', account=account, msg=msg, user_photo=user_photo)
     # User is not loggedin redirect to login page
     return redirect(url_for('manajemen_akun'))
 
