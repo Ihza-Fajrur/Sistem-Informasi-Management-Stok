@@ -101,52 +101,59 @@ def sales_record_bc():
         time.sleep(13)
         
 def total_penjualan():
-    try:
-        year = time.strftime("%Y")
-        month = time.strftime("%m")
-        
-        #Kaos Polos
-        kp_total_sales = 0
-        cursor = secondary_db.cursor()
-        cursor.execute(f'SELECT kode_barang FROM sales_tracking_kp')
-        data_kaos_polos = cursor.fetchall()  
-        for data in data_kaos_polos:
-            cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
-            data_kaos_polos = cursor.fetchone()
-            kp_total_sales += data_kaos_polos[0]
+    while True:
+        try:
+            year = time.strftime("%Y")
+            month = time.strftime("%m")
             
-        #Kaos Original
-        ko_total_sales = 0
-        cursor = secondary_db.cursor()
-        cursor.execute(f'SELECT kode_barang FROM sales_tracking_ko')
-        data_kaos_polos = cursor.fetchall()  
-        for data in data_kaos_polos:
-            cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
-            data_kaos_polos = cursor.fetchone()
-            ko_total_sales += data_kaos_polos[0]
-            
-        #Bahan Cutting
-        bc_total_sales = 0
-        cursor = secondary_db.cursor()
-        cursor.execute(f'SELECT kode_barang FROM sales_tracking_bc')
-        data_bahan_cutting = cursor.fetchall()  
-        for data in data_bahan_cutting:
-            cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
-            data_bahan_cutting = cursor.fetchone()
-            bc_total_sales += data_bahan_cutting[0]
-        
-        total_sales = kp_total_sales + ko_total_sales
-        cursor.execute('UPDATE total_penjualan SET penjualan_kp = %s WHERE id = %s', (kp_total_sales, 1))
-        secondary_db.commit()
-        cursor.execute('UPDATE total_penjualan SET penjualan_ko = %s WHERE id = %s', (ko_total_sales, 1))
-        secondary_db.commit()
-        cursor.execute('UPDATE total_penjualan SET penjualan_bc = %s WHERE id = %s', (bc_total_sales, 1))
-        secondary_db.commit()
-        cursor.execute('UPDATE total_penjualan SET penjualan_total = %s WHERE id = %s', (total_sales, 1))
-        secondary_db.commit()
-        print("synching total penjualan complete")
-    except:
-        print("total penjualan update failed")
+            #Kaos Polos
+            kp_total_sales = 0
+            cursor = secondary_db.cursor()
+            cursor.execute(f'SELECT kode_barang FROM sales_tracking_kp')
+            data_kaos_polos = cursor.fetchall()  
+            for data in data_kaos_polos:
+                cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                data_kaos_polos = cursor.fetchone()
+                kp_total_sales += data_kaos_polos[0]
+                
+            #Kaos Original
+            ko_total_sales = 0
+            cursor = secondary_db.cursor()
+            cursor.execute(f'SELECT kode_barang FROM sales_tracking_ko')
+            data_kaos_polos = cursor.fetchall()  
+            for data in data_kaos_polos:
+                cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                data_kaos_polos = cursor.fetchone()
+                ko_total_sales += data_kaos_polos[0]
+                
+            #Bahan Cutting
+            bc_total_sales = 0
+            cursor = secondary_db.cursor()
+            cursor.execute(f'SELECT kode_barang FROM sales_tracking_bc')
+            data_bahan_cutting = cursor.fetchall()  
+            for data in data_bahan_cutting:
+                cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                data_bahan_cutting = cursor.fetchone()
+                bc_total_sales += data_bahan_cutting[0]
+            cursor.execute(f'SELECT id FROM total_penjualan')
+            verify = cursor.fetchone()
+            if verify:
+                total_sales = kp_total_sales + ko_total_sales
+                cursor.execute('UPDATE total_penjualan SET penjualan_kp = %s WHERE id = %s', (kp_total_sales, 1))
+                secondary_db.commit()
+                cursor.execute('UPDATE total_penjualan SET penjualan_ko = %s WHERE id = %s', (ko_total_sales, 1))
+                secondary_db.commit()
+                cursor.execute('UPDATE total_penjualan SET penjualan_bc = %s WHERE id = %s', (bc_total_sales, 1))
+                secondary_db.commit()
+                cursor.execute('UPDATE total_penjualan SET penjualan_total = %s WHERE id = %s', (total_sales, 1))
+                secondary_db.commit()
+            else:
+                cursor.execute('INSERT INTO total_penjualan (id, penjualan_total, penjualan_kp, penjualan_ko, penjualan_bc) VALUES (%s, %s, %s, %s, %s)', (1, 0, 0, 0, 0))
+                secondary_db.commit()
+            print("synching total penjualan complete")
+        except:
+            print("total penjualan update failed")
+        time.sleep(10)
         
 def sales_record():
     thread = Thread(target=sales_record_kp, args=())
@@ -168,8 +175,14 @@ def sales_record():
 sales_record()
 
 def graph_data_retreval():
-    month = int(time.strftime("%m"))
     cursor = secondary_db.cursor()
+    cursor.execute(f'SELECT bulan FROM record_penjualan_tahunan')
+    verify = cursor.fetchone()
+    if not verify:
+        for i in range (1, 13):
+            cursor.execute('INSERT INTO record_penjualan_tahunan (bulan, value) VALUES (%s, %s)', (i, 0))
+        secondary_db.commit()
+    month = int(time.strftime("%m"))
     cursor.execute('SELECT penjualan_total FROM total_penjualan')
     temp = cursor.fetchone()
     cursor.execute(f'SELECT value FROM record_penjualan_tahunan WHERE bulan = {month}')
@@ -281,9 +294,18 @@ def home():
         penjualan_ko = cursor.fetchone()
         cursor.execute('SELECT penjualan_bc FROM total_penjualan')
         penjualan_bc = cursor.fetchone()
-        presentase_kp = penjualan_kp['penjualan_kp']/penjualan_total['penjualan_total']*100
-        presentase_ko = penjualan_ko['penjualan_ko']/penjualan_total['penjualan_total']*100
-        penjualan_bc = penjualan_bc['penjualan_bc']
+        if penjualan_bc:
+            if not penjualan_total['penjualan_total'] == 0:
+                presentase_kp = penjualan_kp['penjualan_kp']/penjualan_total['penjualan_total']*100
+                presentase_ko = penjualan_ko['penjualan_ko']/penjualan_total['penjualan_total']*100
+            else:
+                presentase_kp = 0
+                presentase_ko = 0
+            penjualan_bc = penjualan_bc['penjualan_bc']
+        else:
+            presentase_kp = 0
+            presentase_ko = 0
+            penjualan_bc = 0
         if session['acc_type'] == 'Staff':
             # total_penjualan()
             return render_template('Halaman.Staff.html',presentase_kp=round(presentase_kp,2), presentase_ko=round(presentase_ko,2), penjualan_bc=penjualan_bc)
