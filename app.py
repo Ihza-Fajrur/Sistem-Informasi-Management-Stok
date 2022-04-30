@@ -49,12 +49,13 @@ def sales_record_kp():
                 cursor.execute(f'SELECT id FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
                 result = cursor.fetchone()
                 if result == None:
-                    cursor.execute('INSERT INTO sales_tracking_kp (kode_barang, jumlah_pembelian, bulan, tahun) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(data[0], 0, month, year))
+                    id = f'{data[0]}-{month}-{year}'
+                    cursor.execute('INSERT IGNORE INTO sales_tracking_kp (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
                     secondary_db.commit()
+            print("synching sales record kaos polos complete")
         except:
             time.sleep(3)
         time.sleep(10)
-        print("synching sales record kaos polos complete")
         
 def sales_record_ko():
     time.sleep(15)
@@ -69,12 +70,14 @@ def sales_record_ko():
                 cursor.execute(f'SELECT id FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
                 result = cursor.fetchone()
                 if result == None:
-                    cursor.execute('INSERT INTO sales_tracking_ko (kode_barang, jumlah_pembelian, bulan, tahun) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(data[0], 0, month, year))
+                    id = f'{data[0]}-{month}-{year}'
+                    cursor.execute('INSERT IGNORE INTO sales_tracking_ko (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
                     secondary_db.commit()
+            print("synching sales record kaos original complete")
         except:
             time.sleep(3)
         time.sleep(10)
-        print("synching sales record kaos original complete")
+        
         
 def sales_record_bc():
     time.sleep(7)
@@ -89,12 +92,13 @@ def sales_record_bc():
                 cursor.execute(f'SELECT id FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
                 result = cursor.fetchone()
                 if result == None:
-                    cursor.execute('INSERT INTO sales_tracking_bc (kode_barang, jumlah_pembelian, bulan, tahun) VALUES ("{0}", "{1}", "{2}", "{3}")'.format(data[0], 0, month, year))
+                    id = f'{data[0]}-{month}-{year}'
+                    cursor.execute('INSERT IGNORE INTO sales_tracking_bc (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
                     secondary_db.commit()
+            print("synching sales record bahan cutting complete")
         except:
             time.sleep(3)
         time.sleep(13)
-        print("synching sales record bahan cutting complete")
         
 def total_penjualan():
     try:
@@ -145,6 +149,29 @@ def sales_record():
     thread.start()
     
 sales_record()
+
+def graph_data_retreval():
+    month = int(time.strftime("%m"))
+    cursor = secondary_db.cursor()
+    cursor.execute('SELECT penjualan_total FROM total_penjualan')
+    temp = cursor.fetchone()
+    cursor.execute(f'SELECT value FROM record_penjualan_tahunan WHERE bulan = {month}')
+    var = cursor.fetchone()
+    if not var[0] == temp[0]:
+        cursor.execute('UPDATE record_penjualan_tahunan SET value = %s WHERE bulan = %s', (temp[0], month))
+        secondary_db.commit()
+    cursor.execute(f'SELECT value FROM record_penjualan_tahunan')
+    data = cursor.fetchall()
+    response = []
+    for data in data:
+        response.append(data[0])
+    return response
+
+@app.route("/graph")
+def graph():
+    # sales = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    sales = graph_data_retreval()
+    return jsonify(sales)
 
 @app.route('/', methods=['POST', 'GET'])
 def function():
@@ -233,7 +260,7 @@ def home():
             return render_template('Halaman.Staff.html', username=session['username'])
         elif session['acc_type'] == 'Admin':
             total_penjualan()
-            return render_template('Halaman.Admin.html', username=session['username'])
+            return render_template('Halaman.Admin.html')
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
 
@@ -1184,3 +1211,4 @@ def edit_kaos_original():
           
 if __name__ == "__main__": 
     app.run(host='0.0.0.0', port=5000, debug=True)
+    # print(graph_data_retreval())
