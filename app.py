@@ -9,6 +9,7 @@ import pandas.io.sql as psql
 from datetime import datetime 
 from threading import Thread
 import time
+import os
 
 #inisialisasi
 app = Flask(__name__)
@@ -111,30 +112,33 @@ def total_penjualan():
             cursor = secondary_db.cursor()
             cursor.execute(f'SELECT kode_barang FROM sales_tracking_kp')
             data_kaos_polos = cursor.fetchall()  
-            for data in data_kaos_polos:
-                cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
-                data_kaos_polos = cursor.fetchone()
-                kp_total_sales += data_kaos_polos[0]
-                
+            if data_kaos_polos:
+                for data in data_kaos_polos:
+                    cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_kp WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                    data_kaos_polos = cursor.fetchone()
+                    kp_total_sales += data_kaos_polos[0]
+                  
             #Kaos Original
             ko_total_sales = 0
             cursor = secondary_db.cursor()
             cursor.execute(f'SELECT kode_barang FROM sales_tracking_ko')
-            data_kaos_polos = cursor.fetchall()  
-            for data in data_kaos_polos:
-                cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
-                data_kaos_polos = cursor.fetchone()
-                ko_total_sales += data_kaos_polos[0]
+            data_kaos_original = cursor.fetchall()  
+            if data_kaos_original:
+                for data in data_kaos_original:
+                    cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_ko WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                    data_kaos_original = cursor.fetchone()
+                    ko_total_sales += data_kaos_original[0]
                 
             #Bahan Cutting
             bc_total_sales = 0
             cursor = secondary_db.cursor()
             cursor.execute(f'SELECT kode_barang FROM sales_tracking_bc')
-            data_bahan_cutting = cursor.fetchall()  
-            for data in data_bahan_cutting:
-                cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
-                data_bahan_cutting = cursor.fetchone()
-                bc_total_sales += data_bahan_cutting[0]
+            data_bahan_cutting = cursor.fetchall() 
+            if data_bahan_cutting: 
+                for data in data_bahan_cutting:
+                    cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
+                    data_bahan_cutting = cursor.fetchone()
+                    bc_total_sales += data_bahan_cutting[0]
             cursor.execute(f'SELECT id FROM total_penjualan')
             verify = cursor.fetchone()
             if verify:
@@ -151,8 +155,11 @@ def total_penjualan():
                 cursor.execute('INSERT INTO total_penjualan (id, penjualan_total, penjualan_kp, penjualan_ko, penjualan_bc) VALUES (%s, %s, %s, %s, %s)', (1, 0, 0, 0, 0))
                 secondary_db.commit()
             print("synching total penjualan complete")
-        except:
+        except Exception as e:
             print("total penjualan update failed")
+            print(e)
+            continue
+            
         time.sleep(10)
         
 def sales_record():
