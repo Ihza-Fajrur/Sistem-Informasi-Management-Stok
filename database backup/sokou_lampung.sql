@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 28, 2022 at 02:56 AM
+-- Generation Time: May 08, 2022 at 09:11 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -40,8 +40,8 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`username`, `password`, `acc_type`, `email`, `user_photo`) VALUES
-('HRFI', '1', 'Admin', 'ihza.119140130@student.itera.ac.id', '/profile_picture/Ihza Fajrur Rachman Hasani_119140130.jpg'),
-('IFRH', '1', 'Admin', 'ihza.119140130@student.itera.ac.id', '/profile_picture/Ihza Fajrur Rachman Hasani_119140130.jpg'),
+('HRFI', '1', 'Admin', 'admin@gmail.com', './static/profile_picture/Ihza.jpg'),
+('IFRH', '1', 'Admin', 'ihza.119140130@student.itera.ac.id', './static/profile_picture/Ihza.jpg'),
 ('user', 'user', 'Staff', 'user@gmail.com', NULL);
 
 -- --------------------------------------------------------
@@ -66,7 +66,7 @@ CREATE TABLE `bahan_cutting` (
 --
 
 INSERT INTO `bahan_cutting` (`kode_barang`, `nama_barang`, `jenis_barang`, `warna`, `ukuran_panjang`, `ukuran_lebar`, `harga_satuan`, `total_harga`) VALUES
-('DTAL', 'DTF', 'DTF', 'ALL', 50, 50, 500, 1250000),
+('DTAL', 'DTF', 'DTF', 'ALL', 30, 28, 500, 420000),
 ('FBHI', 'FLOCK', 'BLUDRU', 'HITAM', 60, 28, 2300, 3864000),
 ('FBOR', 'FLOCK', 'BLUDRU', 'ORANGE', 50, 60, 2300, 6900000),
 ('FBPU', 'FLOCK', 'BLUDRU', 'PUTIH', 25, 33, 2300, 1897500),
@@ -254,6 +254,251 @@ INSERT INTO `kaos_polos` (`kode_barang`, `nama_barang`, `size`, `jenis_kain`, `b
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `record_penjualan_tahunan`
+--
+
+CREATE TABLE `record_penjualan_tahunan` (
+  `bulan` int(11) NOT NULL,
+  `value` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `record_penjualan_tahunan`
+--
+
+INSERT INTO `record_penjualan_tahunan` (`bulan`, `value`) VALUES
+(1, 0),
+(2, 0),
+(3, 0),
+(4, 0),
+(5, 10),
+(6, 0),
+(7, 0),
+(8, 0),
+(9, 0),
+(10, 0),
+(11, 0),
+(12, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales_tracking_bc`
+--
+
+CREATE TABLE `sales_tracking_bc` (
+  `kode_barang` varchar(10) NOT NULL,
+  `jumlah_pembelian` int(10) NOT NULL,
+  `bulan` varchar(2) NOT NULL,
+  `tahun` varchar(4) NOT NULL,
+  `id` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sales_tracking_bc`
+--
+
+INSERT INTO `sales_tracking_bc` (`kode_barang`, `jumlah_pembelian`, `bulan`, `tahun`, `id`) VALUES
+('DTAL', 60, '05', '2022', 'DTAL-05-2022'),
+('FBHI', 0, '05', '2022', 'FBHI-05-2022'),
+('FBOR', 0, '05', '2022', 'FBOR-05-2022'),
+('FBPU', 0, '05', '2022', 'FBPU-05-2022'),
+('FLRW', 0, '05', '2022', 'FLRW-05-2022'),
+('KOPA', 0, '05', '2022', 'KOPA-05-2022'),
+('PUAM', 0, '05', '2022', 'PUAM-05-2022'),
+('PUBM', 0, '05', '2022', 'PUBM-05-2022'),
+('PUGO', 0, '05', '2022', 'PUGO-05-2022'),
+('PUHI', 0, '05', '2022', 'PUHI-05-2022'),
+('PUHM', 0, '05', '2022', 'PUHM-05-2022'),
+('PUKU', 0, '05', '2022', 'PUKU-05-2022'),
+('PUME', 0, '05', '2022', 'PUME-05-2022'),
+('PUMO', 0, '05', '2022', 'PUMO-05-2022'),
+('PUPU', 0, '05', '2022', 'PUPU-05-2022'),
+('PUUN', 0, '05', '2022', 'PUUN-05-2022'),
+('PUVY', 0, '05', '2022', 'PUVY-05-2022'),
+('PVBM', 0, '05', '2022', 'PVBM-05-2022'),
+('PVHI', 0, '05', '2022', 'PVHI-05-2022'),
+('PVHT', 0, '05', '2022', 'PVHT-05-2022'),
+('PVME', 0, '05', '2022', 'PVME-05-2022'),
+('PVOM', 0, '05', '2022', 'PVOM-05-2022'),
+('PVPI', 0, '05', '2022', 'PVPI-05-2022'),
+('RLS', 0, '05', '2022', 'RLS-05-2022');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales_tracking_ko`
+--
+
+CREATE TABLE `sales_tracking_ko` (
+  `kode_barang` varchar(10) NOT NULL,
+  `jumlah_pembelian` int(10) NOT NULL,
+  `bulan` varchar(2) NOT NULL,
+  `tahun` varchar(4) NOT NULL,
+  `id` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sales_tracking_ko`
+--
+
+INSERT INTO `sales_tracking_ko` (`kode_barang`, `jumlah_pembelian`, `bulan`, `tahun`, `id`) VALUES
+('BB1F2H', 3, '05', '2022', 'BB1F2H-05-2022'),
+('BB1G2H', 1, '05', '2022', 'BB1G2H-05-2022'),
+('OR1C2H', 0, '05', '2022', 'OR1C2H-05-2022'),
+('OR1D1P', 0, '05', '2022', 'OR1D1P-05-2022'),
+('OR1E1P', 0, '05', '2022', 'OR1E1P-05-2022'),
+('OR1F2P', 0, '05', '2022', 'OR1F2P-05-2022');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales_tracking_kp`
+--
+
+CREATE TABLE `sales_tracking_kp` (
+  `kode_barang` varchar(10) NOT NULL,
+  `jumlah_pembelian` int(10) NOT NULL,
+  `bulan` varchar(2) NOT NULL,
+  `tahun` varchar(4) NOT NULL,
+  `id` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sales_tracking_kp`
+--
+
+INSERT INTO `sales_tracking_kp` (`kode_barang`, `jumlah_pembelian`, `bulan`, `tahun`, `id`) VALUES
+('AE2DHI', 5, '05', '2022', 'AE2DHI-05-2022'),
+('AE2GHI', 1, '05', '2022', 'AE2GHI-05-2022'),
+('AF2FHI', 0, '05', '2022', 'AF2FHI-05-2022'),
+('AK2CHL', 0, '05', '2022', 'AK2CHL-05-2022'),
+('AK2CKK', 0, '05', '2022', 'AK2CKK-05-2022'),
+('AK2DBD', 0, '05', '2022', 'AK2DBD-05-2022'),
+('AK2DOR', 0, '05', '2022', 'AK2DOR-05-2022'),
+('AK2FPU', 0, '05', '2022', 'AK2FPU-05-2022'),
+('AK2GHI', 0, '05', '2022', 'AK2GHI-05-2022'),
+('AP2DKK', 0, '05', '2022', 'AP2DKK-05-2022'),
+('AP2FBD', 0, '05', '2022', 'AP2FBD-05-2022'),
+('AP2HBB', 0, '05', '2022', 'AP2HBB-05-2022'),
+('AR3FHI', 0, '05', '2022', 'AR3FHI-05-2022'),
+('AT1DHI', 0, '05', '2022', 'AT1DHI-05-2022'),
+('AT1FHI', 0, '05', '2022', 'AT1FHI-05-2022'),
+('AT1GHI', 0, '05', '2022', 'AT1GHI-05-2022'),
+('AV1CHI', 0, '05', '2022', 'AV1CHI-05-2022'),
+('AV1CPU', 0, '05', '2022', 'AV1CPU-05-2022'),
+('AV1DHA', 0, '05', '2022', 'AV1DHA-05-2022'),
+('AV1DHI', 0, '05', '2022', 'AV1DHI-05-2022'),
+('AV1DKK', 0, '05', '2022', 'AV1DKK-05-2022'),
+('AV1DPU', 0, '05', '2022', 'AV1DPU-05-2022'),
+('AV1EHI', 0, '05', '2022', 'AV1EHI-05-2022'),
+('AV1EHS', 0, '05', '2022', 'AV1EHS-05-2022'),
+('AV1EMM', 0, '05', '2022', 'AV1EMM-05-2022'),
+('AV1EPM', 0, '05', '2022', 'AV1EPM-05-2022'),
+('AV1EPU', 0, '05', '2022', 'AV1EPU-05-2022'),
+('AV1FHI', 0, '05', '2022', 'AV1FHI-05-2022'),
+('AV1FKK', 0, '05', '2022', 'AV1FKK-05-2022'),
+('AV1FMM', 0, '05', '2022', 'AV1FMM-05-2022'),
+('AV1FPM', 0, '05', '2022', 'AV1FPM-05-2022'),
+('AV1FPU', 0, '05', '2022', 'AV1FPU-05-2022'),
+('AV1GAMt', 0, '05', '2022', 'AV1GAMt-05-2022'),
+('AV1GBD', 0, '05', '2022', 'AV1GBD-05-2022'),
+('AV1GHI', 0, '05', '2022', 'AV1GHI-05-2022'),
+('AV1GKK', 0, '05', '2022', 'AV1GKK-05-2022'),
+('AV1GMT', 0, '05', '2022', 'AV1GMT-05-2022'),
+('AV1GPM', 0, '05', '2022', 'AV1GPM-05-2022'),
+('AV1GPU', 0, '05', '2022', 'AV1GPU-05-2022'),
+('AV1HAMm', 0, '05', '2022', 'AV1HAMm-05-2022'),
+('AV1HAMt', 0, '05', '2022', 'AV1HAMt-05-2022'),
+('AV1HHI', 0, '05', '2022', 'AV1HHI-05-2022'),
+('AV1HPU', 0, '05', '2022', 'AV1HPU-05-2022'),
+('AV2AHI', 0, '05', '2022', 'AV2AHI-05-2022'),
+('AV2APU', 0, '05', '2022', 'AV2APU-05-2022'),
+('AV2BBT', 0, '05', '2022', 'AV2BBT-05-2022'),
+('AV2BHI', 0, '05', '2022', 'AV2BHI-05-2022'),
+('AV2BPU', 0, '05', '2022', 'AV2BPU-05-2022'),
+('AV2CAG', 0, '05', '2022', 'AV2CAG-05-2022'),
+('AV2CBD', 0, '05', '2022', 'AV2CBD-05-2022'),
+('AV2CBTt', 0, '05', '2022', 'AV2CBTt-05-2022'),
+('AV2CHI', 0, '05', '2022', 'AV2CHI-05-2022'),
+('AV2CHN', 0, '05', '2022', 'AV2CHN-05-2022'),
+('AV2CKB', 0, '05', '2022', 'AV2CKB-05-2022'),
+('AV2CMM', 0, '05', '2022', 'AV2CMM-05-2022'),
+('AV2COR', 0, '05', '2022', 'AV2COR-05-2022'),
+('AV2CPU', 0, '05', '2022', 'AV2CPU-05-2022'),
+('AV2DBB', 0, '05', '2022', 'AV2DBB-05-2022'),
+('AV2DHI', 0, '05', '2022', 'AV2DHI-05-2022'),
+('AV2DMC', 0, '05', '2022', 'AV2DMC-05-2022'),
+('AV2DMT', 0, '05', '2022', 'AV2DMT-05-2022'),
+('AV2DPU', 0, '05', '2022', 'AV2DPU-05-2022'),
+('AV2EAG', 0, '05', '2022', 'AV2EAG-05-2022'),
+('AV2EHI', 0, '05', '2022', 'AV2EHI-05-2022'),
+('AV2EPU', 0, '05', '2022', 'AV2EPU-05-2022'),
+('AV2FBD', 0, '05', '2022', 'AV2FBD-05-2022'),
+('AV2FBT', 0, '05', '2022', 'AV2FBT-05-2022'),
+('AV2FCK', 0, '05', '2022', 'AV2FCK-05-2022'),
+('AV2FCT', 0, '05', '2022', 'AV2FCT-05-2022'),
+('AV2FHI', 0, '05', '2022', 'AV2FHI-05-2022'),
+('AV2FKK', 0, '05', '2022', 'AV2FKK-05-2022'),
+('AV2FMM', 0, '05', '2022', 'AV2FMM-05-2022'),
+('AV2FMT', 0, '05', '2022', 'AV2FMT-05-2022'),
+('AV2FPU', 0, '05', '2022', 'AV2FPU-05-2022'),
+('AV2GBD', 0, '05', '2022', 'AV2GBD-05-2022'),
+('AV2GBT', 0, '05', '2022', 'AV2GBT-05-2022'),
+('AV2GHI', 0, '05', '2022', 'AV2GHI-05-2022'),
+('AV2GHN', 0, '05', '2022', 'AV2GHN-05-2022'),
+('AV2GHS', 0, '05', '2022', 'AV2GHS-05-2022'),
+('AV2GMM', 0, '05', '2022', 'AV2GMM-05-2022'),
+('AV2GPB', 0, '05', '2022', 'AV2GPB-05-2022'),
+('AV2GPU', 0, '05', '2022', 'AV2GPU-05-2022'),
+('AV2HAMm', 0, '05', '2022', 'AV2HAMm-05-2022'),
+('AV2HHI', 0, '05', '2022', 'AV2HHI-05-2022'),
+('AV2HPU', 0, '05', '2022', 'AV2HPU-05-2022'),
+('AV2IHI', 0, '05', '2022', 'AV2IHI-05-2022'),
+('AV2IPU', 0, '05', '2022', 'AV2IPU-05-2022'),
+('AV2JHI', 0, '05', '2022', 'AV2JHI-05-2022'),
+('AV2JKK', 0, '05', '2022', 'AV2JKK-05-2022'),
+('AV2JPU', 0, '05', '2022', 'AV2JPU-05-2022'),
+('AV4GBB', 0, '05', '2022', 'AV4GBB-05-2022'),
+('AVn2GHI', 0, '05', '2022', 'AVn2GHI-05-2022'),
+('AX1DHI', 0, '05', '2022', 'AX1DHI-05-2022'),
+('AZ1GHI', 0, '05', '2022', 'AZ1GHI-05-2022'),
+('AZ1HHI', 0, '05', '2022', 'AZ1HHI-05-2022'),
+('GS1CHI', 0, '05', '2022', 'GS1CHI-05-2022'),
+('GS1DBD', 0, '05', '2022', 'GS1DBD-05-2022'),
+('GS1FBD', 0, '05', '2022', 'GS1FBD-05-2022'),
+('GS1FHI', 0, '05', '2022', 'GS1FHI-05-2022'),
+('GS2DBD', 0, '05', '2022', 'GS2DBD-05-2022'),
+('GS2FBD', 0, '05', '2022', 'GS2FBD-05-2022'),
+('GS2FHI', 0, '05', '2022', 'GS2FHI-05-2022'),
+('GS2GBD', 0, '05', '2022', 'GS2GBD-05-2022'),
+('GS2GHI', 0, '05', '2022', 'GS2GHI-05-2022'),
+('GS2NBD', 0, '05', '2022', 'GS2NBD-05-2022');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `total_penjualan`
+--
+
+CREATE TABLE `total_penjualan` (
+  `id` int(1) NOT NULL,
+  `penjualan_total` int(100) NOT NULL,
+  `penjualan_kp` int(100) NOT NULL,
+  `penjualan_ko` int(100) NOT NULL,
+  `penjualan_bc` int(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `total_penjualan`
+--
+
+INSERT INTO `total_penjualan` (`id`, `penjualan_total`, `penjualan_kp`, `penjualan_ko`, `penjualan_bc`) VALUES
+(1, 10, 6, 4, 60);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `update_history`
 --
 
@@ -346,20 +591,195 @@ INSERT INTO `update_history` (`id`, `activity`, `time`, `user`) VALUES
 (75, '(EDIT) Pengeditan warna dengan kode barang DTAL dari ALLa menjadi ALL pada bahan_cutting', '2022-04-28 00:27:41', 'IFRH'),
 (76, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 501 menjadi 50 pada bahan_cutting', '2022-04-28 00:27:41', 'IFRH'),
 (77, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 501 menjadi 50 pada bahan_cutting', '2022-04-28 00:27:42', 'IFRH'),
-(78, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.5001 menjadi Rp.500 pada bahan cutting', '2022-04-28 00:27:42', 'IFRH');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `update_jumlah_kp`
---
-
-CREATE TABLE `update_jumlah_kp` (
-  `id` int(10) NOT NULL,
-  `kode_barang` varchar(10) NOT NULL,
-  `old_val` int(11) NOT NULL,
-  `new_val` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(78, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.5001 menjadi Rp.500 pada bahan cutting', '2022-04-28 00:27:42', 'IFRH'),
+(79, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-04-28 14:22:51', 'HRFI'),
+(80, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-04-28 14:28:48', 'IFRH'),
+(81, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-28 14:40:53', 'IFRH'),
+(82, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 3', '2022-04-28 14:40:54', 'IFRH'),
+(83, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 3 ke 2', '2022-04-28 14:40:56', 'IFRH'),
+(84, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 2 ke 1', '2022-04-28 14:41:03', 'IFRH'),
+(85, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 1 ke 0', '2022-04-28 14:41:05', 'IFRH'),
+(86, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 0 ke 1', '2022-04-28 14:41:32', 'IFRH'),
+(87, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 1 ke 0', '2022-04-28 14:41:34', 'IFRH'),
+(88, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 0 ke 1', '2022-04-28 14:41:56', 'IFRH'),
+(89, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 1 ke 0', '2022-04-28 14:42:00', 'IFRH'),
+(90, '(EDIT) Pengeditan jumlah stok dengan kode barang AE2DHI dari 0 menjadi 5 pada stok kaos polos', '2022-04-28 14:42:15', 'IFRH'),
+(91, '(EDIT) Pengeditan harga satuan dengan kode barang AE2DHI dari Rp.80000 menjadi Rp.80000 pada stok kaos polos', '2022-04-28 14:42:15', 'IFRH'),
+(92, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 14:42:33', 'IFRH'),
+(93, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 14:42:40', 'IFRH'),
+(94, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 14:43:54', 'IFRH'),
+(95, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 14:43:56', 'IFRH'),
+(96, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 14:49:42', 'IFRH'),
+(97, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 14:49:45', 'IFRH'),
+(98, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 14:50:42', 'IFRH'),
+(99, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 14:50:45', 'IFRH'),
+(100, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 14:51:59', 'IFRH'),
+(101, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 14:52:01', 'IFRH'),
+(102, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 14:57:46', 'IFRH'),
+(103, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 14:57:48', 'IFRH'),
+(104, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 14:59:51', 'HRFI'),
+(105, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 14:59:52', 'HRFI'),
+(106, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:01:14', 'HRFI'),
+(107, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:01:23', 'HRFI'),
+(108, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:02:43', 'HRFI'),
+(109, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:02:45', 'HRFI'),
+(110, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:03:31', 'HRFI'),
+(111, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:03:33', 'HRFI'),
+(112, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:09:33', 'HRFI'),
+(113, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:09:34', 'HRFI'),
+(114, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:11:38', 'IFRH'),
+(115, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:11:41', 'IFRH'),
+(116, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:24:05', 'IFRH'),
+(117, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:24:07', 'IFRH'),
+(118, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:24:55', 'IFRH'),
+(119, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:24:57', 'IFRH'),
+(120, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:26:40', 'IFRH'),
+(121, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:26:42', 'IFRH'),
+(122, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 15:48:06', 'HRFI'),
+(123, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 15:48:07', 'HRFI'),
+(124, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 16:15:05', 'HRFI'),
+(125, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 16:15:06', 'HRFI'),
+(126, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 16:16:29', 'HRFI'),
+(127, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 16:16:31', 'HRFI'),
+(128, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 16:17:44', 'HRFI'),
+(129, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 16:17:46', 'HRFI'),
+(130, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 16:18:00', 'HRFI'),
+(131, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 16:18:01', 'HRFI'),
+(132, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 16:19:16', 'HRFI'),
+(133, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 16:19:18', 'HRFI'),
+(134, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 16:19:57', 'HRFI'),
+(135, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 16:19:58', 'HRFI'),
+(136, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 16:20:33', 'HRFI'),
+(137, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 16:20:34', 'HRFI'),
+(138, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-28 16:21:00', 'HRFI'),
+(139, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-28 16:21:01', 'HRFI'),
+(140, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-29 13:47:55', 'IFRH'),
+(141, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-29 13:47:58', 'IFRH'),
+(142, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-04-29 13:54:33', 'IFRH'),
+(143, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-04-29 13:54:35', 'IFRH'),
+(144, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-29 19:30:39', 'IFRH'),
+(145, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-29 19:31:55', 'IFRH'),
+(146, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-29 19:31:57', 'IFRH'),
+(147, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 3', '2022-04-29 19:33:55', 'IFRH'),
+(148, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 3 ke 2', '2022-04-29 19:34:09', 'IFRH'),
+(149, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 2 ke 3', '2022-04-29 19:34:21', 'IFRH'),
+(150, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 3 ke 4', '2022-04-29 19:34:22', 'IFRH'),
+(151, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-29 19:34:23', 'IFRH'),
+(152, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 5', '2022-04-29 19:35:56', 'IFRH'),
+(153, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 5 ke 6', '2022-04-29 19:36:10', 'IFRH'),
+(154, '(EDIT) Pengeditan jumlah stok dengan kode barang BB1F2H dari 6 menjadi 3 pada stok kaos original', '2022-04-29 19:39:20', 'IFRH'),
+(155, '(EDIT) Pengeditan harga satuan dengan kode barang BB1F2H dari Rp.250000 menjadi Rp.250000 pada stok kaos original', '2022-04-29 19:39:21', 'IFRH'),
+(156, '(EDIT) Pengeditan jumlah stok dengan kode barang BB1F2H dari 3 menjadi 9 pada stok kaos original', '2022-04-29 19:42:23', 'IFRH'),
+(157, '(EDIT) Pengeditan harga satuan dengan kode barang BB1F2H dari Rp.250000 menjadi Rp.250000 pada stok kaos original', '2022-04-29 19:42:23', 'IFRH'),
+(158, '(EDIT) Pengeditan jumlah stok dengan kode barang BB1F2H dari 9 menjadi 6 pada stok kaos original', '2022-04-29 19:42:36', 'IFRH'),
+(159, '(EDIT) Pengeditan harga satuan dengan kode barang BB1F2H dari Rp.250000 menjadi Rp.250000 pada stok kaos original', '2022-04-29 19:42:36', 'IFRH'),
+(160, '(EDIT) Pengeditan jumlah stok dengan kode barang BB1F2H dari 6 menjadi 9 pada stok kaos original', '2022-04-29 19:43:04', 'IFRH'),
+(161, '(EDIT) Pengeditan harga satuan dengan kode barang BB1F2H dari Rp.250000 menjadi Rp.250000 pada stok kaos original', '2022-04-29 19:43:05', 'IFRH'),
+(162, '(EDIT) Pengeditan jumlah stok dengan kode barang BB1F2H dari 9 menjadi 6 pada stok kaos original', '2022-04-29 19:43:10', 'IFRH'),
+(163, '(EDIT) Pengeditan harga satuan dengan kode barang BB1F2H dari Rp.250000 menjadi Rp.250000 pada stok kaos original', '2022-04-29 19:43:10', 'IFRH'),
+(164, '(EDIT) Pengeditan jumlah stok dengan kode barang AE2DHI dari 5 menjadi 10 pada stok kaos polos', '2022-04-29 19:44:52', 'IFRH'),
+(165, '(EDIT) Pengeditan harga satuan dengan kode barang AE2DHI dari Rp.80000 menjadi Rp.80000 pada stok kaos polos', '2022-04-29 19:44:52', 'IFRH'),
+(166, '(EDIT) Pengeditan jumlah stok dengan kode barang AE2DHI dari 10 menjadi 6 pada stok kaos polos', '2022-04-29 19:45:04', 'IFRH'),
+(167, '(EDIT) Pengeditan harga satuan dengan kode barang AE2DHI dari Rp.80000 menjadi Rp.80000 pada stok kaos polos', '2022-04-29 19:45:04', 'IFRH'),
+(168, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-04-29 19:45:11', 'IFRH'),
+(169, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 7', '2022-04-29 19:45:23', 'IFRH'),
+(170, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 7 ke 6', '2022-04-29 19:45:35', 'IFRH'),
+(171, '(-) Pengurangan stok kaos polos dengan kode barang AE2GHI yang berjumlah 5 ke 4', '2022-04-29 20:34:32', 'HRFI'),
+(172, '(+) Penambahan stok kaos polos dengan kode barang AE2GHI yang berjumlah 4 ke 5', '2022-04-29 20:34:34', 'HRFI'),
+(173, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-29 21:15:22', 'IFRH'),
+(174, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-29 21:15:24', 'IFRH'),
+(175, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-29 21:15:36', 'IFRH'),
+(176, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-29 21:15:38', 'IFRH'),
+(177, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-29 21:16:28', 'IFRH'),
+(178, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-29 21:16:30', 'IFRH'),
+(179, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-29 21:19:02', 'IFRH'),
+(180, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-29 21:19:05', 'IFRH'),
+(181, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-29 21:19:19', 'IFRH'),
+(182, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-29 21:19:20', 'IFRH'),
+(183, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-29 21:20:53', 'IFRH'),
+(184, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-29 21:20:55', 'IFRH'),
+(185, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-30 16:49:49', 'HRFI'),
+(186, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-30 16:49:50', 'HRFI'),
+(187, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-30 16:50:24', 'HRFI'),
+(188, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-30 16:50:26', 'HRFI'),
+(189, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 5', '2022-04-30 16:50:59', 'HRFI'),
+(190, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 5 ke 6', '2022-04-30 16:51:23', 'HRFI'),
+(191, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 5', '2022-04-30 16:51:47', 'HRFI'),
+(192, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 5 ke 6', '2022-04-30 16:52:07', 'HRFI'),
+(193, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-30 16:53:33', 'HRFI'),
+(194, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-30 16:53:54', 'HRFI'),
+(195, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 5', '2022-04-30 16:57:47', 'HRFI'),
+(196, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 5 ke 6', '2022-04-30 16:58:10', 'HRFI'),
+(197, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-30 17:09:39', 'HRFI'),
+(198, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 5', '2022-04-30 17:09:58', 'HRFI'),
+(199, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-30 17:27:57', 'HRFI'),
+(200, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-30 17:27:59', 'HRFI'),
+(201, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 5 ke 6', '2022-04-30 18:31:05', 'HRFI'),
+(202, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 7', '2022-04-30 18:31:06', 'HRFI'),
+(203, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 7 ke 6', '2022-04-30 18:31:08', 'HRFI'),
+(204, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-04-30 18:32:58', 'HRFI'),
+(205, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-04-30 18:32:59', 'HRFI'),
+(206, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-04-30 18:33:01', 'HRFI'),
+(207, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 7', '2022-04-30 18:33:15', 'HRFI'),
+(208, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 7 ke 6', '2022-04-30 18:33:16', 'HRFI'),
+(209, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 50 menjadi 40 pada bahan cutting', '2022-04-30 18:49:33', 'HRFI'),
+(210, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 50 menjadi 40 pada bahan cutting', '2022-04-30 18:49:33', 'HRFI'),
+(211, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 40 menjadi 35 pada bahan cutting', '2022-04-30 18:50:52', 'HRFI'),
+(212, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 40 menjadi 35 pada bahan cutting', '2022-04-30 18:50:52', 'HRFI'),
+(213, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.500 pada bahan cutting', '2022-04-30 18:50:52', 'HRFI'),
+(214, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 35 menjadi 50 pada bahan cutting', '2022-04-30 19:03:26', 'HRFI'),
+(215, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 35 menjadi 50 pada bahan cutting', '2022-04-30 19:03:26', 'HRFI'),
+(216, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.500 pada bahan cutting', '2022-04-30 19:03:26', 'HRFI'),
+(217, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 50 menjadi 40 pada bahan cutting', '2022-04-30 19:03:55', 'HRFI'),
+(218, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 50 menjadi 40 pada bahan cutting', '2022-04-30 19:03:55', 'HRFI'),
+(219, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.500 pada bahan cutting', '2022-04-30 19:03:55', 'HRFI'),
+(220, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 40 menjadi 30 pada bahan cutting', '2022-04-30 19:06:16', 'HRFI'),
+(221, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 40 menjadi 30 pada bahan cutting', '2022-04-30 19:06:16', 'HRFI'),
+(222, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.500 pada bahan cutting', '2022-04-30 19:06:16', 'HRFI'),
+(223, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-04-30 19:10:29', 'HRFI'),
+(224, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-05-01 01:59:48', 'HRFI'),
+(225, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 01:59:49', 'HRFI'),
+(226, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 01:59:50', 'HRFI'),
+(227, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 02:14:58', 'HRFI'),
+(228, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 02:14:59', 'HRFI'),
+(229, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 02:17:55', 'HRFI'),
+(230, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 02:17:58', 'HRFI'),
+(231, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 7', '2022-05-01 02:18:52', 'HRFI'),
+(232, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 7 ke 6', '2022-05-01 02:18:53', 'HRFI'),
+(233, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 02:20:30', 'HRFI'),
+(234, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 02:20:31', 'HRFI'),
+(235, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 4', '2022-05-01 02:22:59', 'HRFI'),
+(236, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 4 ke 5', '2022-05-01 02:23:01', 'HRFI'),
+(237, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 02:23:36', 'HRFI'),
+(238, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 02:23:37', 'HRFI'),
+(239, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 02:25:25', 'HRFI'),
+(240, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 02:25:26', 'HRFI'),
+(241, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 02:31:24', 'HRFI'),
+(242, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 02:31:25', 'HRFI'),
+(243, '(+) Penambahan stok kaos polos dengan kode barang AE2GHI yang berjumlah 5 ke 6', '2022-05-01 02:46:28', 'HRFI'),
+(244, '(-) Pengurangan stok kaos polos dengan kode barang AE2GHI yang berjumlah 6 ke 5', '2022-05-01 02:46:29', 'HRFI'),
+(245, '(+) Penambahan stok kaos original dengan kode barang BB1G2H yang berjumlah 5 ke 6', '2022-05-01 02:47:21', 'HRFI'),
+(246, '(-) Pengurangan stok kaos original dengan kode barang BB1G2H yang berjumlah 6 ke 5', '2022-05-01 02:47:23', 'HRFI'),
+(247, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 30 menjadi 30 pada bahan cutting', '2022-05-01 02:49:25', 'HRFI'),
+(248, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 30 menjadi 29 pada bahan cutting', '2022-05-01 02:49:25', 'HRFI'),
+(249, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.500 pada bahan cutting', '2022-05-01 02:49:25', 'HRFI'),
+(250, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 04:33:26', 'IFRH'),
+(251, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 04:33:28', 'IFRH'),
+(252, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 7', '2022-05-01 04:42:08', 'IFRH'),
+(253, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 7 ke 6', '2022-05-01 04:42:10', 'IFRH'),
+(254, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 7', '2022-05-01 04:46:17', 'HRFI'),
+(255, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 7 ke 6', '2022-05-01 04:46:18', 'HRFI'),
+(256, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 04:47:31', 'IFRH'),
+(257, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 04:47:35', 'IFRH'),
+(258, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 04:49:45', 'HRFI'),
+(259, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 04:49:46', 'HRFI'),
+(260, '(+) Penambahan stok kaos original dengan kode barang BB1F2H yang berjumlah 6 ke 7', '2022-05-01 05:14:41', 'HRFI'),
+(261, '(-) Pengurangan stok kaos original dengan kode barang BB1F2H yang berjumlah 7 ke 6', '2022-05-01 05:14:43', 'HRFI'),
+(262, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 30 menjadi 30 pada bahan cutting', '2022-05-01 05:18:42', 'HRFI'),
+(263, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 29 menjadi 28 pada bahan cutting', '2022-05-01 05:18:42', 'HRFI'),
+(264, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.500 pada bahan cutting', '2022-05-01 05:18:42', 'HRFI'),
+(265, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 05:32:48', 'HRFI'),
+(266, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 05:32:50', 'HRFI');
 
 --
 -- Indexes for dumped tables
@@ -390,18 +810,38 @@ ALTER TABLE `kaos_polos`
   ADD PRIMARY KEY (`kode_barang`);
 
 --
+-- Indexes for table `sales_tracking_bc`
+--
+ALTER TABLE `sales_tracking_bc`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `kode_barang_bc` (`kode_barang`);
+
+--
+-- Indexes for table `sales_tracking_ko`
+--
+ALTER TABLE `sales_tracking_ko`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `kode_barang_ko` (`kode_barang`);
+
+--
+-- Indexes for table `sales_tracking_kp`
+--
+ALTER TABLE `sales_tracking_kp`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `kode_barang` (`kode_barang`);
+
+--
+-- Indexes for table `total_penjualan`
+--
+ALTER TABLE `total_penjualan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `update_history`
 --
 ALTER TABLE `update_history`
   ADD PRIMARY KEY (`id`),
   ADD KEY `account-username` (`user`);
-
---
--- Indexes for table `update_jumlah_kp`
---
-ALTER TABLE `update_jumlah_kp`
-  ADD KEY `update-id` (`id`),
-  ADD KEY `updated-item` (`kode_barang`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -411,24 +851,35 @@ ALTER TABLE `update_jumlah_kp`
 -- AUTO_INCREMENT for table `update_history`
 --
 ALTER TABLE `update_history`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=267;
 
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `sales_tracking_bc`
+--
+ALTER TABLE `sales_tracking_bc`
+  ADD CONSTRAINT `kode_barang_bc` FOREIGN KEY (`kode_barang`) REFERENCES `bahan_cutting` (`kode_barang`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `sales_tracking_ko`
+--
+ALTER TABLE `sales_tracking_ko`
+  ADD CONSTRAINT `kode_barang_ko` FOREIGN KEY (`kode_barang`) REFERENCES `kaos_original` (`kode_barang`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `sales_tracking_kp`
+--
+ALTER TABLE `sales_tracking_kp`
+  ADD CONSTRAINT `kode_barang` FOREIGN KEY (`kode_barang`) REFERENCES `kaos_polos` (`kode_barang`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
 -- Constraints for table `update_history`
 --
 ALTER TABLE `update_history`
   ADD CONSTRAINT `account-username` FOREIGN KEY (`user`) REFERENCES `accounts` (`username`) ON DELETE NO ACTION ON UPDATE CASCADE;
-
---
--- Constraints for table `update_jumlah_kp`
---
-ALTER TABLE `update_jumlah_kp`
-  ADD CONSTRAINT `update-id` FOREIGN KEY (`id`) REFERENCES `update_history` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `updated-item` FOREIGN KEY (`kode_barang`) REFERENCES `kaos_polos` (`kode_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
