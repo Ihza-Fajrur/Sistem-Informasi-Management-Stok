@@ -189,37 +189,58 @@ def sales_record():
     
 sales_record()
 
-def graph_data_retreval():
-    # try:
-        cursor = secondary_db.cursor()
-        cursor.execute(f'SELECT bulan FROM record_penjualan_tahunan')
-        verify = cursor.fetchone()
-        if not verify:
-            for i in range (1, 13):
-                cursor.execute('INSERT INTO record_penjualan_tahunan (bulan, value) VALUES (%s, %s)', (i, 0))
-            secondary_db.commit()
-        month = int(time.strftime("%m"))
-        cursor.execute('SELECT penjualan_total FROM total_penjualan')
-        temp = cursor.fetchone()
-        cursor.execute(f'SELECT value FROM record_penjualan_tahunan WHERE bulan = {month}')
-        var = cursor.fetchone()
-        if not var[0] == temp[0]:
-            cursor.execute('UPDATE record_penjualan_tahunan SET value = %s WHERE bulan = %s', (temp[0], month))
-            secondary_db.commit()
-            print("executed")
-        cursor.execute(f'SELECT value FROM record_penjualan_tahunan')
-        data = cursor.fetchall()
-        response = []
-        for data in data:
-            response.append(data[0])
-        return response
+# def graph_data_retreval():
+#     # try:
+#         cursor = secondary_db.cursor()
+#         cursor.execute(f'SELECT bulan FROM record_penjualan_tahunan')
+#         verify = cursor.fetchone()
+#         if not verify:
+#             for i in range (1, 13):
+#                 cursor.execute('INSERT INTO record_penjualan_tahunan (bulan, value) VALUES (%s, %s)', (i, 0))
+#             secondary_db.commit()
+#         month = int(time.strftime("%m"))
+#         cursor.execute('SELECT penjualan_total FROM total_penjualan')
+#         temp = cursor.fetchone()
+#         cursor.execute(f'SELECT value FROM record_penjualan_tahunan WHERE bulan = {month}')
+#         var = cursor.fetchone()
+#         if not var[0] == temp[0]:
+#             cursor.execute('UPDATE record_penjualan_tahunan SET value = %s WHERE bulan = %s', (temp[0], month))
+#             secondary_db.commit()
+#             print("executed")
+#         cursor.execute(f'SELECT value FROM record_penjualan_tahunan')
+#         data = cursor.fetchall()
+#         response = []
+#         for data in data:
+#             response.append(data[0])
+#         return response
     # except Exception as e:
     #     print(e)
 
 @app.route("/graph")
 def graph():
     # sales = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    sales = graph_data_retreval()
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(f'SELECT bulan FROM record_penjualan_tahunan')
+    verify = cursor.fetchone()
+    if not verify:
+        for i in range (1, 13):
+            cursor.execute('INSERT INTO record_penjualan_tahunan (bulan, value) VALUES (%s, %s)', (i, 0))
+        secondary_db.commit()
+    month = int(time.strftime("%m"))
+    cursor.execute('SELECT penjualan_total FROM total_penjualan')
+    temp = cursor.fetchone()
+    cursor.execute(f'SELECT value FROM record_penjualan_tahunan WHERE bulan = {month}')
+    var = cursor.fetchone()
+    if not var['value'] == temp['penjualan_total']:
+        cursor.execute('UPDATE record_penjualan_tahunan SET value = %s WHERE bulan = %s', (temp['penjualan_total'], month))
+        secondary_db.commit()
+        print("executed")
+    cursor.execute(f'SELECT value FROM record_penjualan_tahunan')
+    data = cursor.fetchall()
+    response = []
+    for data in data:
+        response.append(data['value'])
+    sales = response
     return jsonify(sales)
 
 @app.route('/', methods=['POST', 'GET'])
