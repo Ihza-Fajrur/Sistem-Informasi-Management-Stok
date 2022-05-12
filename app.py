@@ -162,11 +162,9 @@ def total_penjualan():
                 cursor.execute('INSERT INTO total_penjualan (id, penjualan_total, penjualan_kp, penjualan_ko, penjualan_bc) VALUES (%s, %s, %s, %s, %s)', (1, 0, 0, 0, 0))
                 secondary_db.commit()
             print("synching total penjualan complete")
-            cursor.close()
         except Exception as e:
             print("total penjualan update failed")
             print(e)
-            cursor.close()
         time.sleep(10)
         
 def sales_record():
