@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 08, 2022 at 09:11 PM
+-- Generation Time: May 12, 2022 at 10:31 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -66,8 +66,7 @@ CREATE TABLE `bahan_cutting` (
 --
 
 INSERT INTO `bahan_cutting` (`kode_barang`, `nama_barang`, `jenis_barang`, `warna`, `ukuran_panjang`, `ukuran_lebar`, `harga_satuan`, `total_harga`) VALUES
-('DTAL', 'DTF', 'DTF', 'ALL', 30, 28, 500, 420000),
-('FBHI', 'FLOCK', 'BLUDRU', 'HITAM', 60, 28, 2300, 3864000),
+('asvwf3', 'Polimer', 'Foil', 'Putih', 20, 30, 40, 24000),
 ('FBOR', 'FLOCK', 'BLUDRU', 'ORANGE', 50, 60, 2300, 6900000),
 ('FBPU', 'FLOCK', 'BLUDRU', 'PUTIH', 25, 33, 2300, 1897500),
 ('FLRW', 'POLYFLEX', 'FOIL', 'RAINBOW', 50, 76, 1200, 4560000),
@@ -114,7 +113,7 @@ CREATE TABLE `kaos_original` (
 --
 
 INSERT INTO `kaos_original` (`kode_barang`, `nama_barang`, `size`, `bentuk_lengan`, `desain`, `warna`, `jumlah_stok`, `harga_satuan`, `total_harga`) VALUES
-('BB1F2H', 'KAOS ORI', 'L', 'PENDEK', 'BBI', 'HITAM', 6, 250000, 1500000),
+('1234d3', 'asvqw', 'XL', 'Panjang', 'Basing', 'Polkadot', 8, 20000, 160000),
 ('BB1G2H', 'KAOS ORI', 'XL', 'PENDEK', 'BBI', 'HITAM', 5, 250000, 1250000),
 ('OR1C2H', 'KAOS ORI', 'S', 'PENDEK', 'ORIGINAL 1', 'HITAM', 7, 135000, 945000),
 ('OR1D1P', 'KAOS ORI', 'M', 'PANJANG', 'ORIGINAL 1', 'PUTIH', 10, 145000, 1450000),
@@ -145,9 +144,7 @@ CREATE TABLE `kaos_polos` (
 --
 
 INSERT INTO `kaos_polos` (`kode_barang`, `nama_barang`, `size`, `jenis_kain`, `bentuk_lengan`, `bentuk_lingkar_leher`, `warna`, `jumlah_stok`, `harga_satuan`, `total_harga`) VALUES
-('AE2DHI', 'KAOS ALS', 'M', 'COTTON CARDED 20S', 'PENDEK', 'O NECK', 'HITAM', 5, 80000, 400000),
-('AE2GHI', 'KAOS ALS', 'XL', 'COTTON CARDED 20S', 'PENDEK', 'O NECK', 'HITAM', 5, 75000, 375000),
-('AF2FHI', 'KAOS ALS', 'L', 'CATTON TC30S', 'PENDEK', 'O NECK', 'HITAM', 5, 70000, 350000),
+('AF2FHI', 'KAOS ALS', 'L', 'CATTON TC30S', 'PENDEK', 'O NECK', 'HITAM', 4, 70000, 280000),
 ('AK2CHL', 'KAOS RMS', 'S', 'COTTON KOZE', 'PENDEK', 'O NECK', 'HIJAU LUMUT', 5, 75000, 375000),
 ('AK2CKK', 'KAOS RMS', 'S', 'COTTON KOZE', 'PENDEK', 'O NECK', 'KUNING KENARI', 5, 75000, 375000),
 ('AK2DBD', 'KAOS RMS', 'M', 'COTTON KOZE', 'PENDEK', 'O NECK', 'BIRU DONGKER', 5, 75000, 375000),
@@ -271,7 +268,19 @@ INSERT INTO `record_penjualan_tahunan` (`bulan`, `value`) VALUES
 (2, 0),
 (3, 0),
 (4, 0),
-(5, 10),
+(5, 2),
+(6, 0),
+(7, 0),
+(8, 0),
+(9, 0),
+(10, 0),
+(11, 0),
+(12, 0),
+(1, 0),
+(2, 0),
+(3, 0),
+(4, 0),
+(5, 0),
 (6, 0),
 (7, 0),
 (8, 0),
@@ -299,8 +308,6 @@ CREATE TABLE `sales_tracking_bc` (
 --
 
 INSERT INTO `sales_tracking_bc` (`kode_barang`, `jumlah_pembelian`, `bulan`, `tahun`, `id`) VALUES
-('DTAL', 60, '05', '2022', 'DTAL-05-2022'),
-('FBHI', 0, '05', '2022', 'FBHI-05-2022'),
 ('FBOR', 0, '05', '2022', 'FBOR-05-2022'),
 ('FBPU', 0, '05', '2022', 'FBPU-05-2022'),
 ('FLRW', 0, '05', '2022', 'FLRW-05-2022'),
@@ -343,7 +350,7 @@ CREATE TABLE `sales_tracking_ko` (
 --
 
 INSERT INTO `sales_tracking_ko` (`kode_barang`, `jumlah_pembelian`, `bulan`, `tahun`, `id`) VALUES
-('BB1F2H', 3, '05', '2022', 'BB1F2H-05-2022'),
+('1234d3', 0, '05', '2022', '1234d3-05-2022'),
 ('BB1G2H', 1, '05', '2022', 'BB1G2H-05-2022'),
 ('OR1C2H', 0, '05', '2022', 'OR1C2H-05-2022'),
 ('OR1D1P', 0, '05', '2022', 'OR1D1P-05-2022'),
@@ -369,9 +376,7 @@ CREATE TABLE `sales_tracking_kp` (
 --
 
 INSERT INTO `sales_tracking_kp` (`kode_barang`, `jumlah_pembelian`, `bulan`, `tahun`, `id`) VALUES
-('AE2DHI', 5, '05', '2022', 'AE2DHI-05-2022'),
-('AE2GHI', 1, '05', '2022', 'AE2GHI-05-2022'),
-('AF2FHI', 0, '05', '2022', 'AF2FHI-05-2022'),
+('AF2FHI', 1, '05', '2022', 'AF2FHI-05-2022'),
 ('AK2CHL', 0, '05', '2022', 'AK2CHL-05-2022'),
 ('AK2CKK', 0, '05', '2022', 'AK2CKK-05-2022'),
 ('AK2DBD', 0, '05', '2022', 'AK2DBD-05-2022'),
@@ -494,7 +499,7 @@ CREATE TABLE `total_penjualan` (
 --
 
 INSERT INTO `total_penjualan` (`id`, `penjualan_total`, `penjualan_kp`, `penjualan_ko`, `penjualan_bc`) VALUES
-(1, 10, 6, 4, 60);
+(1, 2, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -779,7 +784,41 @@ INSERT INTO `update_history` (`id`, `activity`, `time`, `user`) VALUES
 (263, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 29 menjadi 28 pada bahan cutting', '2022-05-01 05:18:42', 'HRFI'),
 (264, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.500 pada bahan cutting', '2022-05-01 05:18:42', 'HRFI'),
 (265, '(+) Penambahan stok kaos polos dengan kode barang AE2DHI yang berjumlah 5 ke 6', '2022-05-01 05:32:48', 'HRFI'),
-(266, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 05:32:50', 'HRFI');
+(266, '(-) Pengurangan stok kaos polos dengan kode barang AE2DHI yang berjumlah 6 ke 5', '2022-05-01 05:32:50', 'HRFI'),
+(267, '(ADD) Penambahan stok bahan cutting dsa dengan kode barang dsa', '2022-05-10 08:11:02', 'HRFI'),
+(268, '(DEL) Penghapusan stok kaos polos dengan kode barang dsa', '2022-05-10 08:11:06', 'HRFI'),
+(269, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 30 menjadi 30 pada bahan cutting', '2022-05-10 08:11:22', 'HRFI'),
+(270, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 28 menjadi 28 pada bahan cutting', '2022-05-10 08:11:22', 'HRFI'),
+(271, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.500 pada bahan cutting', '2022-05-10 08:11:22', 'HRFI'),
+(272, '(EDIT) Pengeditan jumlah stok dengan kode barang AE2DHI dari 5 menjadi 5 pada stok kaos polos', '2022-05-10 08:55:02', 'IFRH'),
+(273, '(EDIT) Pengeditan harga satuan dengan kode barang AE2DHI dari Rp.80000 menjadi Rp.70000 pada stok kaos polos', '2022-05-10 08:55:02', 'IFRH'),
+(274, '(ADD) Penambahan stok kaos polos ds dengan kode barang ds', '2022-05-10 08:58:59', 'HRFI'),
+(275, '(DEL) Penghapusan stok kaos polos dengan kode barang ds', '2022-05-10 09:01:30', 'HRFI'),
+(276, '(ADD) Penambahan stok kaos polos z dengan kode barang z', '2022-05-10 09:02:47', 'HRFI'),
+(277, '(DEL) Penghapusan stok kaos polos dengan kode barang z', '2022-05-10 09:02:51', 'HRFI'),
+(278, '(DEL) Penghapusan stok kaos polos dengan kode barang AE2DHI', '2022-05-10 09:03:42', 'IFRH'),
+(279, '(ADD) Penambahan stok bahan cutting z dengan kode barang z', '2022-05-10 09:06:11', 'HRFI'),
+(280, '(DEL) Penghapusan stok kaos polos dengan kode barang z', '2022-05-10 09:06:14', 'HRFI'),
+(281, '(EDIT) Pengeditan jumlah stok dengan kode barang AE2GHI dari 5 menjadi 5 pada stok kaos polos', '2022-05-10 09:07:05', 'IFRH'),
+(282, '(EDIT) Pengeditan harga satuan dengan kode barang AE2GHI dari Rp.75000 menjadi Rp.70000 pada stok kaos polos', '2022-05-10 09:07:05', 'IFRH'),
+(283, '(DEL) Penghapusan stok kaos polos dengan kode barang AE2GHI', '2022-05-10 09:07:14', 'IFRH'),
+(284, '(EDIT) Pengeditan jumlah stok dengan kode barang BB1F2H dari 6 menjadi 6 pada stok kaos original', '2022-05-10 09:07:34', 'IFRH'),
+(285, '(EDIT) Pengeditan harga satuan dengan kode barang BB1F2H dari Rp.250000 menjadi Rp.200000 pada stok kaos original', '2022-05-10 09:07:34', 'IFRH'),
+(286, '(DEL) Penghapusan stok kaos polos dengan kode barang BB1F2H', '2022-05-10 09:07:36', 'IFRH'),
+(287, '(EDIT) Pengeditan ukuran panjang dengan kode barang DTAL dari 30 menjadi 30 pada bahan cutting', '2022-05-10 09:07:51', 'IFRH'),
+(288, '(EDIT) Pengeditan ukuran lebar dengan kode barang DTAL dari 28 menjadi 28 pada bahan cutting', '2022-05-10 09:07:51', 'IFRH'),
+(289, '(EDIT) Pengeditan harga satuan dengan kode barang DTAL dari Rp.500 menjadi Rp.5000 pada bahan cutting', '2022-05-10 09:07:51', 'IFRH'),
+(290, '(DEL) Penghapusan stok kaos polos dengan kode barang DTAL', '2022-05-10 09:07:53', 'IFRH'),
+(291, '(EDIT) Pengeditan ukuran panjang dengan kode barang FBHI dari 60 menjadi 60 pada bahan cutting', '2022-05-10 09:09:01', 'IFRH'),
+(292, '(EDIT) Pengeditan ukuran lebar dengan kode barang FBHI dari 28 menjadi 28 pada bahan cutting', '2022-05-10 09:09:01', 'IFRH'),
+(293, '(EDIT) Pengeditan harga satuan dengan kode barang FBHI dari Rp.2300 menjadi Rp.2200 pada bahan cutting', '2022-05-10 09:09:01', 'IFRH'),
+(294, '(DEL) Penghapusan stok kaos polos dengan kode barang FBHI', '2022-05-10 09:09:04', 'IFRH'),
+(295, '(-) Pengurangan stok kaos polos dengan kode barang AF2FHI yang berjumlah 5 ke 4', '2022-05-10 09:09:11', 'IFRH'),
+(296, '(ADD) Penambahan stok kaos original asvqw dengan kode barang 1234d3', '2022-05-10 09:11:42', 'IFRH'),
+(297, '(ADD) Penambahan stok kaos polos dfgege dengan kode barang 243df34', '2022-05-10 09:12:42', 'IFRH'),
+(298, '(ADD) Penambahan stok bahan cutting Polimer dengan kode barang asvwf3', '2022-05-10 09:13:39', 'IFRH'),
+(299, '(DEL) Penghapusan stok kaos polos dengan kode barang 243df34', '2022-05-12 07:59:15', 'HRFI'),
+(300, '(+) Penambahan stok kaos original dengan kode barang 1234d3 yang berjumlah 7 ke 8', '2022-05-12 08:34:09', 'HRFI');
 
 --
 -- Indexes for dumped tables
@@ -851,7 +890,7 @@ ALTER TABLE `update_history`
 -- AUTO_INCREMENT for table `update_history`
 --
 ALTER TABLE `update_history`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=267;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=301;
 
 --
 -- Constraints for dumped tables
@@ -861,19 +900,19 @@ ALTER TABLE `update_history`
 -- Constraints for table `sales_tracking_bc`
 --
 ALTER TABLE `sales_tracking_bc`
-  ADD CONSTRAINT `kode_barang_bc` FOREIGN KEY (`kode_barang`) REFERENCES `bahan_cutting` (`kode_barang`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `kode_barang_bc` FOREIGN KEY (`kode_barang`) REFERENCES `bahan_cutting` (`kode_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sales_tracking_ko`
 --
 ALTER TABLE `sales_tracking_ko`
-  ADD CONSTRAINT `kode_barang_ko` FOREIGN KEY (`kode_barang`) REFERENCES `kaos_original` (`kode_barang`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `kode_barang_ko` FOREIGN KEY (`kode_barang`) REFERENCES `kaos_original` (`kode_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sales_tracking_kp`
 --
 ALTER TABLE `sales_tracking_kp`
-  ADD CONSTRAINT `kode_barang` FOREIGN KEY (`kode_barang`) REFERENCES `kaos_polos` (`kode_barang`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `kode_barang` FOREIGN KEY (`kode_barang`) REFERENCES `kaos_polos` (`kode_barang`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `update_history`
