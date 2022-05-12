@@ -95,10 +95,10 @@ def sales_record_bc():
                 for data in data_kode_barang:
                     cursor.execute(f'SELECT id FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{data[0]}"')
                     result = cursor.fetchone()
-                if result == None:
-                    id = f'{data[0]}-{month}-{year}'
-                    cursor.execute('INSERT IGNORE INTO sales_tracking_bc (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
-                    secondary_db.commit()
+                    if not result:
+                        id = f'{data[0]}-{month}-{year}'
+                        cursor.execute('INSERT INTO sales_tracking_bc (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
+                        secondary_db.commit()
                 print("synching sales record bahan cutting complete")
                 cursor.close() 
             except OperationalError:
