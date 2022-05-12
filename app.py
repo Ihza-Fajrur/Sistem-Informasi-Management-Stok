@@ -420,7 +420,7 @@ def bahan_cutting_edit(kode_barang):
                     mysql.connection.commit()
                     
                     #Dokumentasi perubahan ke database
-                    activity = (f"(EDIT) Pengeditan jenis barang dengan kode barang {kode_barang} dari {bahan_cutting['jenis_barang']} menjadi {new_nama_barang} pada bahan cutting")
+                    activity = (f"(EDIT) Pengeditan jenis barang dengan kode barang {kode_barang} dari {bahan_cutting['jenis_barang']} menjadi {new_jenis_barang} pada bahan cutting")
                     cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
                     
