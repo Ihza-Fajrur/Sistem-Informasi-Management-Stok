@@ -58,7 +58,6 @@ def sales_record_kp():
             cursor.close() 
         except:
             time.sleep(3) 
-            cursor.__exit__()
         time.sleep(10)
         
 def sales_record_ko():
