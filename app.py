@@ -165,6 +165,7 @@ def total_penjualan():
         except Exception as e:
             print("total penjualan update failed")
             print(e)
+            break
         time.sleep(10)
         
 def sales_record():
