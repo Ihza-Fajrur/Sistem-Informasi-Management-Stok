@@ -127,7 +127,6 @@ def total_penjualan():
                         kp_total_sales += data_kaos_polos[0]
             #Kaos Original
             ko_total_sales = 0
-            cursor = secondary_db.cursor()
             cursor.execute(f'SELECT kode_barang FROM sales_tracking_ko')
             data_kaos_original = cursor.fetchall()  
             if data_kaos_original:
@@ -139,7 +138,6 @@ def total_penjualan():
                 
             #Bahan Cutting
             bc_total_sales = 0
-            cursor = secondary_db.cursor()
             cursor.execute(f'SELECT kode_barang FROM sales_tracking_bc')
             data_bahan_cutting = cursor.fetchall() 
             if data_bahan_cutting: 
@@ -168,7 +166,7 @@ def total_penjualan():
         except Exception as e:
             print("total penjualan update failed")
             print(e)
-            total_penjualan()
+            cursor.close()
         time.sleep(10)
         
 def sales_record():
