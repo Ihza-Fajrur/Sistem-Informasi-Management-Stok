@@ -373,6 +373,9 @@ def bahan_cutting_edit(kode_barang):
         if request.method == 'POST':
             kode_barang_changed = False
             
+            ukuran_panjang_editted = False
+            ukuran_lebar_editted = False
+            
             if 'kode_barang' in request.form and not request.form['kode_barang'] == '':
                 if request.form['kode_barang'] != kode_barang:
                     # Create variables for easy access
@@ -434,7 +437,7 @@ def bahan_cutting_edit(kode_barang):
                     mysql.connection.commit()
             
             if 'ukuran_panjang' in request.form and not request.form['ukuran_panjang'] == '':
-                if request.form['ukuran_panjang'] != bahan_cutting['ukuran_panjang']:
+                if int(request.form['ukuran_panjang']) != bahan_cutting['ukuran_panjang']:
                     # Create variables for easy access
                     new_ukuran_panjang = request.form['ukuran_panjang']
                     cursor.execute('UPDATE bahan_cutting SET ukuran_panjang = %s WHERE kode_barang = %s', (new_ukuran_panjang, kode_barang,))
@@ -447,9 +450,10 @@ def bahan_cutting_edit(kode_barang):
                     activity = (f"(EDIT) Pengeditan ukuran panjang dengan kode barang {kode_barang} dari {bahan_cutting['ukuran_panjang']} menjadi {new_ukuran_panjang} pada bahan cutting")
                     cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
+                    ukuran_panjang_editted = True
                     
             if 'ukuran_lebar' in request.form and not request.form['ukuran_lebar'] == '':
-                if request.form['ukuran_lebar'] != bahan_cutting['ukuran_lebar']:
+                if int(request.form['ukuran_lebar']) != bahan_cutting['ukuran_lebar']:
                     # Create variables for easy access
                     new_ukuran_lebar = request.form['ukuran_lebar']
                     cursor.execute('UPDATE bahan_cutting SET ukuran_lebar = %s WHERE kode_barang = %s', (new_ukuran_lebar, kode_barang,))
@@ -462,22 +466,62 @@ def bahan_cutting_edit(kode_barang):
                     activity = (f"(EDIT) Pengeditan ukuran lebar dengan kode barang {kode_barang} dari {bahan_cutting['ukuran_lebar']} menjadi {new_ukuran_lebar} pada bahan cutting")
                     cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
+                    ukuran_lebar_editted = True
             
-            ukuran_lama = int(bc_panjang_old)  * int(bc_lebar_old)
-            ukuran_baru = int(bc_panjang_new)  * int(bc_lebar_new)
-            if ukuran_lama > ukuran_baru:
-                #Dokumentasi Sales Record
-                year = time.strftime("%Y")
-                month = time.strftime("%m")
-                cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
-                temp = cursor.fetchone()
-                current_sales = temp['jumlah_pembelian']
-                jumlah_pembelian = current_sales + (ukuran_lama - ukuran_baru)
-                cursor.execute(f'UPDATE sales_tracking_bc SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
-                mysql.connection.commit()
+            if ukuran_panjang_editted and ukuran_lebar_editted:
+                ukuran_lama = int(bc_panjang_old)  * int(bc_lebar_old)
+                ukuran_baru = int(bc_panjang_new)  * int(bc_lebar_new)
+                if ukuran_lama > ukuran_baru:
+                    #Dokumentasi Sales Record
+                    year = time.strftime("%Y")
+                    month = time.strftime("%m")
+                    cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                    temp = cursor.fetchone()
+                    current_sales = temp['jumlah_pembelian']
+                    jumlah_pembelian = current_sales + (ukuran_lama - ukuran_baru)
+                    cursor.execute(f'UPDATE sales_tracking_bc SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                    mysql.connection.commit()
+            elif ukuran_panjang_editted:
+                ukuran_lama = int(bc_panjang_old)  * int(bahan_cutting['ukuran_lebar'])
+                ukuran_baru = int(bc_panjang_new)  * int(bahan_cutting['ukuran_lebar'])
+                if ukuran_lama > ukuran_baru:
+                    #Dokumentasi Sales Record
+                    year = time.strftime("%Y")
+                    month = time.strftime("%m")
+                    cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                    temp = cursor.fetchone()
+                    if temp:
+                        current_sales = temp['jumlah_pembelian']
+                        jumlah_pembelian = current_sales + (ukuran_lama - ukuran_baru)
+                        cursor.execute(f'UPDATE sales_tracking_bc SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                        mysql.connection.commit()
+                    elif not temp:
+                        current_sales = 0
+                        jumlah_pembelian = current_sales + (ukuran_lama - ukuran_baru)
+                        cursor.execute(f'UPDATE sales_tracking_bc SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                        mysql.connection.commit()
+            elif ukuran_lebar_editted:          
+                ukuran_lama = int(bahan_cutting['ukuran_panjang'])  * int(bc_lebar_old)
+                ukuran_baru = int(bahan_cutting['ukuran_panjang'])  * int(bc_lebar_new)
+                if ukuran_lama > ukuran_baru:
+                    #Dokumentasi Sales Record
+                    year = time.strftime("%Y")
+                    month = time.strftime("%m")
+                    cursor.execute(f'SELECT jumlah_pembelian FROM sales_tracking_bc WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                    temp = cursor.fetchone()
+                    if temp:
+                        current_sales = temp['jumlah_pembelian']
+                        jumlah_pembelian = current_sales + (ukuran_lama - ukuran_baru)
+                        cursor.execute(f'UPDATE sales_tracking_bc SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                        mysql.connection.commit()    
+                    elif not temp:
+                        current_sales = 0
+                        jumlah_pembelian = current_sales + (ukuran_lama - ukuran_baru)
+                        cursor.execute(f'UPDATE sales_tracking_bc SET jumlah_pembelian = {jumlah_pembelian} WHERE bulan = {month} AND tahun = {year} AND kode_barang = "{kode_barang}"')
+                        mysql.connection.commit()   
                     
             if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
-                if request.form['harga_satuan'] != bahan_cutting['harga_satuan']:
+                if int(request.form['harga_satuan']) != bahan_cutting['harga_satuan']:
                     # Create variables for easy access
                     new_harga_satuan = request.form['harga_satuan']
                     cursor.execute('UPDATE bahan_cutting SET harga_satuan = %s WHERE kode_barang = %s', (new_harga_satuan, kode_barang,))
@@ -769,7 +813,7 @@ def kaos_polos_edit(kode_barang):
             
             
             if 'warna' in request.form and not request.form['warna'] == '':
-                if request.form['warna'] != kaos_polos['warna']:
+                if not request.form['warna'] == kaos_polos['warna']:
                     # Create variables for easy access
                     new_warna = request.form['warna']
                     cursor.execute('UPDATE kaos_polos SET warna = %s WHERE kode_barang = %s', (new_warna, kode_barang,))
@@ -782,7 +826,7 @@ def kaos_polos_edit(kode_barang):
             
             
             if 'jumlah_stok' in request.form and not request.form['jumlah_stok'] == '':
-                if request.form['jumlah_stok'] != kaos_polos['jumlah_stok']:
+                if not int(request.form['jumlah_stok']) == kaos_polos['jumlah_stok']:
                     # Create variables for easy access
                     new_jumlah_stok = request.form['jumlah_stok']
                     cursor.execute('UPDATE kaos_polos SET jumlah_stok = %s WHERE kode_barang = %s', (new_jumlah_stok, kode_barang,))
@@ -805,7 +849,7 @@ def kaos_polos_edit(kode_barang):
                         mysql.connection.commit()
             
             if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
-                if request.form['harga_satuan'] != kaos_polos['harga_satuan']:
+                if int(request.form['harga_satuan']) != kaos_polos['harga_satuan']:
                     # Create variables for easy access
                     new_harga_satuan = request.form['harga_satuan']
                     cursor.execute('UPDATE kaos_polos SET harga_satuan = %s WHERE kode_barang = %s', (new_harga_satuan, kode_barang,))
@@ -1066,7 +1110,7 @@ def kaos_original_edit(kode_barang):
                     mysql.connection.commit()
             
             if 'jumlah_stok' in request.form and not request.form['jumlah_stok'] == '':
-                if request.form['jumlah_stok'] != kaos_original['jumlah_stok']:
+                if int(request.form['jumlah_stok']) != kaos_original['jumlah_stok']:
                     # Create variables for easy access
                     new_jumlah_stok = request.form['jumlah_stok']
                     cursor.execute('UPDATE kaos_original SET jumlah_stok = %s WHERE kode_barang = %s', (new_jumlah_stok, kode_barang,))
@@ -1089,7 +1133,7 @@ def kaos_original_edit(kode_barang):
                         mysql.connection.commit()
             
             if 'harga_satuan' in request.form and not request.form['harga_satuan'] == '':
-                if request.form['harga_satuan'] != kaos_original['harga_satuan']:
+                if int(request.form['harga_satuan']) != kaos_original['harga_satuan']:
                     # Create variables for easy access
                     new_harga_satuan = request.form['harga_satuan']
                     cursor.execute('UPDATE kaos_original SET harga_satuan = %s WHERE kode_barang = %s', (new_harga_satuan, kode_barang,))
