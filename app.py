@@ -97,7 +97,7 @@ def sales_record_bc():
                     result = cursor.fetchone()
                     if not result:
                         id = f'{data[0]}-{month}-{year}'
-                        cursor.execute('INSERT INTO sales_tracking_bc (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
+                        cursor.execute('INSERT IGNORE INTO sales_tracking_bc (kode_barang, jumlah_pembelian, bulan, tahun, id) VALUES ("{0}", "{1}", "{2}", "{3}", "{4}")'.format(data[0], 0, month, year, id))
                         secondary_db.commit()
                 print("synching sales record bahan cutting complete")
                 cursor.close() 
