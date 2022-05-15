@@ -148,7 +148,7 @@
                                 <div class="account-settings">
                                     <div class="user-profile">
                                         <div class="user-avatar">
-                                            <img src="{{ user_photo }}" alt="{{ account['username'] }}"  width="100%" height="90%">
+                                            <img src="/static/img/user.png" alt="{{ account['username'] }}"  width="100%" height="90%">
                                         </div>
                                     </div>
                                 </div>
@@ -186,7 +186,7 @@
                                                     
                                                 {% elif account['acc_type'] == "Admin" %}
                                                     <option selected="selected" value="Admin">Admin</option>
-                                                    <option value="Admin">Staff</option>
+                                                    <option value="Staff">Staff</option>
                                                 {% endif %}
                                             </select>
                                         </div>
@@ -194,7 +194,7 @@
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group">
                                             <label for="website">Password</label>
-                                            <input type="password" name="password" class="form-control" id="password" value="{{ account['password'] }}" placeholder="Password">
+                                            <input type="password" name="password" class="form-control" id="password" value="{{ account['password'] }}" placeholder="Password" minlength="8">
                                         </div>
                                     </div>
                             </div>
