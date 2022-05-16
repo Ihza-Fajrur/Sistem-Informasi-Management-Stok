@@ -358,7 +358,7 @@ def bahan_cutting_del(kode_barang):
         mysql.connection.commit()
         
         #Dokumentasi perubahan ke database
-        activity = (f"(DEL) Penghapusan stok kaos polos dengan kode barang {kode_barang}")
+        activity = (f"(DEL) Penghapusan stok bahan cutting dengan kode barang {kode_barang}")
         cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
         mysql.connection.commit()
         
@@ -1009,7 +1009,7 @@ def kaos_original_del(kode_barang):
         mysql.connection.commit()
         
         #Dokumentasi perubahan ke database
-        activity = (f"(DEL) Penghapusan stok kaos polos dengan kode barang {kode_barang}")
+        activity = (f"(DEL) Penghapusan stok kaos original dengan kode barang {kode_barang}")
         cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
         mysql.connection.commit()
         
