@@ -1267,7 +1267,7 @@ def manajemen_akun_edit(username):
                     new_acc_type = request.form['acc_type']
                     cursor.execute('UPDATE accounts SET acc_type = %s WHERE username = %s', (new_acc_type, username,))
                     mysql.connection.commit()
-                    if session['acc_type'] == 'Admin':
+                    if session['acc_type'] == 'Admin' and session['username'] == username:
                         session['acc_type'] = new_acc_type
             if 'password' in request.form:
                 if not request.form['password'] == '':
