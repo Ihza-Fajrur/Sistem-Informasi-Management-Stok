@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 15, 2022 at 03:54 PM
+-- Generation Time: May 16, 2022 at 05:28 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.28
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `accounts` (
   `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `acc_type` varchar(10) NOT NULL,
   `email` varchar(100) NOT NULL,
   `user_photo` text DEFAULT NULL
@@ -40,7 +40,8 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`username`, `password`, `acc_type`, `email`, `user_photo`) VALUES
-('HRFI', '1', 'Admin', 'admin@gmail.com', './static/profile_picture/Ihza.jpg'),
+('admin', 'admin1234', 'Admin', 'admin@gmail.com', NULL),
+('HRFI', '1', 'Staff', 'admin@gmail.com', './static/profile_picture/Ihza.jpg'),
 ('Ihza', '1', 'Staff', 'ihzafrh@gmai.com', NULL),
 ('user', 'user', 'Staff', 'user@gmail.com', NULL);
 
@@ -114,7 +115,6 @@ CREATE TABLE `kaos_original` (
 --
 
 INSERT INTO `kaos_original` (`kode_barang`, `nama_barang`, `size`, `bentuk_lengan`, `desain`, `warna`, `jumlah_stok`, `harga_satuan`, `total_harga`) VALUES
-('1234d3', 'asvqw', 'XL', 'Panjang', 'Basing', 'Polkadot', 8, 20000, 160000),
 ('BB1G2H', 'KAOS ORI', 'XL', 'PENDEK', 'BBI', 'HITAM', 5, 250000, 1250000),
 ('OR1C2H', 'KAOS ORI', 'S', 'PENDEK', 'ORIGINAL 1', 'HITAM', 7, 135000, 945000),
 ('OR1D1P', 'KAOS ORI', 'M', 'PANJANG', 'ORIGINAL 1', 'PUTIH', 10, 145000, 1450000),
@@ -145,7 +145,7 @@ CREATE TABLE `kaos_polos` (
 --
 
 INSERT INTO `kaos_polos` (`kode_barang`, `nama_barang`, `size`, `jenis_kain`, `bentuk_lengan`, `bentuk_lingkar_leher`, `warna`, `jumlah_stok`, `harga_satuan`, `total_harga`) VALUES
-('AF2FHI', 'KAOS ALS', 'L', 'CATTON TC30S', 'PENDEK', 'O NECK', 'HITAM', 4, 70000, 280000),
+('AF2FHI', 'KAOS ALS', 'L', 'CATTON TC30S', 'PENDEK', 'O NECK', 'HITAM', 5, 70000, 350000),
 ('AK2CHL', 'KAOS RMS', 'S', 'COTTON KOZE', 'PENDEK', 'O NECK', 'HIJAU LUMUT', 5, 75000, 375000),
 ('AK2CKK', 'KAOS RMS', 'S', 'COTTON KOZE', 'PENDEK', 'O NECK', 'KUNING KENARI', 5, 75000, 375000),
 ('AK2DBD', 'KAOS RMS', 'M', 'COTTON KOZE', 'PENDEK', 'O NECK', 'BIRU DONGKER', 5, 75000, 375000),
@@ -269,7 +269,7 @@ INSERT INTO `record_penjualan_tahunan` (`bulan`, `value`) VALUES
 (2, 0),
 (3, 0),
 (4, 0),
-(5, 4),
+(5, 6),
 (6, 0),
 (7, 0),
 (8, 0),
@@ -281,7 +281,7 @@ INSERT INTO `record_penjualan_tahunan` (`bulan`, `value`) VALUES
 (2, 0),
 (3, 0),
 (4, 0),
-(5, 4),
+(5, 6),
 (6, 0),
 (7, 0),
 (8, 0),
@@ -353,7 +353,6 @@ CREATE TABLE `sales_tracking_ko` (
 --
 
 INSERT INTO `sales_tracking_ko` (`kode_barang`, `jumlah_pembelian`, `bulan`, `tahun`, `id`) VALUES
-('1234d3', 0, '05', '2022', '1234d3-05-2022'),
 ('BB1G2H', 1, '05', '2022', 'BB1G2H-05-2022'),
 ('OR1C2H', 0, '05', '2022', 'OR1C2H-05-2022'),
 ('OR1D1P', 0, '05', '2022', 'OR1D1P-05-2022'),
@@ -379,7 +378,7 @@ CREATE TABLE `sales_tracking_kp` (
 --
 
 INSERT INTO `sales_tracking_kp` (`kode_barang`, `jumlah_pembelian`, `bulan`, `tahun`, `id`) VALUES
-('AF2FHI', 1, '05', '2022', 'AF2FHI-05-2022'),
+('AF2FHI', 3, '05', '2022', 'AF2FHI-05-2022'),
 ('AK2CHL', 0, '05', '2022', 'AK2CHL-05-2022'),
 ('AK2CKK', 0, '05', '2022', 'AK2CKK-05-2022'),
 ('AK2DBD', 0, '05', '2022', 'AK2DBD-05-2022'),
@@ -502,7 +501,7 @@ CREATE TABLE `total_penjualan` (
 --
 
 INSERT INTO `total_penjualan` (`id`, `penjualan_total`, `penjualan_kp`, `penjualan_ko`, `penjualan_bc`) VALUES
-(1, 4, 3, 1, 50);
+(1, 6, 5, 1, 50);
 
 -- --------------------------------------------------------
 
@@ -693,7 +692,19 @@ INSERT INTO `update_history` (`id`, `activity`, `time`, `user`) VALUES
 (329, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-05-14 19:46:26', 'HRFI'),
 (330, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-05-14 19:46:31', 'HRFI'),
 (331, '(+) Penambahan stok kaos polos dengan kode barang AR3FHI yang berjumlah 0 ke 1', '2022-05-14 20:38:00', 'HRFI'),
-(332, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-05-14 20:38:08', 'HRFI');
+(332, '(-) Pengurangan stok kaos polos dengan kode barang AR3FHI yang berjumlah 1 ke 0', '2022-05-14 20:38:08', 'HRFI'),
+(333, '(+) Penambahan stok kaos polos dengan kode barang AF2FHI yang berjumlah 4 ke 5', '2022-05-16 11:30:40', 'HRFI'),
+(334, '(-) Pengurangan stok kaos polos dengan kode barang AF2FHI yang berjumlah 5 ke 4', '2022-05-16 11:30:42', 'HRFI'),
+(335, '(+) Penambahan stok kaos polos dengan kode barang AF2FHI yang berjumlah 4 ke 5', '2022-05-16 11:34:11', 'HRFI'),
+(336, '(EDIT) Pengeditan nama barang dengan kode barang AF2FHI dari KAOS ALS menjadi KAOS ALSs pada stok kaos polos', '2022-05-16 11:34:26', 'HRFI'),
+(337, '(-) Pengurangan stok kaos polos dengan kode barang AF2FHI yang berjumlah 5 ke 4', '2022-05-16 11:34:31', 'HRFI'),
+(338, '(+) Penambahan stok kaos polos dengan kode barang AF2FHI yang berjumlah 4 ke 5', '2022-05-16 11:34:33', 'HRFI'),
+(339, '(ADD) Penambahan stok kaos polos test dengan kode barang test', '2022-05-16 11:35:02', 'HRFI'),
+(340, '(DEL) Penghapusan stok kaos polos dengan kode barang test', '2022-05-16 11:35:06', 'HRFI'),
+(341, '(EDIT) Pengeditan nama barang dengan kode barang AF2FHI dari KAOS ALSs menjadi KAOS ALS pada stok kaos polos', '2022-05-16 11:35:16', 'HRFI'),
+(342, '(+) Penambahan stok kaos original dengan kode barang 1234d3 yang berjumlah 8 ke 9', '2022-05-16 11:35:20', 'HRFI'),
+(343, '(-) Pengurangan stok kaos original dengan kode barang 1234d3 yang berjumlah 9 ke 8', '2022-05-16 11:35:21', 'HRFI'),
+(344, '(DEL) Penghapusan stok kaos polos dengan kode barang 1234d3', '2022-05-16 11:35:24', 'HRFI');
 
 --
 -- Indexes for dumped tables
@@ -765,7 +776,7 @@ ALTER TABLE `update_history`
 -- AUTO_INCREMENT for table `update_history`
 --
 ALTER TABLE `update_history`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=345;
 
 --
 -- Constraints for dumped tables
