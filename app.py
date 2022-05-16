@@ -1253,6 +1253,8 @@ def manajemen_akun_edit(username):
                     new_username = request.form['username']
                     cursor.execute('UPDATE IGNORE accounts SET username = %s WHERE username = %s', (new_username, username,))
                     mysql.connection.commit()
+                    if session['username'] == username:
+                        session['username'] = new_username
             if 'email' in request.form:
                 if not request.form['email'] == '':
                     # Create variables for easy access
@@ -1265,6 +1267,8 @@ def manajemen_akun_edit(username):
                     new_acc_type = request.form['acc_type']
                     cursor.execute('UPDATE accounts SET acc_type = %s WHERE username = %s', (new_acc_type, username,))
                     mysql.connection.commit()
+                    if session['acc_type'] == 'Admin':
+                        session['acc_type'] = new_acc_type
             if 'password' in request.form:
                 if not request.form['password'] == '':
                     # Create variables for easy access
