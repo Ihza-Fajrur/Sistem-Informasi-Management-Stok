@@ -1255,6 +1255,7 @@ def manajemen_akun_edit(username):
                     mysql.connection.commit()
                     if session['username'] == username:
                         session['username'] = new_username
+                    username = new_username
             if 'email' in request.form:
                 if not request.form['email'] == '':
                     # Create variables for easy access
