@@ -420,7 +420,7 @@ def bahan_cutting_edit(kode_barang):
                     mysql.connection.commit()
                     
                     #Dokumentasi perubahan ke database
-                    activity = (f"(EDIT) Pengeditan jenis barang dengan kode barang {kode_barang} dari {bahan_cutting['jenis_barang']} menjadi {new_jenis_barang} pada bahan cutting")
+                    activity = (f"(EDIT) Pengeditan jenis bahan dengan kode barang {kode_barang} dari {bahan_cutting['jenis_barang']} menjadi {new_jenis_barang} pada bahan cutting")
                     cursor.execute('INSERT INTO update_history (activity, time, user) VALUES (%s, %s, %s)', (activity, datetime.now() ,session['username'],))
                     mysql.connection.commit()
                     
@@ -1238,6 +1238,8 @@ def manajemen_akun_del(username):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('DELETE FROM accounts WHERE username = %s', (username,))
         mysql.connection.commit()
+        if session['username'] == username:
+            session.clear()
         return redirect(url_for('manajemen_akun'))
     return redirect (url_for('login'))
         
